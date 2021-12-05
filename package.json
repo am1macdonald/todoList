@@ -1,0 +1,43 @@
+{
+  "name": "Git'er Done",
+  "version": "1.0.0",
+  "description": "A to-do list project",
+  "main": "index.js",
+  "private": "true",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/am1macdonald/todoList.git"
+  },
+  "keywords": [
+    "todo",
+    "list"
+  ],
+  "author": "Adam MacDonald",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/am1macdonald/todoList/issues"
+  },
+  "homepage": "https://github.com/am1macdonald/todoList#readme",
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.5.1",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
+  },
+  "dependencies": {
+    "date-fns": "^2.27.0"
+  }
+}
