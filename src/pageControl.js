@@ -100,18 +100,19 @@ function pageLoad(){
         checklistLabel.innerHTML = 'Checklist:';
         const checklistDiv = document.createElement('div');
         checklistDiv.id = 'checklist-div';
-        let checklistTextField = document.createElement('input');
-        checklistTextField.type = 'text';
+        let checklistTextInput = document.createElement('input');
+        checklistTextInput.type = 'text';
+        checklistTextInput.id = 'checklist-text-input'
         const addChecklistItem = document.createElement('button');
         addChecklistItem.type = 'button';
         addChecklistItem.innerHTML = 'add';
         addChecklistItem.addEventListener('click', function(){
             let checklistInput = document.createElement('input');
             checklistInput.type = 'checkbox';
-            checklistDiv.insertBefore(checklistInput, checklistTextField);            
+            checklistDiv.insertBefore(checklistInput, checklistTextInput);            
         });
 
-        checklistDiv.appendChild(checklistTextField);
+        checklistDiv.appendChild(checklistTextInput);
         checklistDiv.appendChild(addChecklistItem);
         
 

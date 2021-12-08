@@ -1,5 +1,5 @@
 export class Task {
-    constructor(title, description, dueDate,  priority, notes, checklist) {
+    constructor(title, description, dueDate,  priority = 1, notes, checklist = {}) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
@@ -7,12 +7,12 @@ export class Task {
         this.notes = notes;
         this.checklist = checklist;
     }
-    announce() {
-        console.log(`i am task, ${this.title}`);
+    summary() {
+        console.log(`I am task, ${this.title}, due on ${this.dueDate} with level ${this.priority} priority`);
     }
 }
 export class Project {
-    constructor(title, description, dueDate, notes, tasks) {
+    constructor(title, description, dueDate, notes, tasks = []) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
@@ -20,6 +20,6 @@ export class Project {
         this.tasks = tasks;
     }
     announce() {
-        console.log(`i am project, ${this.title}`);
+        console.log(`I am project ${this.title}`);
     }
 }
