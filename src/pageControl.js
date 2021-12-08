@@ -5,24 +5,41 @@ function pageLoad(){
 
     const content = document.getElementById('content');
 
-    let task2 = new Task('task2', 2, 3, 4, 5, 6);
-    let project1 = new Project('project1', 2, 3, 4, 5);
-    console.log(task2, project1);
-    task2.announce();
-    project1.announce();
+
+    // create the popup for adding new tasks
 
     const taskCreationWindow = function() {
+
+
+        //div to hold the data form
+
         const container = document.createElement('div');
         container.id = 'form-container';
+
+
+
+        //form to hold the items
+
         const form = document.createElement('form');
         form.name = 'task creation form';
+        form.id = 'task-form';
+
+
+
+        // input for the task name
+
         const titleLabel = document.createElement('label');
         titleLabel.for = 'title';
         titleLabel.innerHTML = 'Task:';
         const titleInput = document.createElement('input');
         titleInput.id = 'title';
         titleInput.type = 'text';
-        titleInput.placeholder = 'What needs doing?';        
+        titleInput.placeholder = 'What needs doing?';     
+        
+
+        
+        // input for the task description
+
         const descriptionLabel = document.createElement('label');
         descriptionLabel.for = 'description';
         descriptionLabel.innerHTML = 'Description:';
@@ -30,6 +47,11 @@ function pageLoad(){
         descriptionInput.id = 'description';
         descriptionInput.type = 'text';
         descriptionInput.placeholder = 'What are some details?'
+
+
+
+        // input for the task deadline
+
         const dueDateLabel = document.createElement('label');
         dueDateLabel.for = 'due-date';
         dueDateLabel.innerHTML = 'What is the deadline?';
@@ -38,25 +60,76 @@ function pageLoad(){
         dueDateInput.type = 'date';
         dueDateInput.min = `${format(new Date(), 'yyyy-MM-dd')}`;
         dueDateInput.value = `${format(new Date(), 'yyyy-MM-dd')}`
+
+
+
+        // input for the task priority
+
         const priorityLabel = document.createElement('label');
-        dueDateLabel.for = 'dueDate';
-        dueDateLabel.innerHTML = 'What is the deadline?';
-        const priorityInput = document.createElement('input');
+        priorityLabel.for = 'priority';
+        priorityLabel.innerHTML = 'How important is the task?';
+        const priorityInput = document.createElement('select');
+        priorityInput.id = 'priority';
+        const priorityOptions = [1,2,3,4,5];
+        for (let num of priorityOptions) {
+            let newOption = document.createElement('option');
+            newOption.value = num.toString();
+            newOption.innerHTML = num.toString()
+            priorityInput.appendChild(newOption);
+        }
+
+
+
+        // input for the task notes
+       
+
         const notesLabel = document.createElement('label');
+        notesLabel.for = 'notes';
+        notesLabel.innerHTML = 'Notes:';
         const notesInput = document.createElement('input');
+        notesInput.id = 'notes';
+        notesInput.type = 'text';
+        notesInput.placeholder = 'Any additional details?'
+
+
+
+        // input for a task checklist
+
         const checklistLabel = document.createElement('label');
-        const checklistInput = document.createElement('input');
+        checklistLabel.for = 'checklist';
+        checklistLabel.innerHTML = 'Checklist:';
+        const checklistDiv = document.createElement('div');
+        checklistDiv.id = 'checklist-div';
+        let checklistTextField = document.createElement('input');
+        checklistTextField.type = 'text';
+        const addChecklistItem = document.createElement('button');
+        addChecklistItem.type = 'button';
+        addChecklistItem.innerHTML = 'add';
+        addChecklistItem.addEventListener('click', function(){
+            let checklistInput = document.createElement('input');
+            checklistInput.type = 'checkbox';
+            checklistDiv.insertBefore(checklistInput, checklistTextField);            
+        });
+
+        checklistDiv.appendChild(checklistTextField);
+        checklistDiv.appendChild(addChecklistItem);
+        
+
+    
+        // button to submit the details and invoke function to make a new task object
+
         const submitButton = document.createElement('button');
+        submitButton.type = 'button';
+        submitButton.innerHTML = 'Create';
 
         
         
-        
+        // appending all elements to the DOM
 
         const appendArray = [titleLabel, titleInput, descriptionLabel, descriptionInput,
             dueDateLabel, dueDateInput, priorityLabel, priorityInput, notesLabel, notesInput, checklistLabel,
-            checklistInput, submitButton
+            checklistDiv, submitButton
         ];
-
         for (let item of appendArray) {
             form.appendChild(item);
         };
@@ -65,8 +138,6 @@ function pageLoad(){
     }
     
     taskCreationWindow();
-    console.log(format(new Date(), 'yyyy-MM-dd'));
-
 }
 
 export {

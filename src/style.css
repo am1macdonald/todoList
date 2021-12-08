@@ -12,6 +12,12 @@ body {
 }
 
 #form-container {
+  box-sizing: border-box;
+  padding: 3vmin;
+  border-radius: 1px;
+  background-color: beige;
+  box-shadow: 3px 3px 15px lightgrey;
+  line-height: 5vmin;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,6 +26,11 @@ body {
 #form-container form {
   display: inherit;
   flex-direction: column;
- 
 }
 
+#checklist-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
