@@ -95,27 +95,51 @@ function pageLoad(){
 
         // input for a task checklist
 
-        const checklistLabel = document.createElement('label');
-        checklistLabel.for = 'checklist';
-        checklistLabel.innerHTML = 'Checklist:';
-        const checklistDiv = document.createElement('div');
-        checklistDiv.id = 'checklist-div';
-        let checklistTextInput = document.createElement('input');
-        checklistTextInput.type = 'text';
-        checklistTextInput.id = 'checklist-text-input'
-        const addChecklistItem = document.createElement('button');
-        addChecklistItem.type = 'button';
-        addChecklistItem.innerHTML = 'add';
-        addChecklistItem.addEventListener('click', function(){
-            let checklistInput = document.createElement('input');
-            checklistInput.type = 'checkbox';
-            checklistDiv.insertBefore(checklistInput, checklistTextInput);            
-        });
+        const renderChecklist = (function () {
+            const checklist = document.createElement('div');
+            const label = document.createElement('label');
+            label.for = 'checklist';
+            label.innerHTML = 'Checklist:';
+            const listDiv = document.createElement('div');
+            listDiv.id = 'checklist-div'
+            const listUl = document.createElement('ul');
+            listUl.id = 'checklist-list';
+            let textInput = document.createElement('input');
+            textInput.type = 'text';
+            textInput.id = 'checklist-text-input'
+            const buttonDiv = document.createElement('div');
+            const addItem = document.createElement('button');
+            addItem.type = 'button';
+            addItem.innerHTML = 'add';
+            const removeItem = document.createElement('button');
+            removeItem.type = 'button';
+            removeItem.innerHTML = 'remove';
+            addItem.addEventListener('click', function(){
+                if (textInput.value.length > 0){
+                    let listItem = document.createElement('li');
+                    listItem.innerHTML = '- ' + textInput.value;
+                    listUl.appendChild(listItem);
+                    textInput.value = '';
+                };
+            });
+            removeItem.addEventListener('click', function(){
+                if (listUl.childElementCount > 0) {
+                    listUl.removeChild(listUl.lastElementChild);
+                }
+            })
 
-        checklistDiv.appendChild(checklistTextInput);
-        checklistDiv.appendChild(addChecklistItem);
-        
+            buttonDiv.appendChild(addItem);
+            buttonDiv.appendChild(removeItem);
 
+            listDiv.appendChild(listUl);
+            listDiv.appendChild(textInput);
+            listDiv.appendChild(buttonDiv);
+            return {
+                label,
+                listDiv
+            }
+            
+        })();
     
         // button to submit the details and invoke function to make a new task object
 
@@ -128,8 +152,8 @@ function pageLoad(){
         // appending all elements to the DOM
 
         const appendArray = [titleLabel, titleInput, descriptionLabel, descriptionInput,
-            dueDateLabel, dueDateInput, priorityLabel, priorityInput, notesLabel, notesInput, checklistLabel,
-            checklistDiv, submitButton
+            dueDateLabel, dueDateInput, priorityLabel, priorityInput, notesLabel, notesInput, renderChecklist.label,
+            renderChecklist.listDiv, submitButton
         ];
         for (let item of appendArray) {
             form.appendChild(item);
