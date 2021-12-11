@@ -1,6 +1,8 @@
 import { Task, Project } from './todo.js';
 import { format } from 'date-fns';
 
+
+
 function pageLoad(){
 
     const content = document.getElementById('content');
@@ -103,7 +105,6 @@ function pageLoad(){
         // input for a task checklist
 
         const renderChecklist = (function () {
-            const checklist = document.createElement('div');
             const label = document.createElement('label');
             label.for = 'checklist';
             label.innerHTML = 'Checklist:';
@@ -121,15 +122,18 @@ function pageLoad(){
             const removeItem = document.createElement('button');
             removeItem.type = 'button';
             removeItem.innerHTML = 'remove';
-            addItem.addEventListener('click', function(){
+            addItem.addEventListener('click', function(e){
+                e.preventDefault();
                 if (textInput.value.length > 0){
                     let listItem = document.createElement('li');
+                    listItem.classList.add('checklist-item');
                     listItem.innerHTML = '- ' + textInput.value;
                     listUl.appendChild(listItem);
                     textInput.value = '';
                 };
             });
-            removeItem.addEventListener('click', function(){
+            removeItem.addEventListener('click', function(e){
+                e.preventDefault();
                 if (listUl.childElementCount > 0) {
                     listUl.removeChild(listUl.lastElementChild);
                 }
@@ -153,12 +157,11 @@ function pageLoad(){
         const submitButton = document.createElement('button');
         submitButton.type = 'button';
         submitButton.innerHTML = 'Create';
+        submitButton.addEventListener('click', addNewTask);
 
-        
-        
+                
         // appending all elements to the DOM
-
-        const taskCreation = () => {
+        const taskCreationMenu = () => {
             const appendArray = [
                 formHeader, titleLabel, titleInput, descriptionLabel, descriptionInput,
                 dueDateLabel, dueDateInput, priorityLabel, priorityInput, notesLabel, notesInput,
@@ -171,19 +174,32 @@ function pageLoad(){
             content.appendChild(container);
         }
 
-        const getData = () => {
-            titleInput, descriptionInput, dueDateInput, priorityInput, notesInput,
-            renderChecklist.listDiv, submitButton
+        function addNewTask(e) {
+            e.preventDefault();
+            console.log('hello');
+            let inputs = [
+                titleInput.value, descriptionInput.value, dueDateInput.value, priorityInput.value, notesInput.value
+            ];        
+            let listItems = document.getElementsByClassName('checklist-item');
+            let checklistObj = {};
+            for (let item of listItems) {
+                checklistObj[item.innerHTML.slice(2,item.innerHTML.length)] = false;
+            };
+            let newTask = new Task(...inputs, checklistObj);
+            newTask.summary();
         }
 
+
         return {
-            taskCreation
+            taskCreationMenu
         }
 
         
+
+
     }
     
-    dataInputWindow().taskCreation();
+    dataInputWindow().taskCreationMenu();
 }
 
 export {
