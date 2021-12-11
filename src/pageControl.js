@@ -8,17 +8,24 @@ function pageLoad(){
 
     // create the popup for adding new tasks
 
-    const taskCreationWindow = function() {
+    const dataInputWindow = function() {
 
 
-        //div to hold the data form
+        // div to hold the data form
 
         const container = document.createElement('div');
         container.id = 'form-container';
 
 
 
-        //form to hold the items
+        // form header
+
+        const formHeader = document.createElement('h3');
+        formHeader.innerHTML = 'New Task';
+
+
+
+        // form to hold the items
 
         const form = document.createElement('form');
         form.name = 'task creation form';
@@ -151,18 +158,32 @@ function pageLoad(){
         
         // appending all elements to the DOM
 
-        const appendArray = [titleLabel, titleInput, descriptionLabel, descriptionInput,
-            dueDateLabel, dueDateInput, priorityLabel, priorityInput, notesLabel, notesInput, renderChecklist.label,
+        const taskCreation = () => {
+            const appendArray = [
+                formHeader, titleLabel, titleInput, descriptionLabel, descriptionInput,
+                dueDateLabel, dueDateInput, priorityLabel, priorityInput, notesLabel, notesInput,
+                renderChecklist.label, renderChecklist.listDiv, submitButton
+            ];
+            for (let item of appendArray) {
+                form.appendChild(item);
+            };
+            container.appendChild(form);
+            content.appendChild(container);
+        }
+
+        const getData = () => {
+            titleInput, descriptionInput, dueDateInput, priorityInput, notesInput,
             renderChecklist.listDiv, submitButton
-        ];
-        for (let item of appendArray) {
-            form.appendChild(item);
-        };
-        container.appendChild(form);
-        content.appendChild(container);
+        }
+
+        return {
+            taskCreation
+        }
+
+        
     }
     
-    taskCreationWindow();
+    dataInputWindow().taskCreation();
 }
 
 export {
