@@ -6,6 +6,5 @@ import './pageFunctions.js';
 import { cacheDom } from './pageFunctions.js';
 
 pageLoad();
-cacheDom();
 
 

@@ -1,5 +1,6 @@
 import { Task, Project } from './todo.js';
 import { format } from 'date-fns';
+import { addTask } from './pageFunctions.js';
 
 
 
@@ -157,7 +158,7 @@ function pageLoad(){
         const submitButton = document.createElement('button');
         submitButton.type = 'button';
         submitButton.innerHTML = 'Create';
-        submitButton.addEventListener('click', addNewTask);
+        submitButton.addEventListener('click', addTask);
 
                 
         // appending all elements to the DOM
