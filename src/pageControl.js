@@ -1,6 +1,5 @@
 import { Task, Project } from './todo.js';
 import { format } from 'date-fns';
-import { addTask } from './pageFunctions.js';
 
 
 
@@ -33,6 +32,22 @@ function pageLoad(){
         const form = document.createElement('form');
         form.name = 'task creation form';
         form.id = 'task-form';
+
+        const newFormWindow = () => {
+
+            // div to hold the data form
+            const container = document.createElement('div');
+            container.id = 'form-container';
+
+            // form header
+            const formHeader = document.createElement('h3');
+            formHeader.innerHTML = 'New Task';
+
+            // form to hold the items
+            const form = document.createElement('form');
+            form.name = 'task creation form';
+            form.id = 'task-form';
+        }
 
 
 
@@ -158,7 +173,7 @@ function pageLoad(){
         const submitButton = document.createElement('button');
         submitButton.type = 'button';
         submitButton.innerHTML = 'Create';
-        submitButton.addEventListener('click', addTask);
+        submitButton.addEventListener('click', addNewTask);
 
                 
         // appending all elements to the DOM
