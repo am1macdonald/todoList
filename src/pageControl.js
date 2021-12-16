@@ -13,17 +13,13 @@ function pageLoad(){
     const dataInputWindow = function() {
 
         // creates a new popup for task / project entry
-
         const newFormWindow = (type) => {
-            // div to hold the data form
             const container = document.createElement('div');
             container.id = 'form-container';
 
-            // form header
             const formHeader = document.createElement('h3');
             formHeader.innerHTML = `New ${type}`;
 
-            // form to hold the items
             const form = document.createElement('form');
             form.name = `${type} creation form`;
             form.id = `${type.toLowerCase()}-form`;
@@ -33,6 +29,7 @@ function pageLoad(){
             content.appendChild(container);
         }
 
+        // creates a text input when called
         const newTextInput = (parent, name, labelText, placeholder) => {
             const label = document.createElement('label');
             label.for = name;
@@ -45,16 +42,23 @@ function pageLoad(){
             parent.appendChild(label);
             parent.appendChild(input);
         }
+
+        // creates a date input when called
+        const newDateInput = (parent) => {
+            const label = document.createElement('label');
+            label.for = 'due-date';
+            label.innerHTML = 'What is the deadline?';
+            const input = document.createElement('input');
+            input.id = 'due-date';
+            input.type = 'date';
+            input.min = `${format(new Date(), 'yyyy-MM-dd')}`;
+            input.value = `${format(new Date(), 'yyyy-MM-dd')}`
+
+            parent.appendChild(label);
+            parent.appendChild(input);
+        }
         
-        // input for the task deadline
-        const dueDateLabel = document.createElement('label');
-        dueDateLabel.for = 'due-date';
-        dueDateLabel.innerHTML = 'What is the deadline?';
-        const dueDateInput = document.createElement('input');
-        dueDateInput.id = 'due-date';
-        dueDateInput.type = 'date';
-        dueDateInput.min = `${format(new Date(), 'yyyy-MM-dd')}`;
-        dueDateInput.value = `${format(new Date(), 'yyyy-MM-dd')}`
+
 
         // input for the task priority
         const priorityLabel = document.createElement('label');
@@ -70,17 +74,24 @@ function pageLoad(){
             priorityInput.appendChild(newOption);
         }
 
-        // input for the task notes
-        const notesLabel = document.createElement('label');
-        notesLabel.for = 'notes';
-        notesLabel.innerHTML = 'Notes:';
-        const notesInput = document.createElement('input');
-        notesInput.id = 'notes';
-        notesInput.type = 'text';
-        notesInput.placeholder = 'Any additional details?'
+        const newPriorityDropdown = (parent, maxScale) => {
+            const label = document.createElement('label');
+            label.for = 'priority';
+            label.innerHTML = 'How important is the task?';
+            const input = document.createElement('select');
+            input.id = 'priority';
+            for (let i = 1; i <= maxScale; i++) {
+                let newOption = document.createElement('option');
+                newOption.value = i.toString();
+                newOption.innerHTML = i.toString()
+                input.appendChild(newOption);
+            }
+            parent.appendChild(label);
+            parent.appendChild(input);
+        }
 
         // input for a task checklist
-        const renderChecklist = (function () {
+        const newChecklist = (parent) => {
             const label = document.createElement('label');
             label.for = 'checklist';
             label.innerHTML = 'Checklist:';
@@ -121,14 +132,14 @@ function pageLoad(){
             listDiv.appendChild(listUl);
             listDiv.appendChild(textInput);
             listDiv.appendChild(buttonDiv);
-            return {
-                label,
-                listDiv
-            }
+        
+            parent.appendChild(label);
+            parent.appendChild(listDiv);
             
-        })();
+        };
     
         // button to submit the details and invoke function to make a new task object
+
 
         const submitButton = document.createElement('button');
         submitButton.type = 'button';
@@ -140,16 +151,14 @@ function pageLoad(){
         const taskCreationMenu = () => {
             newFormWindow('Task');
             let form = document.getElementById('task-form');
-            newTextInput(form, "title", "Title:", "What needs doing?");
-            newTextInput(form, "description", "Description:", "What are the details?");
+            newTextInput(form, 'title', 'Title:', 'What needs doing?');
+            newTextInput(form, 'description', 'Description:', 'What are the details?');
+            newDateInput(form);
+            newPriorityDropdown(form, 5);
+            newChecklist(form);
+            newTextInput(form, 'notes', 'Notes:', 'Any additional details?');
             
-            const appendArray = [
-                dueDateLabel, dueDateInput, priorityLabel, priorityInput, notesLabel, notesInput,
-                renderChecklist.label, renderChecklist.listDiv, submitButton
-            ];
-            for (let item of appendArray) {
-                form.appendChild(item);
-            };
+            form.appendChild(submitButton);
             
         }
 
