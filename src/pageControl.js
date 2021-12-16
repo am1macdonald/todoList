@@ -12,26 +12,7 @@ function pageLoad(){
 
     const dataInputWindow = function() {
 
-
-        // div to hold the data form
-
-        const container = document.createElement('div');
-        container.id = 'form-container';
-
-
-
-        // form header
-
-        const formHeader = document.createElement('h3');
-        formHeader.innerHTML = 'New Task';
-
-
-
-        // form to hold the items
-
-        const form = document.createElement('form');
-        form.name = 'task creation form';
-        form.id = 'task-form';
+        // creates a new popup for task / project entry
 
         const newFormWindow = (type) => {
             // div to hold the data form
@@ -184,6 +165,8 @@ function pageLoad(){
             };
             let newTask = new Task(...inputs, checklistObj);
             newTask.summary();
+
+            return newTask;
         }
 
 

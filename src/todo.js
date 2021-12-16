@@ -6,9 +6,10 @@ export class Task {
         this.priority = priority;
         this.notes = notes;
         this.checklist = checklist;
+        this.identifier = Date.now();
     }
     summary() {
-        console.log(`I am task, ${this.title}, due on ${this.dueDate} with level ${this.priority} priority`);
+        console.log(`I am task, ${this.title}, due on ${this.dueDate} with level ${this.priority} priority id:${this.identifier}`);
     }
 }
 export class Project {
