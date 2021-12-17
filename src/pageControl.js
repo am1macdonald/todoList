@@ -30,7 +30,7 @@ function pageLoad(){
         }
 
         // creates a text input when called
-        const newTextInput = (parent, name, labelText, placeholder) => {
+        const newTextInput = (parent, name, labelText, placeholder, required) => {
             const label = document.createElement('label');
             label.for = name;
             label.innerHTML = labelText;
@@ -38,7 +38,10 @@ function pageLoad(){
             input.id = name;
             input.type = 'text';
             input.placeholder = placeholder;
-            input.required = true;
+            
+            if (required) {
+                input.required = true;
+            }
 
             parent.appendChild(label);
             parent.appendChild(input);
@@ -134,12 +137,12 @@ function pageLoad(){
         const taskCreationMenu = () => {
             newFormWindow('Task');
             let form = document.getElementById('task-form');
-            newTextInput(form, 'title', 'Title:', 'What needs doing?');
-            newTextInput(form, 'description', 'Description:', 'What are the details?');
+            newTextInput(form, 'title', 'Title:', 'What needs doing?', true);
+            newTextInput(form, 'description', 'Description:', 'What are the details?', true);
             newDateInput(form);
             newPriorityDropdown(form, 5);
             newChecklist(form);
-            newTextInput(form, 'notes', 'Notes:', 'Any additional details?');            
+            newTextInput(form, 'notes', 'Notes:', 'Any additional details?', false);            
             form.appendChild(submitButton);            
         }
 
