@@ -1,5 +1,7 @@
 import { Task, Project } from './todo.js';
 import { format } from 'date-fns';
+import './pageFunctions.js'
+import { addNewTask } from './pageFunctions.js';
 
 
 
@@ -7,12 +9,10 @@ function pageLoad(){
 
     const content = document.getElementById('content');
 
-
     // create the popup for adding new tasks
 
     const dataInputWindow = function() {
 
-        // creates a new popup for task / project entry
         const newFormWindow = (type) => {
             const container = document.createElement('div');
             container.id = 'form-container';
@@ -38,6 +38,7 @@ function pageLoad(){
             input.id = name;
             input.type = 'text';
             input.placeholder = placeholder;
+            input.required = true;
 
             parent.appendChild(label);
             parent.appendChild(input);
@@ -53,25 +54,10 @@ function pageLoad(){
             input.type = 'date';
             input.min = `${format(new Date(), 'yyyy-MM-dd')}`;
             input.value = `${format(new Date(), 'yyyy-MM-dd')}`
+            input.required = true;
 
             parent.appendChild(label);
             parent.appendChild(input);
-        }
-        
-
-
-        // input for the task priority
-        const priorityLabel = document.createElement('label');
-        priorityLabel.for = 'priority';
-        priorityLabel.innerHTML = 'How important is the task?';
-        const priorityInput = document.createElement('select');
-        priorityInput.id = 'priority';
-        const priorityOptions = [1,2,3,4,5];
-        for (let num of priorityOptions) {
-            let newOption = document.createElement('option');
-            newOption.value = num.toString();
-            newOption.innerHTML = num.toString()
-            priorityInput.appendChild(newOption);
         }
 
         const newPriorityDropdown = (parent, maxScale) => {
@@ -139,13 +125,10 @@ function pageLoad(){
         };
     
         // button to submit the details and invoke function to make a new task object
-
-
         const submitButton = document.createElement('button');
-        submitButton.type = 'button';
+        submitButton.type = 'submit';
         submitButton.innerHTML = 'Create';
         submitButton.addEventListener('click', addNewTask);
-
                 
         // appending all elements to the DOM
         const taskCreationMenu = () => {
@@ -156,38 +139,14 @@ function pageLoad(){
             newDateInput(form);
             newPriorityDropdown(form, 5);
             newChecklist(form);
-            newTextInput(form, 'notes', 'Notes:', 'Any additional details?');
-            
-            form.appendChild(submitButton);
-            
+            newTextInput(form, 'notes', 'Notes:', 'Any additional details?');            
+            form.appendChild(submitButton);            
         }
-
-        function addNewTask(e) {
-            e.preventDefault();
-            console.log('hello');
-            let inputs = [
-            ];        
-            let listItems = document.getElementsByClassName('checklist-item');
-            let checklistObj = {};
-            for (let item of listItems) {
-                checklistObj[item.innerHTML.slice(2,item.innerHTML.length)] = false;
-            };
-            let newTask = new Task(...inputs, checklistObj);
-            newTask.summary();
-
-            return newTask;
-        }
-
 
         return {
             taskCreationMenu
         }
-
-        
-
-
-    }
-    
+    }    
     dataInputWindow().taskCreationMenu();
 }
 

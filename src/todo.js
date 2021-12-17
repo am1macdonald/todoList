@@ -9,7 +9,7 @@ export class Task {
         this.identifier = Date.now();
     }
     summary() {
-        console.log(`I am task, ${this.title}, due on ${this.dueDate} with level ${this.priority} priority id:${this.identifier}`);
+        console.log(`I am task, ${this.title}, due on ${this.dueDate} with level ${this.priority} priority & id:${this.identifier}`);
     }
 }
 export class Project {
