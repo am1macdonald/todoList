@@ -130,7 +130,14 @@ const newChecklist = (parent) => {
 const submitButton = document.createElement('button');
 submitButton.type = 'submit';
 submitButton.innerHTML = 'Create';
-submitButton.addEventListener('click', addNewTask);
+submitButton.addEventListener('click', addNewTask );
+
+const cancelButton = document.createElement('button');
+cancelButton.type = 'button';
+cancelButton.innerHTML = 'Cancel';
+cancelButton.addEventListener('click', () => {
+    wipeForm();
+});
                 
         // appending all elements to the DOM
 const taskCreationMenu = () => {
@@ -142,12 +149,18 @@ const taskCreationMenu = () => {
     newPriorityDropdown(form, 5);
     newChecklist(form);
     newTextInput(form, 'notes', 'Notes:', 'Any additional details?', false);            
-    form.appendChild(submitButton);            
+    form.appendChild(submitButton);
+    form.appendChild(cancelButton);         
+}
+
+const wipeForm = () => {
+    document.getElementById('form-overlay').remove();
 }
 
 
 
 
 export {
-    taskCreationMenu
+    taskCreationMenu,
+    wipeForm
 }
