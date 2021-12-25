@@ -1,11 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin&family=Playfair+Display&display=swap');
+/*
+font-family: 'Cabin', sans-serif;
+
+font-family: 'Playfair Display', serif;
+*/
+
+
 body { 
   width: 100vw;
   height: 100vh;
+  
+  background-color: lightcoral;
 }
+nav {
+  position: fixed;
+  
+  height: 100vh;
+  width: 25vw;
+  
+  background-color: black;
+}
+nav h1 {
+  font-size: 5vmin;
+  color: white;
+  font-family: 'Playfair Display', serif;
 
+}
 #content {
   height: 100%;
-  width: 100%;
+  width: 75vw;
+  margin-left: 25vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,7 +40,7 @@ body {
   padding: 3vmin;
   border-radius: 1px;
   background-color: beige;
-  box-shadow: 3px 3px 15px lightgrey;
+  box-shadow: 3px 3px 15px lightcoral;
   line-height: 5vmin;
   display: flex;
   justify-content: center;

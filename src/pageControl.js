@@ -4,16 +4,14 @@ import './pageFunctions.js'
 import { addNewTask } from './pageFunctions.js';
 
 
-
-function pageLoad(){
-
-    const content = document.getElementById('content');
+const content = document.getElementById('content');
 
     // create the popup for adding new tasks
+const newFormWindow = (type) => {
 
-    const dataInputWindow = function() {
+            const formOverlay = document.createElement('div');
+            formOverlay.id = 'form-overlay';
 
-        const newFormWindow = (type) => {
             const container = document.createElement('div');
             container.id = 'form-container';
 
@@ -26,11 +24,12 @@ function pageLoad(){
 
             form.appendChild(formHeader);
             container.appendChild(form);
-            content.appendChild(container);
-        }
+            formOverlay.appendChild(container);
+            content.appendChild(formOverlay);
+    }
 
         // creates a text input when called
-        const newTextInput = (parent, name, labelText, placeholder, required) => {
+const newTextInput = (parent, name, labelText, placeholder, required) => {
             const label = document.createElement('label');
             label.for = name;
             label.innerHTML = labelText;
@@ -45,10 +44,10 @@ function pageLoad(){
 
             parent.appendChild(label);
             parent.appendChild(input);
-        }
+    }
 
         // creates a date input when called
-        const newDateInput = (parent) => {
+const newDateInput = (parent) => {
             const label = document.createElement('label');
             label.for = 'due-date';
             label.innerHTML = 'What is the deadline?';
@@ -61,9 +60,9 @@ function pageLoad(){
 
             parent.appendChild(label);
             parent.appendChild(input);
-        }
-
-        const newPriorityDropdown = (parent, maxScale) => {
+}
+        // dropdown menu for selecting the priority
+const newPriorityDropdown = (parent, maxScale) => {
             const label = document.createElement('label');
             label.for = 'priority';
             label.innerHTML = 'How important is the task?';
@@ -77,10 +76,10 @@ function pageLoad(){
             }
             parent.appendChild(label);
             parent.appendChild(input);
-        }
+}
 
         // input for a task checklist
-        const newChecklist = (parent) => {
+const newChecklist = (parent) => {
             const label = document.createElement('label');
             label.for = 'checklist';
             label.innerHTML = 'Checklist:';
@@ -128,31 +127,27 @@ function pageLoad(){
         };
     
         // button to submit the details and invoke function to make a new task object
-        const submitButton = document.createElement('button');
-        submitButton.type = 'submit';
-        submitButton.innerHTML = 'Create';
-        submitButton.addEventListener('click', addNewTask);
+const submitButton = document.createElement('button');
+submitButton.type = 'submit';
+submitButton.innerHTML = 'Create';
+submitButton.addEventListener('click', addNewTask);
                 
         // appending all elements to the DOM
-        const taskCreationMenu = () => {
-            newFormWindow('Task');
-            let form = document.getElementById('task-form');
-            newTextInput(form, 'title', 'Title:', 'What needs doing?', true);
-            newTextInput(form, 'description', 'Description:', 'What are the details?', true);
-            newDateInput(form);
-            newPriorityDropdown(form, 5);
-            newChecklist(form);
-            newTextInput(form, 'notes', 'Notes:', 'Any additional details?', false);            
-            form.appendChild(submitButton);            
-        }
-
-        return {
-            taskCreationMenu
-        }
-    }    
-    dataInputWindow().taskCreationMenu();
+const taskCreationMenu = () => {
+    newFormWindow('Task');
+    let form = document.getElementById('task-form');
+    newTextInput(form, 'title', 'Title:', 'What needs doing?', true);
+    newTextInput(form, 'description', 'Description:', 'What are the details?', true);
+    newDateInput(form);
+    newPriorityDropdown(form, 5);
+    newChecklist(form);
+    newTextInput(form, 'notes', 'Notes:', 'Any additional details?', false);            
+    form.appendChild(submitButton);            
 }
 
+
+
+
 export {
-    pageLoad
+    taskCreationMenu
 }
