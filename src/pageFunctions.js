@@ -2,18 +2,18 @@ import { wipeForm } from './pageControl.js';
 import './todo.js'
 import { Task } from './todo.js';
 
-export const taskLibrary = () => {
-    
+export const taskLibrary = (() => {    
     const arr = [];
+    const showLibrary = () => arr;
     const addToLibrary = (task) => {
         arr.push(task);
         arr[arr.length-1].summary();
-    }
+    };
     return {
-        addToLibrary
-    }
-
-};
+        addToLibrary,
+        showLibrary
+    };
+})();
 const projects = [];
 
 export function addNewTask(e) {
@@ -40,10 +40,9 @@ export function addNewTask(e) {
     };
     let newTask = new Task(...nodeArr, checklistObj);
     
-    taskLibrary().addToLibrary(newTask);
-    console.log('adding new task');
-    console.log(nodeArr);
+    taskLibrary.addToLibrary(newTask);
     wipeForm();
+    taskLibrary.showLibrary();
 
 }
 
