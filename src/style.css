@@ -14,6 +14,7 @@ body {
 }
 
 #img-div {
+  filter: brightness(0.7);
   height: 100vh;
   width: 100vw;
   overflow: hidden;
@@ -29,7 +30,6 @@ nav {
   height: 100vh;
   width: clamp(190px, 25vw, 270px);
   
-  background-color: hsla(240, 6%, 26%, 0.747);
 
   display: flex;
   flex-direction: column;
@@ -39,15 +39,16 @@ nav {
 
 nav h1 {
   font-size: clamp(39px, 5vmin, 55px);
-  color: white;
+  color: rgb(255, 255, 255);
   font-family: 'Playfair Display', serif;
   width: 100%;
   text-align: justify;
 }
 
 #task-container {
+  width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: whitesmoke;  
 }
 
 #content {

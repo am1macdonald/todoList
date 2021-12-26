@@ -1,17 +1,17 @@
-import { wipeForm } from './pageControl.js';
+import { renderTasksToNav, wipeForm } from './pageControl.js';
 import './todo.js'
-import { Task } from './todo.js';
+import Task from './taskClass.js';
 
 export const taskLibrary = (() => {    
     const arr = [];
-    const showLibrary = () => arr;
+    const show = () => arr;
     const addToLibrary = (task) => {
         arr.push(task);
         arr[arr.length-1].summary();
     };
     return {
         addToLibrary,
-        showLibrary
+        show,
     };
 })();
 const projects = [];
@@ -42,7 +42,8 @@ export function addNewTask(e) {
     
     taskLibrary.addToLibrary(newTask);
     wipeForm();
-    taskLibrary.showLibrary();
+    taskLibrary.show();
+    renderTasksToNav();
 
 }
 

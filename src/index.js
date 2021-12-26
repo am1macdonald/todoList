@@ -1,11 +1,10 @@
-import { intervalToDuration } from 'date-fns';
 import './reset.css';
 import './style.css';
-import image from './mixkit-starry-night-sky-over-hills-and-water-85-original.png'
-import {renderStaticElements, taskCreationMenu} from './pageControl.js';
+import {renderBigDate, renderStaticElements, taskCreationMenu} from './pageControl.js';
 
 
 renderStaticElements();
+renderBigDate();
 
 
 const newTaskButton = document.getElementById('new-task-button');

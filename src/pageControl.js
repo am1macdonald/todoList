@@ -1,7 +1,7 @@
 import { Task, Project } from './todo.js';
 import { format } from 'date-fns';
 import './pageFunctions.js';
-import { addNewTask } from './pageFunctions.js';
+import { addNewTask, taskLibrary } from './pageFunctions.js';
 
 
 const content = document.getElementById('content');
@@ -36,6 +36,13 @@ const renderStaticElements = () => {
     
         const taskContainer = document.createElement('div');
         taskContainer.id = 'task-container';
+        const taskHeader = document.createElement('h3');
+        taskHeader.id = 'task-header';
+        taskHeader.innerHTML = 'Tasks';
+        taskContainer.appendChild(taskHeader);
+        const taskList = document.createElement('ul');
+        taskList.id = 'task-list';
+        taskContainer.appendChild(taskList);
     
         const newTaskButton = document.createElement('button');
         newTaskButton.id = 'new-task-button';
@@ -48,26 +55,6 @@ const renderStaticElements = () => {
         page.prepend(nav);
     })();
 
-        // renders date to body of page
-    const renderBigDate = (() => {
-        const dateHero = document.createElement('div');
-        dateHero.id = 'date-hero';
-        const dateToday = document.createElement('h2');
-        dateToday.id = 'date-today';
-
-        function updateTime() {
-        dateToday.innerHTML = `${format(new Date(), "EEEE' the 'do' of 'MMMM")} <br />
-                                ${format(new Date(), "HH:mm:ss")}`;
-        setTimeout(updateTime, 1000);
-        };
-
-        dateHero.appendChild(dateToday);
-        content.appendChild(dateHero);
-
-        updateTime();
-        
-
-    })();
 };
 
 
@@ -76,23 +63,23 @@ const renderDynamicParts = (() => {
         // create the popup for adding new tasks
     const newFormWindow = (type) => {
 
-    const formOverlay = document.createElement('div');
-    formOverlay.id = 'form-overlay';
+        const formOverlay = document.createElement('div');
+        formOverlay.id = 'form-overlay';
 
-    const container = document.createElement('div');
-    container.id = 'form-container';
+        const container = document.createElement('div');
+        container.id = 'form-container';
 
-    const formHeader = document.createElement('h3');
-    formHeader.innerHTML = `New ${type}`;
+        const formHeader = document.createElement('h3');
+        formHeader.innerHTML = `New ${type}`;
 
-    const form = document.createElement('form');
-    form.name = `${type} creation form`;
-    form.id = `${type.toLowerCase()}-form`;
+        const form = document.createElement('form');
+        form.name = `${type} creation form`;
+        form.id = `${type.toLowerCase()}-form`;
 
-    form.appendChild(formHeader);
-    container.appendChild(form);
-    formOverlay.appendChild(container);
-    content.appendChild(formOverlay);
+        form.appendChild(formHeader);
+        container.appendChild(form);
+        formOverlay.appendChild(container);
+        content.appendChild(formOverlay);
     };
 
         // creates a text input when called
@@ -228,6 +215,22 @@ const renderDynamicParts = (() => {
 
 
 })();
+
+// renders date to body of page
+const renderBigDate = () => {
+    const dateHero = document.createElement('div');
+    dateHero.id = 'date-hero';
+    const dateToday = document.createElement('h2');
+    dateToday.id = 'date-today';
+    function updateTime() {
+    dateToday.innerHTML = `${format(new Date(), "EEEE' the 'do' of 'MMMM")} <br />
+                            ${format(new Date(), "HH:mm:ss")}`;
+    setTimeout(updateTime, 1000);
+    };
+    dateHero.appendChild(dateToday);
+    content.appendChild(dateHero);
+    updateTime();    
+};
               
         // creating a form for a new task
 const taskCreationMenu = () => {
@@ -249,11 +252,26 @@ const wipeForm = () => {
     document.getElementById('form-overlay').remove();
 };
 
+const renderTasksToNav = () => {
+    const list = document.getElementById('task-list');
+    list.innerHTML = '';
+    const taskItem = document.createElement('li');
+
+    taskLibrary.show().map(task => {
+        console.log(task.identifier);
+        let newListItem = taskItem.cloneNode();
+        newListItem.innerHTML = task.title;        
+        list.appendChild(newListItem);
+    });
+}
+
 
 
 
 export {
     renderStaticElements,
+    renderBigDate,
     taskCreationMenu,
     wipeForm,
+    renderTasksToNav,
 };
