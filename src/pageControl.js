@@ -1,4 +1,3 @@
-import { Task, Project } from './todo.js';
 import { format } from 'date-fns';
 import './pageFunctions.js';
 import { addNewTask, taskLibrary } from './pageFunctions.js';

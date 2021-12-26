@@ -1,5 +1,4 @@
 import { renderTasksToNav, wipeForm } from './pageControl.js';
-import './todo.js'
 import Task from './taskClass.js';
 
 export const taskLibrary = (() => {    

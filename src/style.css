@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Cabin&family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
 /*
 font-family: 'Cabin', sans-serif;
 
@@ -11,6 +12,7 @@ body {
   height: 100vh;
   
   background-color: lightcoral;
+  font-family: 'Montserrat', sans-serif;
 }
 
 #img-div {
@@ -40,7 +42,7 @@ nav {
 nav h1 {
   font-size: clamp(39px, 5vmin, 55px);
   color: rgb(255, 255, 255);
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   width: 100%;
   text-align: justify;
 }
@@ -62,7 +64,7 @@ nav h1 {
 #date-today {
   font-size: clamp(30px, 4vmin, 5px);
   color: white;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   width: auto;
   height: 10vh;
 }
