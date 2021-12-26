@@ -4,6 +4,9 @@ import './pageFunctions.js';
 import { addNewTask } from './pageFunctions.js';
 
 
+const content = document.getElementById('content');
+
+
 
 const renderStaticElements = () => {
 
@@ -44,11 +47,28 @@ const renderStaticElements = () => {
         
         page.prepend(nav);
     })();
+
+        // renders date to body of page
+    const renderBigDate = (() => {
+        const dateHero = document.createElement('div');
+        dateHero.id = 'date-hero';
+        const dateToday = document.createElement('h2');
+        dateToday.id = 'date-today';
+
+        function updateTime() {
+        dateToday.innerHTML = `${format(new Date(), "EEEE' the 'do' of 'MMMM")} <br />
+                                ${format(new Date(), "HH:mm:ss")}`;
+        setTimeout(updateTime, 1000);
+        };
+
+        dateHero.appendChild(dateToday);
+        content.appendChild(dateHero);
+
+        updateTime();
+        
+
+    })();
 };
-
-    // ref for dynamically rendered elements to append to
-const content = document.getElementById('content');
-
 
 
 const renderDynamicParts = (() => {
@@ -208,23 +228,8 @@ const renderDynamicParts = (() => {
 
 
 })();
-
-/*
-        // button to submit the details and invoke function to make a new task object
-const submitButton = document.createElement('button');
-submitButton.type = 'submit';
-submitButton.innerHTML = 'Create';
-submitButton.addEventListener('click', addNewTask );
-
-const cancelButton = document.createElement('button');
-cancelButton.type = 'button';
-cancelButton.innerHTML = 'Cancel';
-cancelButton.addEventListener('click', () => {
-    wipeForm();
-});
-*/
-                
-        // appending all elements to the DOM
+              
+        // creating a form for a new task
 const taskCreationMenu = () => {
     renderDynamicParts.newFormWindow('Task');
     let form = document.getElementById('task-form');
@@ -238,11 +243,11 @@ const taskCreationMenu = () => {
     renderDynamicParts.cancelButton(form);
     //form.appendChild(submitButton);
     //form.appendChild(cancelButton);         
-}
+};
 
 const wipeForm = () => {
     document.getElementById('form-overlay').remove();
-}
+};
 
 
 
@@ -251,4 +256,4 @@ export {
     renderStaticElements,
     taskCreationMenu,
     wipeForm,
-}
+};
