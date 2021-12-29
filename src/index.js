@@ -9,6 +9,7 @@ renderBigDate.updateTime();
 const content = document.getElementById('content');
 const clock = document.getElementById('date-hero');
 
+// Observer puts the clock back up when the content is empty.
 const contentObserver = (() => {
     const config = { childList: true };
     const callback = function (mutationsList, observer) {
@@ -34,5 +35,4 @@ newTaskButton.addEventListener('click', () => {
         taskCreationMenu();
         clock.remove();
     };
-    
 });

@@ -19,7 +19,7 @@ const renderStaticElements = () => {
     
         const header = document.createElement('h1');
         header.id = 'title';
-        header.innerHTML = 'Get on it.';
+        header.innerHTML = 'Do.';
     
         const taskContainer = document.createElement('div');
         taskContainer.id = 'task-container';
@@ -30,13 +30,24 @@ const renderStaticElements = () => {
         const taskList = document.createElement('ul');
         taskList.id = 'task-list';
         taskContainer.appendChild(taskList);
+
+        const projectContainer = document.createElement('div');
+        projectContainer.id = 'project-container';
+        const projectHeader = document.createElement('h3');
+        projectHeader.id = 'project-header';
+        projectHeader.innerHTML = 'Projects';
+        projectContainer.appendChild(projectHeader);
+        const projectList = document.createElement('ul');
+        projectList.id = 'project-list';
+        projectContainer.appendChild(projectList);
     
         const newTaskButton = document.createElement('button');
         newTaskButton.id = 'new-task-button';
-        newTaskButton.innerHTML = 'New Task';
+        newTaskButton.innerHTML = 'New Task*';
     
         nav.appendChild(header);
         nav.appendChild(taskContainer);
+        nav.appendChild(projectContainer);
         nav.appendChild(newTaskButton);
         
         page.prepend(nav);
@@ -87,7 +98,7 @@ const renderDynamicParts = (() => {
     const newDateInput = (parent) => {
         const label = document.createElement('label');
         label.for = 'due-date';
-        label.innerHTML = 'What is the deadline?';
+        label.innerHTML = 'Deadline.';
         const input = document.createElement('input');
         input.id = 'due-date';
         input.type = 'date';
@@ -103,7 +114,7 @@ const renderDynamicParts = (() => {
     const newPriorityDropdown = (parent, maxScale) => {
         const label = document.createElement('label');
         label.for = 'priority';
-        label.innerHTML = 'How important is the task?';
+        label.innerHTML = 'Priority.';
         const input = document.createElement('select');
         input.id = 'priority';
         for (let i = 1; i <= maxScale; i++) {
@@ -120,7 +131,7 @@ const renderDynamicParts = (() => {
     const newChecklist = (parent) => {
         const label = document.createElement('label');
         label.for = 'checklist';
-        label.innerHTML = 'Checklist:';
+        label.innerHTML = 'Checklist.';
         const listDiv = document.createElement('div');
         listDiv.id = 'checklist-div'
         const listUl = document.createElement('ul');
@@ -212,10 +223,8 @@ const renderBigDate = (() => {
     dateToday.innerHTML = `${format(new Date(), "EEEE', the 'do'<br />of 'MMMM")} <br />
                             ${format(new Date(), "HH:mm:ss")}`;
     timer = setTimeout(updateTime, 1000);
-    console.log(timer);
     };
     function stop() {
-        console.log('stop timer' + 'timer');
         clearTimeout(timer);
         timer = 0;
     };
@@ -231,12 +240,12 @@ const renderBigDate = (() => {
 const taskCreationMenu = () => {
     renderDynamicParts.newFormWindow('Task');
     let form = document.getElementById('task-form');
-    renderDynamicParts.newTextInput(form, 'title', 'Title:', 'What needs doing?', true);
-    renderDynamicParts.newTextInput(form, 'description', 'Description:', 'What are the details?', true);
+    renderDynamicParts.newTextInput(form, 'title', 'Title.', 'Enter task name...', true);
+    renderDynamicParts.newTextInput(form, 'description', 'Details.', 'Details...', true);
     renderDynamicParts.newDateInput(form);
     renderDynamicParts.newPriorityDropdown(form, 5);
     renderDynamicParts.newChecklist(form);
-    renderDynamicParts.newTextInput(form, 'notes', 'Notes:', 'Any additional details?', false);            
+    renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);            
     renderDynamicParts.submitButton(form);
     renderDynamicParts.cancelButton(form);
     //form.appendChild(submitButton);
