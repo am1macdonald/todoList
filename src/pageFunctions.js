@@ -27,7 +27,7 @@ export function addNewTask(e) {
     // checks for contents of each child node
     for (let i = 0; i < nodeArr.length - 1; i++) {
         if (nodeArr[i].length == 0) {
-            return console.error("sry");
+            return console.error("err: missing fields");
         };
     };
      

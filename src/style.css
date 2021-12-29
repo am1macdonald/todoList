@@ -1,17 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Cabin&family=Playfair+Display&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
-/*
-font-family: 'Cabin', sans-serif;
-
-font-family: 'Playfair Display', serif;
-*/
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;1,600&display=swap');
 
 body { 
   width: 100vw;
   height: 100vh;
   
-  background-color: lightcoral;
+  background: rgb(250,249,246);
+  background: linear-gradient(145deg, rgba(250,249,246,1) 83%, rgba(0,121,140,1) 94%, rgba(31,27,27,1) 100%); 
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -40,17 +34,27 @@ nav {
 }
 
 nav h1 {
-  font-size: clamp(39px, 5vmin, 55px);
-  color: rgb(255, 255, 255);
+  font-size: clamp(39px, 6vmin, 55px);
+  font-weight: 600;
+  font-style: italic;
+  color: hsla(302, 16%, 45%, 1);
   font-family: 'Montserrat', sans-serif;
   width: 100%;
   text-align: justify;
 }
 
+h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(30px, 4vmin, 5px);
+  color: hsla(302, 16%, 45%, 1);
+  font-weight: 600;
+  font-style: italic;
+}
+
 #task-container {
   width: 100%;
   height: 100%;
-  background-color: whitesmoke;  
+  background-color: hsla(45, 29%, 97%, 1);  
 }
 
 #content {
@@ -62,28 +66,49 @@ nav h1 {
   align-items: center;
 }
 #date-today {
-  font-size: clamp(30px, 4vmin, 5px);
-  color: white;
   font-family: 'Montserrat', sans-serif;
+  font-size: clamp(30px, 5vmin, 50px);
+  color: hsla(302, 16%, 45%, 1);
+  font-weight: 600;
+  line-height: 1em;
+  text-align: center;
   width: auto;
   height: 10vh;
+}
+#form-overlay {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #form-container {
   box-sizing: border-box;
   padding: 3vmin;
   border-radius: 1px;
-  background-color: beige;
-  box-shadow: 3px 3px 15px lightcoral;
-  line-height: 5vmin;
+  background-color: whitesmoke;
+  box-shadow: 3px 3px 15px hsla(120, 5%, 84%, 1);
   display: flex;
   justify-content: center;
   align-items: center;
+
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(30px, 2vmin, 5px);
+  color: hsla(302, 16%, 45%, 1);
+  font-weight: 600;
+  line-height: 1em;
 }
 
-#form-container form {
+#task-form {
   display: inherit;
   flex-direction: column;
+  line-height: 2em;
 }
 
 #checklist-div {

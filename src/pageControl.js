@@ -12,18 +12,6 @@ const renderStaticElements = () => {
         // ref for static elements to append to
     const page = document.getElementById('page');
 
-
-        // renders the background
-    const renderBackground = (() => {
-        const backgroundImg = document.createElement('IMG');
-        const imgDiv = document.createElement('div');
-        imgDiv.id = 'img-div';
-        backgroundImg.setAttribute('src', "./414f227d270f533c6661.png");
-        backgroundImg.setAttribute('alt', "A background Picture");
-        imgDiv.appendChild(backgroundImg);
-        page.prepend(imgDiv);
-    })();
-    
         // renders the sidebar
     const renderSidebar = (() => {    
         const nav = document.createElement('nav');
@@ -62,9 +50,6 @@ const renderDynamicParts = (() => {
         // create the popup for adding new tasks
     const newFormWindow = (type) => {
 
-        const formOverlay = document.createElement('div');
-        formOverlay.id = 'form-overlay';
-
         const container = document.createElement('div');
         container.id = 'form-container';
 
@@ -77,8 +62,7 @@ const renderDynamicParts = (() => {
 
         form.appendChild(formHeader);
         container.appendChild(form);
-        formOverlay.appendChild(container);
-        content.appendChild(formOverlay);
+        content.appendChild(container);
     };
 
         // creates a text input when called
@@ -216,22 +200,34 @@ const renderDynamicParts = (() => {
 })();
 
 // renders date to body of page
-const renderBigDate = () => {
+const renderBigDate = (() => {
     const dateHero = document.createElement('div');
     dateHero.id = 'date-hero';
     const dateToday = document.createElement('h2');
     dateToday.id = 'date-today';
-    function updateTime() {
-    dateToday.innerHTML = `${format(new Date(), "EEEE' the 'do' of 'MMMM")} <br />
-                            ${format(new Date(), "HH:mm:ss")}`;
-    setTimeout(updateTime, 1000);
-    };
     dateHero.appendChild(dateToday);
     content.appendChild(dateHero);
-    updateTime();    
-};
+    let timer;
+    function updateTime() {
+    dateToday.innerHTML = `${format(new Date(), "EEEE', the 'do'<br />of 'MMMM")} <br />
+                            ${format(new Date(), "HH:mm:ss")}`;
+    timer = setTimeout(updateTime, 1000);
+    console.log(timer);
+    };
+    function stop() {
+        console.log('stop timer' + 'timer');
+        clearTimeout(timer);
+        timer = 0;
+    };
+
+
+    return {
+        updateTime,
+        stop,
+    }
+})();
               
-        // creating a form for a new task
+// creating a form for a new task
 const taskCreationMenu = () => {
     renderDynamicParts.newFormWindow('Task');
     let form = document.getElementById('task-form');
@@ -248,7 +244,7 @@ const taskCreationMenu = () => {
 };
 
 const wipeForm = () => {
-    document.getElementById('form-overlay').remove();
+    document.getElementById('form-container').remove();
 };
 
 const renderTasksToNav = () => {
