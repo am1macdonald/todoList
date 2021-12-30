@@ -1,6 +1,6 @@
 import './reset.css';
 import './style.css';
-import {renderBigDate, renderStaticElements, taskCreationMenu, render} from './pageControl.js';
+import {renderBigDate, renderStaticElements, taskCreationMenu } from './pageControl.js';
 
 
 renderStaticElements();
@@ -10,17 +10,17 @@ const content = document.getElementById('content');
 const clock = document.getElementById('date-hero');
 
 // Observer puts the clock back up when the content is empty.
-const contentObserver = (() => {
+(() => {
     const config = { childList: true };
-    const callback = function (mutationsList, observer) {
+    const callback = function (mutationsList) {
         for (const mutation of mutationsList) {
             if (mutation.type === "childList") {
                 if (content.childNodes.length === 0) {
                     renderBigDate.updateTime();
                     content.appendChild(clock);
-                }; 
-            };
-        };
+                } 
+            }
+        }
     };
     const observer = new MutationObserver(callback);
     observer.observe(content, config);
@@ -34,5 +34,5 @@ newTaskButton.addEventListener('click', () => {
     if (!checkForm) {
         taskCreationMenu();
         clock.remove();
-    };
+    }
 });

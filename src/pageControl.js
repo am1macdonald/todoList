@@ -9,11 +9,11 @@ const content = document.getElementById('content');
 
 const renderStaticElements = () => {
 
-        // ref for static elements to append to
+    // ref for static elements to append to
     const page = document.getElementById('page');
 
-        // renders the sidebar
-    const renderSidebar = (() => {    
+    // renders the sidebar
+    (() => {    
         const nav = document.createElement('nav');
         nav.id = 'sidebar';
     
@@ -154,7 +154,7 @@ const renderDynamicParts = (() => {
                 listItem.innerHTML = '- ' + textInput.value;
                 listUl.appendChild(listItem);
                 textInput.value = '';
-            };
+            }
         });
         removeItem.addEventListener('click', function(e){
             e.preventDefault();
@@ -223,11 +223,11 @@ const renderBigDate = (() => {
     dateToday.innerHTML = `${format(new Date(), "EEEE', the 'do'<br />of 'MMMM")} <br />
                             ${format(new Date(), "p")}`;
     timer = setTimeout(updateTime, 1000);
-    };
+    }
     function stop() {
         clearTimeout(timer);
         timer = 0;
-    };
+    }
 
 
     return {
@@ -245,11 +245,12 @@ const taskCreationMenu = () => {
     renderDynamicParts.newDateInput(form);
     renderDynamicParts.newPriorityDropdown(form, 5);
     renderDynamicParts.newChecklist(form);
-    renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);            
-    renderDynamicParts.submitButton(form);
-    renderDynamicParts.cancelButton(form);
-    //form.appendChild(submitButton);
-    //form.appendChild(cancelButton);         
+    renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
+    const div = document.createElement('div');
+    div.id = 'form-button-div';           
+    renderDynamicParts.submitButton(div);
+    renderDynamicParts.cancelButton(div);
+    form.appendChild(div);
 };
 
 const wipeForm = () => {

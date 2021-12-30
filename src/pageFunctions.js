@@ -28,15 +28,15 @@ export function addNewTask(e) {
     for (let i = 0; i < nodeArr.length - 1; i++) {
         if (nodeArr[i].length == 0) {
             return console.error("err: missing fields");
-        };
-    };
+        }
+    }
      
     // gets contents of the checklist and stores them in an object
     let listItems = document.getElementsByClassName('checklist-item');
     let checklistObj = {};
     for (let item of listItems) {
         checklistObj[item.innerHTML.slice(2,item.innerHTML.length)] = false;
-    };
+    }
     let newTask = new Task(...nodeArr, checklistObj);
     
     taskLibrary.addToLibrary(newTask);

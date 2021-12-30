@@ -1,11 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,900;1,600&display=swap');
+@font-face {
+  font-family: 'Oswald';
+  src: url(./Oswald-VariableFont_wght.ttf);
+}
 
 body { 
   width: 100vw;
   height: 100vh;  
   background: rgb(250,249,246);
   background: linear-gradient(145deg, rgba(250,249,246,1) 83%, rgba(0,121,140,1) 94%, rgba(31,27,27,1) 100%); 
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-weight: normal;
 }
 
@@ -27,13 +30,13 @@ nav h1 {
   font-weight: 600;
   font-style: italic;
   color: hsla(302, 16%, 45%, 1);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Oswald', sans-serif;
   width: 100%;
   text-align: justify;
 }
 
 h3 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 4vmin;
   color: hsla(302, 16%, 45%, 1);
   font-weight: 0, 600;
@@ -51,7 +54,7 @@ h3 {
  border: none;
  width: 12rem;
  height: auto;
- font-family: 'Montserrat', sans-serif;
+ font-family: 'Oswald', sans-serif;
  font-size: 2.8vmin;
  font-weight: bold;
 }
@@ -69,7 +72,7 @@ h3 {
 }
 
 #date-today {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: clamp(30px, 5vmin, 50px);
   color: hsla(302, 16%, 45%, 1);
   font-weight: 300;
@@ -89,7 +92,7 @@ h3 {
   justify-content: center;
   align-items: center;
 
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: clamp(22px, 2vmin, 5px);
   color: hsla(302, 16%, 45%, 1);
   font-weight: 600;
@@ -103,7 +106,36 @@ h3 {
   line-height: 1.5em;
   font-weight: 300;
 }
+#task-form input {
+  background: none;
+  border: none;
+  border-bottom: 1px solid;
 
+  height: 2vmin;
+  border-color: hsla(120, 5%, 84%, 1);
+}
+#task-form input:focus {
+  height: 2.2vmin;
+  border-bottom: 2px solid;
+  border-color: rgba(0, 120, 138, 0.473);
+  outline: none;
+}
+
+#task-form button {
+  color: hsl(43, 100%, 68%);
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  width: 12rem;
+  height: auto;
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.8vmin;
+  font-weight: bold;
+}
+#task-form button:hover {
+  padding: 0;
+  font-size: 2.9vmin;
+  text-shadow: 2px 2px rgb(240, 238, 232);
+}
 #checklist-div {
   display: flex;
   flex-direction: column;
