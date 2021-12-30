@@ -221,7 +221,7 @@ const renderBigDate = (() => {
     let timer;
     function updateTime() {
     dateToday.innerHTML = `${format(new Date(), "EEEE', the 'do'<br />of 'MMMM")} <br />
-                            ${format(new Date(), "HH:mm:ss")}`;
+                            ${format(new Date(), "p")}`;
     timer = setTimeout(updateTime, 1000);
     };
     function stop() {
