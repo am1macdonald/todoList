@@ -35,12 +35,22 @@ nav h1 {
   text-align: justify;
 }
 
+h2 {  
+  font-family: 'Oswald', sans-serif;
+  font-size: 3.8vmin;
+  color: hsla(302, 16%, 45%, 1);
+  font-weight: 0;
+  font-style: italic;
+  padding-bottom: 3vmin;
+}
+
 h3 {
   font-family: 'Oswald', sans-serif;
-  font-size: 4vmin;
+  font-size: 3.7vmin;
   color: hsla(302, 16%, 45%, 1);
-  font-weight: 0, 600;
+  font-weight: 600;
   font-style: italic;
+  padding-bottom: 5vmin;
 }
 
 #task-container {
@@ -49,14 +59,14 @@ h3 {
 }
 
 #new-task-button {
- color: hsl(43, 95%, 63%);
- background-color: rgba(0, 0, 0, 0);
- border: none;
- width: 12rem;
- height: auto;
- font-family: 'Oswald', sans-serif;
- font-size: 2.8vmin;
- font-weight: bold;
+  color: hsl(43, 100%, 59%);
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  width: 12rem;
+  height: auto;
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.8vmin;
+  font-weight: bold;
 }
 
 #new-task-button:hover{
@@ -100,29 +110,38 @@ h3 {
 }
 
 #task-form {
+  display: flex;
+  justify-content: space-between;
+  height: 70vh;
   width: clamp( 50vw, 80%, 680px );
   display: inherit;
   flex-direction: column;
   line-height: 1.5em;
   font-weight: 300;
 }
+#task-form * {
+  padding-bottom: 2px;
+}
 #task-form input {
   background: none;
   border: none;
   border-bottom: 1px solid;
-
-  height: 2vmin;
   border-color: hsla(120, 5%, 84%, 1);
+
+  height: 2.4vmin;
+  width: 100%;
+  font-size: 1.6vmin;
+  font-family: 'Oswald', sans-serif;
 }
 #task-form input:focus {
-  height: 2.2vmin;
+  padding-bottom: 1px;
   border-bottom: 2px solid;
   border-color: rgba(0, 120, 138, 0.473);
   outline: none;
 }
 
 #task-form button {
-  color: hsl(43, 100%, 68%);
+  color: hsl(43, 100%, 59%);
   background-color: rgba(0, 0, 0, 0);
   border: none;
   width: 12rem;
@@ -142,7 +161,9 @@ h3 {
   align-items: flex-start;
   justify-content: flex-start;
 }
-
-.display {
-  display: none;
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }

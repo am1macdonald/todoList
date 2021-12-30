@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { compareAsc, format } from 'date-fns';
 import './pageFunctions.js';
 import { addNewTask, taskLibrary } from './pageFunctions.js';
 
@@ -23,7 +23,7 @@ const renderStaticElements = () => {
     
         const taskContainer = document.createElement('div');
         taskContainer.id = 'task-container';
-        const taskHeader = document.createElement('h3');
+        const taskHeader = document.createElement('h2');
         taskHeader.id = 'task-header';
         taskHeader.innerHTML = 'Tasks';
         taskContainer.appendChild(taskHeader);
@@ -33,7 +33,7 @@ const renderStaticElements = () => {
 
         const projectContainer = document.createElement('div');
         projectContainer.id = 'project-container';
-        const projectHeader = document.createElement('h3');
+        const projectHeader = document.createElement('h2');
         projectHeader.id = 'project-header';
         projectHeader.innerHTML = 'Projects';
         projectContainer.appendChild(projectHeader);
@@ -51,6 +51,7 @@ const renderStaticElements = () => {
         nav.appendChild(newTaskButton);
         
         page.prepend(nav);
+        renderTasksToNav();
     })();
 
 };
@@ -103,7 +104,7 @@ const renderDynamicParts = (() => {
         input.id = 'due-date';
         input.type = 'date';
         input.min = `${format(new Date(), 'yyyy-MM-dd')}`;
-        input.value = `${format(new Date(), 'yyyy-MM-dd')}`
+        input.value = `${format(new Date(), 'yyyy-MM-dd')}`;
         input.required = true;
 
         parent.appendChild(label);
@@ -138,14 +139,16 @@ const renderDynamicParts = (() => {
         listUl.id = 'checklist-list';
         let textInput = document.createElement('input');
         textInput.type = 'text';
+        textInput.placeholder = 'Add an item...';
         textInput.id = 'checklist-text-input'
         const buttonDiv = document.createElement('div');
+        buttonDiv.classList.add('form-buttons');
         const addItem = document.createElement('button');
         addItem.type = 'button';
-        addItem.innerHTML = 'add';
+        addItem.innerHTML = 'add*';
         const removeItem = document.createElement('button');
         removeItem.type = 'button';
-        removeItem.innerHTML = 'remove';
+        removeItem.innerHTML = 'remove*';
         addItem.addEventListener('click', function(e){
             e.preventDefault();
             if (textInput.value.length > 0){
@@ -179,7 +182,7 @@ const renderDynamicParts = (() => {
     const submitButton = (parent) => {
         const submitButton = document.createElement('button');
         submitButton.type = 'submit';
-        submitButton.innerHTML = 'Create';
+        submitButton.innerHTML = 'create*';
         submitButton.addEventListener('click', addNewTask );
 
         parent.appendChild(submitButton);
@@ -189,7 +192,7 @@ const renderDynamicParts = (() => {
     const cancelButton = (parent) => {
         const cancelButton = document.createElement('button');
         cancelButton.type = 'button';
-        cancelButton.innerHTML = 'Cancel';
+        cancelButton.innerHTML = 'cancel*';
         cancelButton.addEventListener('click', () => {
             wipeForm();
         });
@@ -228,8 +231,6 @@ const renderBigDate = (() => {
         clearTimeout(timer);
         timer = 0;
     }
-
-
     return {
         updateTime,
         stop,
@@ -247,7 +248,7 @@ const taskCreationMenu = () => {
     renderDynamicParts.newChecklist(form);
     renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
     const div = document.createElement('div');
-    div.id = 'form-button-div';           
+    div.classList.add('form-buttons');         
     renderDynamicParts.submitButton(div);
     renderDynamicParts.cancelButton(div);
     form.appendChild(div);
@@ -261,14 +262,30 @@ const renderTasksToNav = () => {
     const list = document.getElementById('task-list');
     list.innerHTML = '';
     const taskItem = document.createElement('li');
-
-    taskLibrary.show().map(task => {
-        console.log(task.identifier);
+    let temp = [...taskLibrary.show()];
+    let topFive = [];
+    temp.map(task => {
+      if (topFive.length === 0){
+        topFive.push(task);
+      } else {
+        for (let i=0; i < topFive.length; i++){
+          let test = compareAsc(new Date(topFive[i].dueDate), new Date(task.dueDate));
+          if( test === 1 ){
+            topFive.splice(i, 0, task);
+            if (topFive.length > 5){ 
+              topFive.pop();
+            }
+            break;
+          }
+        }
+      }
+    });
+    topFive.map(task => {
         let newListItem = taskItem.cloneNode();
         newListItem.innerHTML = task.title;        
         list.appendChild(newListItem);
     });
-}
+};
 
 
 
