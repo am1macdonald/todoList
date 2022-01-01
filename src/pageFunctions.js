@@ -1,7 +1,9 @@
 import Task from './taskClass.js';
 
 export const taskLibrary = (() => {    
-    let arr = [      
+    let arr = [];
+    /*
+    [      
       {"title":"6 task","description":"More stuff","dueDate":"2026-12-30","priority":"1","notes":"","checklist":{},"identifier":16408544564564},      
       {"title":"3","description":"123123","dueDate":"2023-12-30","priority":"1","notes":"","checklist":{},"identifier":1640854693381},
       {"title":"4","description":"1231231231","dueDate":"2024-12-30","priority":"1","notes":"","checklist":{},"identifier":1640854696682},
@@ -11,18 +13,17 @@ export const taskLibrary = (() => {
       {"title":"8","description":"1231231231","dueDate":"2028-12-30","priority":"1","notes":"","checklist":{},"identifier":164085465675675},
       {"title":"first task","description":"stuff","dueDate":"2021-12-31","priority":"1","notes":"","checklist":{},"identifier":1640854644788}
     ];
-    /* 
+    */ 
     if (window.localStorage.getItem('task-library')) {
       arr = JSON.parse(window.localStorage.getItem('task-library')).map(task => {
         return new Task(task.title, task.description, task.dueDate, task.priority, task.notes, task.checklist)
       });
     }
-    */
     const show = () => arr;
     const addToLibrary = (task) => {
         arr.push(task);
         arr[arr.length-1].summary();
-        //window.localStorage.setItem('task-library', JSON.stringify(arr));
+        window.localStorage.setItem('task-library', JSON.stringify(arr));
     };
     return {
         addToLibrary,

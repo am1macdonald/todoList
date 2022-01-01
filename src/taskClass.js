@@ -3,7 +3,7 @@ export default class Task {
     constructor(title, description, dueDate,  priority = 1, notes, checklist = {}) {
         this.title = title;
         this.description = description;
-        this.dueDate = format(dueDate, "yyyy-MM-dd");
+        this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
         this.priority = priority;
         this.notes = notes;
         this.checklist = checklist;
