@@ -268,29 +268,26 @@ const renderTasksToNav = () => {
     list.innerHTML = '';
     const taskItem = document.createElement('li');
     let temp = [...taskLibrary.show()];
-    console.log(temp)
     let topFive = [];
     temp.map(task => {
-      console.log(task.dueDate);
       if (topFive.length === 0){
-        console.log('foo');
         topFive.push(task);
       } else {
-        console.log('bar');
         for (let i=0; i < topFive.length; i++){
           let test = compareAsc(new Date(topFive[i].dueDate), new Date(task.dueDate));
-          console.log('test: ' + test);
           if( test === 1 || test === 0){
             topFive.splice(i, 0, task);
             if (topFive.length > 5){ 
               topFive.pop();
             }
             break;
+          } else if (topFive.length < 5) {
+            topFive.push(task);
+            break;
           }
         }
       }
     });
-    console.log(topFive);
     topFive.map(task => {
         let newListItem = taskItem.cloneNode();
         newListItem.innerHTML = task.title;        
