@@ -1,4 +1,3 @@
-import { renderTasksToNav, wipeForm } from './pageControl.js';
 import Task from './taskClass.js';
 
 export const taskLibrary = (() => {    
@@ -32,8 +31,7 @@ export const taskLibrary = (() => {
 })();
 //const projects = [];
 
-export function addNewTask(e) {
-    e.preventDefault();
+export function addNewTask() {
     
     // array from text child nodes of form
     let nodeArr = 
@@ -62,9 +60,10 @@ export function addNewTask(e) {
     let newTask = new Task(...nodeArr, checklistObj);
     
     taskLibrary.addToLibrary(newTask);
-    wipeForm();
     taskLibrary.show();
-    renderTasksToNav();
+    //renderTasksToNav();
+    return true;
+    
 
 }
 

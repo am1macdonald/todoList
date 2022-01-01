@@ -181,9 +181,14 @@ const renderDynamicParts = (() => {
         // form submit button
     const submitButton = (parent) => {
         const submitButton = document.createElement('button');
-        submitButton.type = 'submit';
+        submitButton.type = 'button';
         submitButton.innerHTML = 'create*';
-        submitButton.addEventListener('click', addNewTask );
+        submitButton.addEventListener('click', () => {
+          if (addNewTask() === true) {
+            renderTasksToNav();
+            wipeForm();
+          }
+        });
 
         parent.appendChild(submitButton);
     };
