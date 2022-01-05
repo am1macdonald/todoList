@@ -185,6 +185,47 @@ const renderDynamicParts = (() => {
         
     };
 
+    const newTasklist = (parent) => {
+      const label = document.createElement('label');
+      label.setAttribute('for', 'checkboxes'); 
+      label.innerHTML = 'Tasks.';
+      const listDiv = document.createElement('div');
+      listDiv.id = 'tasklist-div'
+      const checkboxes = document.createElement('ul');
+      checkboxes.id = 'checkboxes';
+
+      const checkBox = document.createElement('input');
+      checkBox.type = 'checkbox';
+      const checkboxLabel = document.createElement('label');
+
+      let items = [...taskLibrary.show()];
+
+      items.map((item) => {
+        let listItem = document.createElement('li');
+        listItem.classList.add('task-list-item');
+
+        let cloneCheckbox = checkBox.cloneNode();
+        cloneCheckbox.id = `${item.identifier}`;
+        cloneCheckbox.value = `${item.identifier}`;
+
+        let cloneCheckboxLabel = checkboxLabel.cloneNode();
+        
+        cloneCheckboxLabel.setAttribute('for', `${item.identifier}`);
+        cloneCheckboxLabel.innerHTML = `${item.title}`;
+
+        listItem.appendChild(cloneCheckbox);
+        listItem.appendChild(cloneCheckboxLabel);
+        checkboxes.appendChild(listItem);
+      })
+
+
+      listDiv.appendChild(label);
+      listDiv.appendChild(checkboxes);
+
+      parent.appendChild(listDiv);
+      
+  };
+
         // form submit button
     const submitButton = (parent) => {
         const submitButton = document.createElement('button');
@@ -201,20 +242,17 @@ const renderDynamicParts = (() => {
               renderListToNav(taskLibrary.show(), 'task');
               wipeForm();
               stateManager.setAdded(false);
-
-              console.log(stateManager.getAdded());
             }
           } else if (parent.id === 'project-buttons') {
-            addNewProject();
-            console.log('project');
-            if (stateManager.getAdded()) {
-              renderListToNav(projectLibrary.show(), 'project');
-              wipeForm();
-              stateManager.setAdded(false);
-            }
+              addNewProject();
+              console.log('project');
+              if (stateManager.getAdded()) {
+                renderListToNav(projectLibrary.show(), 'project');
+                wipeForm();
+                stateManager.setAdded(false);
+              }
           }
         });
-
         parent.appendChild(submitButton);
     };
 
@@ -236,6 +274,7 @@ const renderDynamicParts = (() => {
         newDateInput,
         newPriorityDropdown,
         newChecklist,
+        newTasklist,
         submitButton,
         cancelButton
     }
@@ -295,11 +334,16 @@ const projectCreationMenu = () => {
   renderDynamicParts.newTextInput(form, 'description', 'Details.', 'Details...', true);
   renderDynamicParts.newDateInput(form);
   renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
+  renderDynamicParts.newTasklist(form);
   const div = document.createElement('div');
   div.classList.add('form-buttons');
   div.id = 'project-buttons';        
   renderDynamicParts.submitButton(div);
   renderDynamicParts.cancelButton(div);
+  const footNote = document.createElement('p');
+  footNote.id = 'project-form-footnote';
+  footNote.innerHTML = '*Additional tasks can be added later from the project screen';
+  form.appendChild(footNote);
   form.appendChild(div);
 }
 

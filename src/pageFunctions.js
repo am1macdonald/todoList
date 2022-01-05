@@ -135,7 +135,6 @@ export const stateManager = (() => {
     if (typeof newState === 'boolean') {
       _added = newState;
     }
-    console.log(_added);
   }
 
   return {

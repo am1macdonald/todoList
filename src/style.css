@@ -167,3 +167,11 @@ h3 {
   align-items: center;
   width: 100%;
 }
+#checkboxes {
+  overflow: scroll;
+  height: 25vh;
+}
+.task-list-item {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
