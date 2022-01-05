@@ -252,6 +252,7 @@ const renderBigDate = (() => {
 const taskCreationMenu = () => {
     renderDynamicParts.newFormWindow('Task');
     let form = document.getElementById('task-form');
+    form.classList.add('data-entry');
     renderDynamicParts.newTextInput(form, 'title', 'Title.', 'Enter task name...', true);
     renderDynamicParts.newTextInput(form, 'description', 'Details.', 'Details...', true);
     renderDynamicParts.newDateInput(form);
@@ -264,6 +265,21 @@ const taskCreationMenu = () => {
     renderDynamicParts.cancelButton(div);
     form.appendChild(div);
 };
+
+const projectCreationMenu = () => {
+  renderDynamicParts.newFormWindow('Project');
+  let form = document.getElementById('project-form');
+  form.classList.add('data-entry');
+  renderDynamicParts.newTextInput(form, 'title', 'Title.', 'Enter project name...', true);
+  renderDynamicParts.newTextInput(form, 'description', 'Details.', 'Details...', true);
+  renderDynamicParts.newDateInput(form);
+  renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
+  const div = document.createElement('div');
+  div.classList.add('form-buttons');         
+  renderDynamicParts.submitButton(div);
+  renderDynamicParts.cancelButton(div);
+  form.appendChild(div);
+}
 
 const wipeForm = () => {
     document.getElementById('form-container').remove();
@@ -308,6 +324,7 @@ export {
     renderStaticElements,
     renderBigDate,
     taskCreationMenu,
+    projectCreationMenu,
     wipeForm,
     renderTasksToNav,
 };

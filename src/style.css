@@ -109,7 +109,7 @@ h3 {
   line-height: 1em;
 }
 
-#task-form {
+.data-entry {
   display: flex;
   justify-content: space-between;
   height: 70vh;
@@ -119,10 +119,10 @@ h3 {
   line-height: 1.5em;
   font-weight: 300;
 }
-#task-form * {
+.data-entry * {
   padding-bottom: 2px;
 }
-#task-form input {
+.data-entry input {
   background: none;
   border: none;
   border-bottom: 1px solid;
@@ -133,14 +133,14 @@ h3 {
   font-size: 1.6vmin;
   font-family: 'Oswald', sans-serif;
 }
-#task-form input:focus {
+.data-entry input:focus {
   padding-bottom: 1px;
   border-bottom: 2px solid;
   border-color: rgba(0, 120, 138, 0.473);
   outline: none;
 }
 
-#task-form button {
+.data-entry button {
   color: hsl(43, 100%, 59%);
   background-color: rgba(0, 0, 0, 0);
   border: none;
@@ -150,7 +150,7 @@ h3 {
   font-size: 2.8vmin;
   font-weight: bold;
 }
-#task-form button:hover {
+.data-entry button:hover {
   padding: 0;
   font-size: 2.9vmin;
   text-shadow: 2px 2px rgb(240, 238, 232);

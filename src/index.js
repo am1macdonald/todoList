@@ -1,6 +1,6 @@
 import './reset.css';
 import './style.css';
-import {renderBigDate, renderStaticElements, taskCreationMenu } from './pageControl.js';
+import {projectCreationMenu, renderBigDate, renderStaticElements, taskCreationMenu } from './pageControl.js';
 
 
 renderStaticElements();
@@ -27,12 +27,23 @@ const clock = document.getElementById('date-hero');
 })();
 
 const newTaskButton = document.getElementById('new-task-button');
-newTaskButton.addEventListener('click', () => {
+  newTaskButton.addEventListener('click', () => {
     renderBigDate.stop();
     let checkForm = Array.from(document.getElementById('content').childNodes)
     .find((node) => node.id == 'form-container');
     if (!checkForm) {
         taskCreationMenu();
+        clock.remove();
+    }
+});
+
+const newProjectButton = document.getElementById('new-project-button');
+  newProjectButton.addEventListener('click', () => {
+    renderBigDate.stop();
+    let checkForm = Array.from(document.getElementById('content').childNodes)
+    .find((node) => node.id == 'form-container');
+    if (!checkForm) {
+        projectCreationMenu();
         clock.remove();
     }
 });
