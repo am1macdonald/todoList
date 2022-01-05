@@ -41,14 +41,20 @@ const renderStaticElements = () => {
         projectList.id = 'project-list';
         projectContainer.appendChild(projectList);
     
-        const newTaskButton = document.createElement('button');
-        newTaskButton.id = 'new-task-button';
-        newTaskButton.innerHTML = 'New Task*';
+        const newNavButton = (name) => {
+          let button = document.createElement('button');
+          button.id = `new-${name.toLowerCase()}-button`;
+          button.classList.add('nav-button');
+          button.innerHTML = `New ${name} >>`;
+          nav.appendChild(button);
+        }
     
+        
         nav.appendChild(header);
         nav.appendChild(taskContainer);
+        newNavButton('Task');
         nav.appendChild(projectContainer);
-        nav.appendChild(newTaskButton);
+        newNavButton('Project');
         
         page.prepend(nav);
         renderTasksToNav();

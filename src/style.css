@@ -22,7 +22,7 @@ nav {
   height: 98vh;
   width: auto;  
   display: grid;
-  grid-template-rows: 1fr 3fr 3fr 1fr;
+  grid-template-rows: 1fr 3fr 1fr 3fr 1fr;
 }
 
 nav h1 {
@@ -58,7 +58,7 @@ h3 {
   height: 100%;
 }
 
-#new-task-button {
+.nav-button {
   color: hsl(43, 100%, 59%);
   background-color: rgba(0, 0, 0, 0);
   border: none;
@@ -69,7 +69,7 @@ h3 {
   font-weight: bold;
 }
 
-#new-task-button:hover{
+.nav-button:hover{
   font-size: 2.9vmin;
   text-shadow: 2px 2px rgb(240, 238, 232);}
 
