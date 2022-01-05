@@ -7,7 +7,7 @@ export default class Project {
         this.notes = notes;
         this.tasks = tasks;
     }
-    announce() {
+    summary() {
         console.log(`I am project ${this.title}`);
     }
 }

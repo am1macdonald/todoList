@@ -31,7 +31,6 @@ export const taskLibrary = (() => {
         show,
     };
 })();
-//const projects = [];
 
 export const projectLibrary = (() => {    
   let arr = [];
@@ -53,10 +52,18 @@ export const projectLibrary = (() => {
 })();
 
 export function addNewTask() {
+    let taskForm = '';
+
+    if (document.getElementById('task-form') !== null) {
+      taskForm = document.getElementById('task-form');
+    } else { 
+      console.error('not a task');
+      return false;
+    }
     
-    // array from text child nodes of form
+    // array from text-input nodes from the task form
     let nodeArr = 
-    Array.from(document.getElementById('task-form').childNodes)
+    Array.from(taskForm.childNodes)
     .filter(node => node.tagName == 'INPUT' || node.tagName == 'SELECT')
     .map (node => {
       if (node.id === 'due-date') {
@@ -82,10 +89,57 @@ export function addNewTask() {
     
     taskLibrary.addToLibrary(newTask);
     taskLibrary.show();
-    //renderTasksToNav();
-    return true;
-    
+    stateManager.setAdded(true);
+  }
 
+export function addNewProject () {
+  let projectForm = '';
+
+  if (document.getElementById('project-form') !== null) {
+    projectForm = document.getElementById('project-form');
+  } else { 
+    console.error('not a project');
+    return false;
+  }
+  
+  // array from text-input nodes from the project form
+  let nodeArr = 
+  Array.from(projectForm.childNodes)
+  .filter(node => node.tagName == 'INPUT' || node.tagName == 'SELECT')
+  .map (node => {
+    if (node.id === 'due-date') {
+      return node.valueAsDate;
+    }      else { 
+      return node.value;
+    }
+  });
+  // checks for contents of each child node
+  for (let i = 0; i < nodeArr.length - 1; i++) {
+      if (nodeArr[i].length == 0) {
+          return console.error("err: missing fields");
+      }
+  }
+  let newProject = new Project(...nodeArr, []);
+  
+  projectLibrary.addToLibrary(newProject);
+  projectLibrary.show();
+  stateManager.setAdded(true);
 }
 
 
+export const stateManager = (() => {
+  // state for adding things to the libraries
+  let _added = false;
+  const getAdded = () => _added;
+  const setAdded = (newState) => {
+    if (typeof newState === 'boolean') {
+      _added = newState;
+    }
+    console.log(_added);
+  }
+
+  return {
+    getAdded,
+    setAdded,
+  }
+})()

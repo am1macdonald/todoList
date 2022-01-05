@@ -1,6 +1,6 @@
 import { compareAsc, format } from 'date-fns';
 import './pageFunctions.js';
-import { addNewTask, taskLibrary } from './pageFunctions.js';
+import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary } from './pageFunctions.js';
 
 
 const content = document.getElementById('content');
@@ -57,7 +57,8 @@ const renderStaticElements = () => {
         newNavButton('Project');
         
         page.prepend(nav);
-        renderTasksToNav();
+        renderListToNav(taskLibrary.show(), 'task');
+        renderListToNav(projectLibrary.show(), 'project');
     })();
 
 };
@@ -190,9 +191,27 @@ const renderDynamicParts = (() => {
         submitButton.type = 'button';
         submitButton.innerHTML = 'create >>';
         submitButton.addEventListener('click', () => {
-          if (addNewTask() === true) {
-            renderTasksToNav();
-            wipeForm();
+          
+          if (parent.id === 'task-buttons') {
+            console.log('task')
+            addNewTask();
+            if (stateManager.getAdded()) {
+
+              console.log(stateManager.getAdded());
+              renderListToNav(taskLibrary.show(), 'task');
+              wipeForm();
+              stateManager.setAdded(false);
+
+              console.log(stateManager.getAdded());
+            }
+          } else if (parent.id === 'project-buttons') {
+            addNewProject();
+            console.log('project');
+            if (stateManager.getAdded()) {
+              renderListToNav(projectLibrary.show(), 'project');
+              wipeForm();
+              stateManager.setAdded(false);
+            }
           }
         });
 
@@ -248,7 +267,7 @@ const renderBigDate = (() => {
     }
 })();
               
-// creating a form for a new task
+// creating a form to make a new task
 const taskCreationMenu = () => {
     renderDynamicParts.newFormWindow('Task');
     let form = document.getElementById('task-form');
@@ -260,12 +279,14 @@ const taskCreationMenu = () => {
     renderDynamicParts.newChecklist(form);
     renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
     const div = document.createElement('div');
-    div.classList.add('form-buttons');         
+    div.classList.add('form-buttons');    
+    div.id = 'task-buttons';      
     renderDynamicParts.submitButton(div);
     renderDynamicParts.cancelButton(div);
     form.appendChild(div);
 };
 
+// creating a form to make a new project
 const projectCreationMenu = () => {
   renderDynamicParts.newFormWindow('Project');
   let form = document.getElementById('project-form');
@@ -275,47 +296,51 @@ const projectCreationMenu = () => {
   renderDynamicParts.newDateInput(form);
   renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
   const div = document.createElement('div');
-  div.classList.add('form-buttons');         
+  div.classList.add('form-buttons');
+  div.id = 'project-buttons';        
   renderDynamicParts.submitButton(div);
   renderDynamicParts.cancelButton(div);
   form.appendChild(div);
 }
 
+// clears the form from the main menu
 const wipeForm = () => {
     document.getElementById('form-container').remove();
 };
 
-const renderTasksToNav = () => {
-    const list = document.getElementById('task-list');
-    list.innerHTML = '';
-    const taskItem = document.createElement('li');
-    let temp = [...taskLibrary.show()];
-    let topFive = [];
-    temp.map(task => {
-      if (topFive.length === 0){
-        topFive.push(task);
-      } else {
-        for (let i=0; i < topFive.length; i++){
-          let test = compareAsc(new Date(topFive[i].dueDate), new Date(task.dueDate));
-          if( test === 1 || test === 0){
-            topFive.splice(i, 0, task);
-            if (topFive.length > 5){ 
-              topFive.pop();
-            }
-            break;
-          } else if (topFive.length < 5) {
-            topFive.push(task);
-            break;
+// renders the five tasks or projects, that are due the soonest, to the navbar
+
+const renderListToNav = (library, target) => {
+  const list = document.getElementById(`${target}-list`);
+  list.innerHTML = '';
+  const listItem = document.createElement('li');
+  let temp = [...library];
+  let topFive = [];
+  temp.map(item => {
+    if (topFive.length === 0){
+      topFive.push(item);
+    } else {
+      for (let i=0; i < topFive.length; i++){
+        let test = compareAsc(new Date(topFive[i].dueDate), new Date(item.dueDate));
+        if( test === 1 || test === 0){
+          topFive.splice(i, 0, item);
+          if (topFive.length > 5){ 
+            topFive.pop();
           }
+          break;
+        } else if (topFive.length < 5) {
+          topFive.push(item);
+          break;
         }
       }
-    });
-    topFive.map(task => {
-        let newListItem = taskItem.cloneNode();
-        newListItem.innerHTML = task.title;        
-        list.appendChild(newListItem);
-    });
-};
+    }
+  });
+  topFive.map(item => {
+      let newListItem = listItem.cloneNode();
+      newListItem.innerHTML = item.title;        
+      list.appendChild(newListItem);
+  });  
+}
 
 
 
@@ -326,5 +351,5 @@ export {
     taskCreationMenu,
     projectCreationMenu,
     wipeForm,
-    renderTasksToNav,
+    renderListToNav,
 };
