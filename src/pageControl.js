@@ -288,7 +288,12 @@ const renderBigDate = (() => {
     dateHero.id = 'date-hero';
     const dateToday = document.createElement('h2');
     dateToday.id = 'date-today';
+    const startButton = document.createElement('button');
+    startButton.id = 'start-button';
+    startButton.innerHTML = 'Get Started >>';
+
     dateHero.appendChild(dateToday);
+    dateHero.appendChild(startButton);
     content.appendChild(dateHero);
     let timer;
     function updateTime() {

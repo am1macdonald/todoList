@@ -71,7 +71,8 @@ h3 {
 
 .nav-button:hover{
   font-size: 2.9vmin;
-  text-shadow: 2px 2px rgb(240, 238, 232);}
+  text-shadow: 2px 2px rgb(240, 238, 232);
+}
 
 #content {
   height: auto;
@@ -79,6 +80,29 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#date-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 25vh;
+}
+#start-button {
+  color: hsl(43, 100%, 59%);
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  width: 100%;
+  height: auto;
+  font-family: 'Oswald', sans-serif;
+  font-size: 3.5vmin;
+  font-weight: bold;
+}
+
+#start-button:hover{
+  font-size: 3.7vmin;
+  text-shadow: 2px 2px rgb(240, 238, 232);
 }
 
 #date-today {
