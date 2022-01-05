@@ -151,10 +151,10 @@ const renderDynamicParts = (() => {
         buttonDiv.classList.add('form-buttons');
         const addItem = document.createElement('button');
         addItem.type = 'button';
-        addItem.innerHTML = 'add*';
+        addItem.innerHTML = 'add >>';
         const removeItem = document.createElement('button');
         removeItem.type = 'button';
-        removeItem.innerHTML = 'remove*';
+        removeItem.innerHTML = 'remove >>';
         addItem.addEventListener('click', function(e){
             e.preventDefault();
             if (textInput.value.length > 0){
@@ -188,7 +188,7 @@ const renderDynamicParts = (() => {
     const submitButton = (parent) => {
         const submitButton = document.createElement('button');
         submitButton.type = 'button';
-        submitButton.innerHTML = 'create*';
+        submitButton.innerHTML = 'create >>';
         submitButton.addEventListener('click', () => {
           if (addNewTask() === true) {
             renderTasksToNav();
@@ -203,7 +203,7 @@ const renderDynamicParts = (() => {
     const cancelButton = (parent) => {
         const cancelButton = document.createElement('button');
         cancelButton.type = 'button';
-        cancelButton.innerHTML = 'cancel*';
+        cancelButton.innerHTML = 'cancel >>';
         cancelButton.addEventListener('click', () => {
             wipeForm();
         });

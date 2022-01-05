@@ -1,3 +1,4 @@
+import Project from './projectClass.js';
 import Task from './taskClass.js';
 
 export const taskLibrary = (() => {    
@@ -31,6 +32,25 @@ export const taskLibrary = (() => {
     };
 })();
 //const projects = [];
+
+export const projectLibrary = (() => {    
+  let arr = [];
+  if (window.localStorage.getItem('project-library')) {
+    arr = JSON.parse(window.localStorage.getItem('project-library')).map(project => {
+      return new Project(project.title, project.description, project.dueDate, project.notes, project.tasks)
+    });
+  }
+  const show = () => arr;
+  const addToLibrary = (project) => {
+      arr.push(project);
+      arr[arr.length-1].summary();
+      window.localStorage.setItem('project-library', JSON.stringify(arr));
+  };
+  return {
+      addToLibrary,
+      show,
+  };
+})();
 
 export function addNewTask() {
     
