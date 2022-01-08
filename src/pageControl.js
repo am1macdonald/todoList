@@ -1,6 +1,6 @@
 import { compareAsc, format, parseISO } from 'date-fns';
 import './pageFunctions.js';
-import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary } from './pageFunctions.js';
+import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, sortAlg } from './pageFunctions.js';
 
 
 const content = document.getElementById('content');
@@ -64,7 +64,7 @@ const renderStaticElements = () => {
 };
 
 
-const renderDynamicParts = (() => {
+const dynamicFormParts = (() => {
 
         // create the popup for adding new tasks
     const newFormWindow = (type) => {
@@ -199,8 +199,9 @@ const renderDynamicParts = (() => {
       const checkboxLabel = document.createElement('label');
 
       let items = [...taskLibrary.show()];
+      console.log(sortAlg.timeAsc(items));
 
-      items.map((item) => {
+      sortAlg.timeAsc(items).map((item) => {
         let listItem = document.createElement('li');
         listItem.classList.add('task-list-item');
 
@@ -288,6 +289,7 @@ const renderBigDate = (() => {
     startButton.id = 'start-button';
     startButton.innerHTML = 'Get Started >>';
 
+
     dateHero.appendChild(dateToday);
     dateHero.appendChild(startButton);
     content.appendChild(dateHero);
@@ -295,12 +297,17 @@ const renderBigDate = (() => {
     function updateTime() {
     dateToday.innerHTML = `${format(new Date(), "EEEE', the 'do'<br />of 'MMMM")} <br />
                             ${format(new Date(), "p")}`;
-    timer = setTimeout(updateTime, 1000);
+    timer = setTimeout(updateTime, 60000);
     }
     function stop() {
         clearTimeout(timer);
         timer = 0;
     }
+    startButton.addEventListener('click', () => {
+      stop();
+      dateHero.remove();
+      console.log(dateHero);
+    })
     return {
         updateTime,
         stop,
@@ -309,38 +316,38 @@ const renderBigDate = (() => {
               
 // creating a form to make a new task
 const taskCreationMenu = () => {
-    renderDynamicParts.newFormWindow('Task');
+    dynamicFormParts.newFormWindow('Task');
     let form = document.getElementById('task-form');
     form.classList.add('data-entry');
-    renderDynamicParts.newTextInput(form, 'title', 'Title.', 'Enter task name...', true);
-    renderDynamicParts.newTextInput(form, 'description', 'Details.', 'Details...', true);
-    renderDynamicParts.newDateInput(form);
-    renderDynamicParts.newPriorityDropdown(form, 5);
-    renderDynamicParts.newChecklist(form);
-    renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
+    dynamicFormParts.newTextInput(form, 'title', 'Title.', 'Enter task name...', true);
+    dynamicFormParts.newTextInput(form, 'description', 'Details.', 'Details...', true);
+    dynamicFormParts.newDateInput(form);
+    dynamicFormParts.newPriorityDropdown(form, 5);
+    dynamicFormParts.newChecklist(form);
+    dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
     const div = document.createElement('div');
     div.classList.add('form-buttons');    
     div.id = 'task-buttons';      
-    renderDynamicParts.submitButton(div);
-    renderDynamicParts.cancelButton(div);
+    dynamicFormParts.submitButton(div);
+    dynamicFormParts.cancelButton(div);
     form.appendChild(div);
 };
 
 // creating a form to make a new project
 const projectCreationMenu = () => {
-  renderDynamicParts.newFormWindow('Project');
+  dynamicFormParts.newFormWindow('Project');
   let form = document.getElementById('project-form');
   form.classList.add('data-entry');
-  renderDynamicParts.newTextInput(form, 'title', 'Title.', 'Enter project name...', true);
-  renderDynamicParts.newTextInput(form, 'description', 'Details.', 'Details...', true);
-  renderDynamicParts.newDateInput(form);
-  renderDynamicParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
-  renderDynamicParts.newTasklist(form);
+  dynamicFormParts.newTextInput(form, 'title', 'Title.', 'Enter project name...', true);
+  dynamicFormParts.newTextInput(form, 'description', 'Details.', 'Details...', true);
+  dynamicFormParts.newDateInput(form);
+  dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
+  dynamicFormParts.newTasklist(form);
   const div = document.createElement('div');
   div.classList.add('form-buttons');
   div.id = 'project-buttons';        
-  renderDynamicParts.submitButton(div);
-  renderDynamicParts.cancelButton(div);
+  dynamicFormParts.submitButton(div);
+  dynamicFormParts.cancelButton(div);
   const footNote = document.createElement('p');
   footNote.id = 'project-form-footnote';
   footNote.innerHTML = '*Additional tasks can be added later from the project screen';
@@ -389,30 +396,6 @@ const renderListToNav = (library, target) => {
       list.appendChild(newListItem);
   });
 }
-
-const sortTimeAsc = (library) => {
-  let temp = [...library];
-  let tempArr = [];
-  temp.map(item => {
-    if (tempArr.length === 0){
-      tempArr.push(item);
-    } else {
-      for (let i= tempArr.length - 1; i >= 0; i--){
-        let test = compareAsc(parseISO(item.dueDate), parseISO(tempArr[i].dueDate));
-        if (test === 1 || test === 0) {
-          tempArr.splice(i + 1, 0, item);
-          break;
-        } else if (i === 0) {
-          tempArr.unshift(item);
-        }
-      }
-    }
-  });
-  return tempArr;
-}
-
-
-
 
 export {
     renderStaticElements,
