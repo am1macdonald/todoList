@@ -390,6 +390,27 @@ const renderListToNav = (library, target) => {
   });
 }
 
+const sortTimeAsc = (library) => {
+  let temp = [...library];
+  let tempArr = [];
+  temp.map(item => {
+    if (tempArr.length === 0){
+      tempArr.push(item);
+    } else {
+      for (let i= tempArr.length - 1; i >= 0; i--){
+        let test = compareAsc(parseISO(item.dueDate), parseISO(tempArr[i].dueDate));
+        if (test === 1 || test === 0) {
+          tempArr.splice(i + 1, 0, item);
+          break;
+        } else if (i === 0) {
+          tempArr.unshift(item);
+        }
+      }
+    }
+  });
+  return tempArr;
+}
+
 
 
 
