@@ -1,4 +1,4 @@
-import { compareAsc, format } from 'date-fns';
+import { compareAsc, format, parseISO } from 'date-fns';
 import './pageFunctions.js';
 import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary } from './pageFunctions.js';
 
@@ -234,18 +234,14 @@ const renderDynamicParts = (() => {
         submitButton.addEventListener('click', () => {
           
           if (parent.id === 'task-buttons') {
-            console.log('task')
             addNewTask();
             if (stateManager.getAdded()) {
-
-              console.log(stateManager.getAdded());
               renderListToNav(taskLibrary.show(), 'task');
               wipeForm();
               stateManager.setAdded(false);
             }
           } else if (parent.id === 'project-buttons') {
               addNewProject();
-              console.log('project');
               if (stateManager.getAdded()) {
                 renderListToNav(projectLibrary.show(), 'project');
                 wipeForm();
@@ -369,26 +365,29 @@ const renderListToNav = (library, target) => {
     if (topFive.length === 0){
       topFive.push(item);
     } else {
-      for (let i=0; i < topFive.length; i++){
-        let test = compareAsc(new Date(topFive[i].dueDate), new Date(item.dueDate));
-        if( test === 1 || test === 0){
-          topFive.splice(i, 0, item);
-          if (topFive.length > 5){ 
-            topFive.pop();
+      for (let i= topFive.length - 1; i >= 0; i--){
+        let test = compareAsc(parseISO(item.dueDate), parseISO(topFive[i].dueDate));
+        if (test === 1 || test === 0) {
+          if (i >= 4) {
+            break;
+          } else {
+            topFive.splice(i + 1, 0, item);
+            break;
           }
-          break;
-        } else if (topFive.length < 5) {
-          topFive.push(item);
-          break;
+        } else if (i === 0) {
+          topFive.unshift(item);
         }
       }
+    }
+    if (topFive.length > 5) {
+      topFive.pop();
     }
   });
   topFive.map(item => {
       let newListItem = listItem.cloneNode();
       newListItem.innerHTML = item.title;        
       list.appendChild(newListItem);
-  });  
+  });
 }
 
 
