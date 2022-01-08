@@ -1,6 +1,7 @@
 import './reset.css';
 import './style.css';
 import {projectCreationMenu, renderBigDate, renderStaticElements, taskCreationMenu } from './pageControl.js';
+import { tr } from 'date-fns/locale';
 
 
 renderStaticElements();
@@ -9,7 +10,7 @@ renderBigDate.updateTime();
 const content = document.getElementById('content');
 const clock = document.getElementById('date-hero');
 
-// Observer puts the clock back up when the content is empty.
+// Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
     const config = { childList: true };
     const callback = function (mutationsList) {
@@ -18,6 +19,7 @@ const clock = document.getElementById('date-hero');
                 if (content.childNodes.length === 0) {
                     renderBigDate.updateTime();
                     content.appendChild(clock);
+                    contentState.setState(false);
                 } 
             }
         }
@@ -27,23 +29,42 @@ const clock = document.getElementById('date-hero');
 })();
 
 const newTaskButton = document.getElementById('new-task-button');
-  newTaskButton.addEventListener('click', () => {
+newTaskButton.addEventListener('click', () => {
     renderBigDate.stop();
-    let checkForm = Array.from(document.getElementById('content').childNodes)
-    .find((node) => node.id == 'form-container');
-    if (!checkForm) {
+    if (contentState.getState() === false) {
         taskCreationMenu();
         clock.remove();
     }
+    contentState.setState(true);
 });
 
 const newProjectButton = document.getElementById('new-project-button');
-  newProjectButton.addEventListener('click', () => {
+newProjectButton.addEventListener('click', () => {
     renderBigDate.stop();
-    let checkForm = Array.from(document.getElementById('content').childNodes)
-    .find((node) => node.id == 'form-container');
-    if (!checkForm) {
+    if (contentState.getState() === false) {
         projectCreationMenu();
         clock.remove();
     }
+    contentState.setState(true);
 });
+
+const startButton = document.getElementById('start-button');
+startButton.addEventListener('click', () => {
+  console.log('index ref');
+  contentState.setState(true);
+})
+
+const contentState = (() => {
+  let state = false;
+  const getState = () => state;
+  const setState = (newState) => {
+    if (typeof newState === 'boolean') { 
+    state = newState;
+    }
+  };
+
+  return {
+    getState,
+    setState,
+  }
+})()

@@ -238,14 +238,14 @@ const dynamicFormParts = (() => {
             addNewTask();
             if (stateManager.getAdded()) {
               renderListToNav(taskLibrary.show(), 'task');
-              wipeForm();
+              clearContent();
               stateManager.setAdded(false);
             }
           } else if (parent.id === 'project-buttons') {
               addNewProject();
               if (stateManager.getAdded()) {
                 renderListToNav(projectLibrary.show(), 'project');
-                wipeForm();
+                clearContent();
                 stateManager.setAdded(false);
               }
           }
@@ -259,7 +259,7 @@ const dynamicFormParts = (() => {
         cancelButton.type = 'button';
         cancelButton.innerHTML = 'cancel >>';
         cancelButton.addEventListener('click', () => {
-            wipeForm();
+            clearContent();
         });
         parent.appendChild(cancelButton);
     };
@@ -278,6 +278,46 @@ const dynamicFormParts = (() => {
 
 
 })();
+
+const dynamicExplorerParts = (() => {
+  const explorerFrame = () => {
+    const explorer = document.createElement('div');
+    explorer.id = 'explorer';    
+    content.appendChild(explorer);
+  }
+
+  const explorerTab = () => {
+    const div = document.createElement('div');
+
+    div.id = 'tab'
+
+  } 
+
+  const itemList = (library, parent) => {
+    const list = document.createElement('ul');
+    list.id = 'explorer-list';
+
+
+
+    library.map(item => {
+      let listItem = document.createElement('li');
+      listItem.classList.add('explorer-list-item');
+      listItem.id = item.identifier;
+      list.appendChild(listItem);
+    })
+
+    parent.appendChild(list);
+  }
+  
+
+  
+
+  return {
+    explorerFrame,
+    explorerTab,
+    itemList,
+  }
+})()
 
 // renders date to body of page
 const renderBigDate = (() => {
@@ -305,6 +345,7 @@ const renderBigDate = (() => {
     }
     startButton.addEventListener('click', () => {
       stop();
+      taskExplorer();
       dateHero.remove();
       console.log(dateHero);
     })
@@ -313,7 +354,14 @@ const renderBigDate = (() => {
         stop,
     }
 })();
-              
+
+// creates task explorer
+const taskExplorer = () => {
+
+  dynamicExplorerParts.explorerFrame();
+  const explorer = document.getElementById('explorer-frame');
+
+}
 // creating a form to make a new task
 const taskCreationMenu = () => {
     dynamicFormParts.newFormWindow('Task');
@@ -356,7 +404,7 @@ const projectCreationMenu = () => {
 }
 
 // clears the form from the main menu
-const wipeForm = () => {
+const clearContent = () => {
     document.getElementById('form-container').remove();
 };
 
@@ -402,6 +450,6 @@ export {
     renderBigDate,
     taskCreationMenu,
     projectCreationMenu,
-    wipeForm,
+    clearContent,
     renderListToNav,
 };
