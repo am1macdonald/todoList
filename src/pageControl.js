@@ -280,30 +280,85 @@ const dynamicFormParts = (() => {
 })();
 
 const dynamicExplorerParts = (() => {
+
   const explorerFrame = () => {
+    const explorerFrame = document.createElement('div');
+    explorerFrame.id = 'explorer-frame';
+
     const explorer = document.createElement('div');
-    explorer.id = 'explorer';    
-    content.appendChild(explorer);
+    explorer.id = 'explorer';
+
+    
+    
+    explorerFrame.appendChild(explorer);
+    content.appendChild(explorerFrame);
+
   }
 
-  const explorerTab = () => {
+  const explorerTabs = (parent, tabType) => {
     const div = document.createElement('div');
 
-    div.id = 'tab'
+    div.id = 'explorer-tabs';
 
-  } 
+    const buttonDiv = document.createElement('div');
 
-  const itemList = (library, parent) => {
+    buttonDiv.id = 'header-button-div';
+
+    const taskTab = document.createElement('button');
+    taskTab.id = 'task-tab-button';
+    taskTab.classList.add('tab-button');
+    taskTab.innerHTML = 'Tasks';
+
+    const projectTab = document.createElement('button');
+    projectTab.id = `project-tab-button`;
+    projectTab.classList.add('tab-button');
+    projectTab.innerHTML = 'Projects';
+
+    if (tabType === 'task') {
+      console.log('task active');
+    } else if (tabType === 'project') {
+      console.log('project active');
+    }
+
+
+    div.appendChild(taskTab);
+    div.appendChild(projectTab);
+
+    parent.appendChild(div);
+
+  }
+
+  const itemList = (parent, library) => {
     const list = document.createElement('ul');
     list.id = 'explorer-list';
+    let listItem = document.createElement('li');
+    listItem.classList.add('explorer-list-item');
+
+    let collapsible = document.createElement('button');
+    collapsible.type = 'button';
+    collapsible.classList.add = 'collapsible';
+    let contentDiv = document.createElement('div');
+    contentDiv.classList.add('collapsible-content');
+    let details = document.createElement('p');
+
+    sortAlg.timeAsc(library).map(item => {
+      let cloneItem = listItem.cloneNode();
+      cloneItem.id = item.identifier;
+
+      let cloneCollapsible = collapsible.cloneNode();
+      cloneCollapsible.innerHTML = `${item.title}`;
 
 
+      let cloneContent = contentDiv.cloneNode();
 
-    library.map(item => {
-      let listItem = document.createElement('li');
-      listItem.classList.add('explorer-list-item');
-      listItem.id = item.identifier;
-      list.appendChild(listItem);
+      let detailsClone = details.cloneNode();
+
+      cloneContent.appendChild(detailsClone);
+      
+
+      cloneItem.appendChild(cloneCollapsible);
+      cloneItem.appendChild(cloneContent);
+      list.appendChild(cloneItem);
     })
 
     parent.appendChild(list);
@@ -314,7 +369,7 @@ const dynamicExplorerParts = (() => {
 
   return {
     explorerFrame,
-    explorerTab,
+    explorerTabs,
     itemList,
   }
 })()
@@ -359,7 +414,16 @@ const renderBigDate = (() => {
 const taskExplorer = () => {
 
   dynamicExplorerParts.explorerFrame();
-  const explorer = document.getElementById('explorer-frame');
+  const explorer = document.getElementById('explorer');
+
+  dynamicExplorerParts.explorerTabs(explorer, 'task');
+
+  dynamicExplorerParts.itemList(explorer, taskLibrary.show());
+
+  dynamicFormParts.cancelButton(explorer);
+
+
+
 
 }
 // creating a form to make a new task
@@ -405,7 +469,9 @@ const projectCreationMenu = () => {
 
 // clears the form from the main menu
 const clearContent = () => {
-    document.getElementById('form-container').remove();
+    while (content.firstChild) {
+      content.removeChild(content.firstChild);
+    }
 };
 
 // renders the five tasks or projects, that are due the soonest, to the navbar

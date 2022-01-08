@@ -1,8 +1,6 @@
 import './reset.css';
 import './style.css';
 import {projectCreationMenu, renderBigDate, renderStaticElements, taskCreationMenu } from './pageControl.js';
-import { tr } from 'date-fns/locale';
-
 
 renderStaticElements();
 renderBigDate.updateTime();

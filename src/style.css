@@ -83,11 +83,14 @@ h3 {
 }
 
 #date-hero {
+  box-sizing: content-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  padding: 1vmin;
   height: 25vh;
+  width: auto;
 }
 #start-button {
   color: hsl(43, 100%, 59%);
@@ -113,7 +116,7 @@ h3 {
   line-height: 1em;
   text-align: center;
   width: auto;
-  height: 10vh;
+  height: 15vh;
 }
 
 #form-container {
@@ -199,7 +202,27 @@ h3 {
   display: grid;
   grid-template-columns: 1fr 5fr;
 }
-#explorer {
+#explorer-frame {
   height: 100vh;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#explorer {
+  height: 80vh;
+  width: 60vw;
+  display: grid;
+  grid-template-rows: 10vh 60vh;
+  background-color: greenyellow;
+}
+#explorer-tabs {
+  display: grid;
+  grid-template-columns: 20vw 20vw 20vw;
+}
+#explorer-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: flex-start;
 }
