@@ -1,7 +1,9 @@
 import { compareAsc, format, parseISO } from 'date-fns';
 import './pageFunctions.js';
 import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, sortAlg } from './pageFunctions.js';
-
+import 'simplebar'; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+import 'simplebar/dist/simplebar.css';
+import SimpleBar from 'simplebar';
 
 const content = document.getElementById('content');
 
@@ -23,6 +25,7 @@ const renderStaticElements = () => {
     
         const taskContainer = document.createElement('div');
         taskContainer.id = 'task-container';
+        taskContainer.classList.add('nav-container');
         const taskHeader = document.createElement('h2');
         taskHeader.id = 'task-header';
         taskHeader.innerHTML = 'Tasks';
@@ -33,6 +36,7 @@ const renderStaticElements = () => {
 
         const projectContainer = document.createElement('div');
         projectContainer.id = 'project-container';
+        projectContainer.classList.add('nav-container');
         const projectHeader = document.createElement('h2');
         projectHeader.id = 'project-header';
         projectHeader.innerHTML = 'Projects';
@@ -331,12 +335,17 @@ const dynamicExplorerParts = (() => {
   const itemList = (parent, library) => {
     const list = document.createElement('ul');
     list.id = 'explorer-list';
+
+    const scroller = document.createElement('div');
+    scroller.id = 'scroller';
+    new SimpleBar(scroller);
+
     let listItem = document.createElement('li');
     listItem.classList.add('explorer-list-item');
 
     let collapsible = document.createElement('button');
     collapsible.type = 'button';
-    collapsible.classList.add = 'collapsible';
+    collapsible.classList.add('collapsible');
     let contentDiv = document.createElement('div');
     contentDiv.classList.add('collapsible-content');
     let details = document.createElement('p');
@@ -348,20 +357,24 @@ const dynamicExplorerParts = (() => {
       let cloneCollapsible = collapsible.cloneNode();
       cloneCollapsible.innerHTML = `${item.title}`;
 
+      let editButton = document.createElement('button');
+      editButton.classList.add('edit-button');
+
 
       let cloneContent = contentDiv.cloneNode();
 
       let detailsClone = details.cloneNode();
 
       cloneContent.appendChild(detailsClone);
+      cloneContent.appendChild(editButton);
       
-
       cloneItem.appendChild(cloneCollapsible);
       cloneItem.appendChild(cloneContent);
       list.appendChild(cloneItem);
     })
 
-    parent.appendChild(list);
+    scroller.appendChild(list);
+    parent.appendChild(scroller);
   }
   
 
@@ -455,6 +468,7 @@ const projectCreationMenu = () => {
   dynamicFormParts.newDateInput(form);
   dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
   dynamicFormParts.newTasklist(form);
+  new SimpleBar(document.getElementById('checkboxes'));
   const div = document.createElement('div');
   div.classList.add('form-buttons');
   div.id = 'project-buttons';        

@@ -2,6 +2,7 @@ import './reset.css';
 import './style.css';
 import {projectCreationMenu, renderBigDate, renderStaticElements, taskCreationMenu } from './pageControl.js';
 
+
 renderStaticElements();
 renderBigDate.updateTime();
 
