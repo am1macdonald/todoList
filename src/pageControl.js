@@ -1,9 +1,9 @@
 import { compareAsc, format, parseISO } from 'date-fns';
 import './pageFunctions.js';
 import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, sortAlg } from './pageFunctions.js';
-import 'simplebar'; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
-import 'simplebar/dist/simplebar.css';
 import SimpleBar from 'simplebar';
+import 'simplebar/dist/simplebar.css';
+
 
 const content = document.getElementById('content');
 
@@ -336,10 +336,6 @@ const dynamicExplorerParts = (() => {
     const list = document.createElement('ul');
     list.id = 'explorer-list';
 
-    const scroller = document.createElement('div');
-    scroller.id = 'scroller';
-    new SimpleBar(scroller);
-
     let listItem = document.createElement('li');
     listItem.classList.add('explorer-list-item');
 
@@ -373,8 +369,11 @@ const dynamicExplorerParts = (() => {
       list.appendChild(cloneItem);
     })
 
-    scroller.appendChild(list);
-    parent.appendChild(scroller);
+    parent.appendChild(list);
+    new SimpleBar(document.getElementById('explorer-list'), {
+      autoHide : false,
+    });
+
   }
   
 
@@ -468,7 +467,9 @@ const projectCreationMenu = () => {
   dynamicFormParts.newDateInput(form);
   dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
   dynamicFormParts.newTasklist(form);
-  new SimpleBar(document.getElementById('checkboxes'));
+  new SimpleBar(document.getElementById('checkboxes'), {
+    autoHide: false,
+  });
   const div = document.createElement('div');
   div.classList.add('form-buttons');
   div.id = 'project-buttons';        

@@ -46,11 +46,12 @@ h2 {
 
 h3 {
   font-family: 'Oswald', sans-serif;
-  font-size: 3.7vmin;
+  font-size: 3.8vmin;
   color: hsla(302, 16%, 45%, 1);
   font-weight: 600;
   font-style: italic;
   padding-bottom: 5vmin;
+  text-align: center;
 }
 
 .nav-container {
@@ -139,7 +140,7 @@ h3 {
 .data-entry {
   display: flex;
   justify-content: space-between;
-  height: 70vh;
+  height: 90vh;
   width: clamp( 50vw, 80%, 680px );
   display: inherit;
   flex-direction: column;
@@ -236,4 +237,7 @@ h3 {
 .edit-button {
   width: 3vmin;
   height: 1vmin;
+}
+#scroller {
+  overflow-y: scroll;
 }
