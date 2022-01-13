@@ -7,8 +7,6 @@ import 'simplebar/dist/simplebar.css';
 
 const content = document.getElementById('content');
 
-
-
 const renderStaticElements = () => {
 
     // ref for static elements to append to
@@ -66,7 +64,6 @@ const renderStaticElements = () => {
     })();
 
 };
-
 
 const dynamicFormParts = (() => {
 
@@ -313,17 +310,24 @@ const dynamicExplorerParts = (() => {
     taskTab.classList.add('tab-button');
     taskTab.innerHTML = 'Tasks';
 
+    taskTab.addEventListener('click', () => {
+
+    })
+
     const projectTab = document.createElement('button');
     projectTab.id = `project-tab-button`;
     projectTab.classList.add('tab-button');
     projectTab.innerHTML = 'Projects';
+
+    projectTab.addEventListener('click', () => {
+      
+    })
 
     if (tabType === 'task') {
       console.log('task active');
     } else if (tabType === 'project') {
       console.log('project active');
     }
-
 
     div.appendChild(taskTab);
     div.appendChild(projectTab);
@@ -383,8 +387,7 @@ const dynamicExplorerParts = (() => {
       Deadline: ${item.dueDate}
       Priority: ${item.priority}
       Notes:
-      ${item.notes}
-      `;
+      ${item.notes}`;
 
       cloneContent.appendChild(detailsClone);
       cloneContent.appendChild(editButton);
@@ -436,9 +439,6 @@ const dynamicExplorerParts = (() => {
     parent.appendChild(div);
   }
   
-
-  
-
   return {
     explorerFrame,
     explorerTabs,
