@@ -236,11 +236,15 @@ h3 {
   display: grid;
   grid-template-columns: 20vw 20vw 20vw;
 }
+#list-container {
+  max-height: 100%;
+}
 #explorer-list {
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: flex-start;
+  max-height: inherit;
 }
 .explorer-list-item {
   width: 100%;

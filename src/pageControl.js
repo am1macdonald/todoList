@@ -288,15 +288,13 @@ const dynamicExplorerParts = (() => {
 
     const explorer = document.createElement('div');
     explorer.id = 'explorer';
-
-    
     
     explorerFrame.appendChild(explorer);
     content.appendChild(explorerFrame);
 
   }
 
-  const explorerTabs = (parent, tabType) => {
+  const explorerTabs = (parent) => {
     const div = document.createElement('div');
 
     div.id = 'explorer-tabs';
@@ -311,7 +309,9 @@ const dynamicExplorerParts = (() => {
     taskTab.innerHTML = 'Tasks';
 
     taskTab.addEventListener('click', () => {
-
+      let listContainer = document.getElementById('list-container');
+      listContainer.removeChild(listContainer.childNodes[0]);
+      itemList(listContainer, taskLibrary.show());
     })
 
     const projectTab = document.createElement('button');
@@ -320,14 +320,10 @@ const dynamicExplorerParts = (() => {
     projectTab.innerHTML = 'Projects';
 
     projectTab.addEventListener('click', () => {
-      
+      let listContainer = document.getElementById('list-container');
+      listContainer.removeChild(listContainer.childNodes[0]);
+      itemList(listContainer, projectLibrary.show());   
     })
-
-    if (tabType === 'task') {
-      console.log('task active');
-    } else if (tabType === 'project') {
-      console.log('project active');
-    }
 
     div.appendChild(taskTab);
     div.appendChild(projectTab);
@@ -355,6 +351,8 @@ const dynamicExplorerParts = (() => {
       let cloneItem = listItem.cloneNode();
       cloneItem.id = item.identifier;
 
+      console.log(item.constructor.name);
+
       let cloneCollapsible = collapsible.cloneNode();
       cloneCollapsible.innerHTML = `${item.title}`;
 
@@ -381,13 +379,24 @@ const dynamicExplorerParts = (() => {
       let cloneContent = contentDiv.cloneNode();
 
       let detailsClone = details.cloneNode();
-      detailsClone.innerHTML = `
-      Title: ${item.title}
-      Description: ${item.description}
-      Deadline: ${item.dueDate}
-      Priority: ${item.priority}
-      Notes:
-      ${item.notes}`;
+      if (item.constructor.name === 'Task') {
+        detailsClone.innerHTML = `
+        Title: ${item.title}
+        Description: ${item.description}
+        Deadline: ${item.dueDate}
+        Priority: ${item.priority}
+        Notes:
+        ${item.notes}`;
+      } else if (item.constructor.name === 'Project') {
+        detailsClone.innerHTML = `
+        Title: ${item.title}
+        Description: ${item.description}
+        Deadline: ${item.dueDate}
+        Notes:
+        ${item.notes}
+        Tasks: 
+        `;
+      };
 
       cloneContent.appendChild(detailsClone);
       cloneContent.appendChild(editButton);
@@ -488,11 +497,11 @@ const taskExplorer = () => {
 
   dynamicExplorerParts.explorerFrame();
   const explorer = document.getElementById('explorer');
-
   dynamicExplorerParts.explorerTabs(explorer, 'task');
-
-  dynamicExplorerParts.itemList(explorer, taskLibrary.show());
-
+  const listContainer = document.createElement('div');
+  listContainer.id = 'list-container';
+  explorer.appendChild(listContainer);
+  dynamicExplorerParts.itemList(listContainer, taskLibrary.show());
   dynamicExplorerParts.buttons(explorer);
 
 }
