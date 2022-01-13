@@ -202,6 +202,22 @@ h3 {
   display: grid;
   grid-template-columns: 1fr 5fr;
 }
+.active {
+  background-color: lavenderblush;
+}
+.collapsible-content {
+  text-align: justify;
+  display: grid;
+  grid-template-columns: 8fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.collapsible-content pre {
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+.collapsible-content button {
+  align-self: center;
+}
 #explorer-frame {
   height: 100vh;
   width: 100%;
@@ -234,10 +250,12 @@ h3 {
   width: 100%;
   height: 7vh;
 }
+#explorer-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 .edit-button {
   width: 3vmin;
   height: 1vmin;
-}
-#scroller {
-  overflow-y: scroll;
 }

@@ -344,7 +344,8 @@ const dynamicExplorerParts = (() => {
     collapsible.classList.add('collapsible');
     let contentDiv = document.createElement('div');
     contentDiv.classList.add('collapsible-content');
-    let details = document.createElement('p');
+    contentDiv.style.display = "none";
+    let details = document.createElement('pre');
 
     sortAlg.timeAsc(library).map(item => {
       let cloneItem = listItem.cloneNode();
@@ -353,16 +354,41 @@ const dynamicExplorerParts = (() => {
       let cloneCollapsible = collapsible.cloneNode();
       cloneCollapsible.innerHTML = `${item.title}`;
 
+      cloneCollapsible.addEventListener('click', function () {
+        this.classList.toggle('active');
+        var hiddenDiv = this.nextElementSibling;
+        if (hiddenDiv.style.display === 'grid') {
+          hiddenDiv.style.display = 'none';
+        } else {
+          hiddenDiv.style.display = 'grid';
+        }
+      })
+
+
       let editButton = document.createElement('button');
       editButton.classList.add('edit-button');
+      editButton.innerHTML = 'Edit';
+
+      let completeButton = document.createElement('button');
+      completeButton.classList.add('complete-button');
+      completeButton.innerHTML = 'Mark Complete';
 
 
       let cloneContent = contentDiv.cloneNode();
 
       let detailsClone = details.cloneNode();
+      detailsClone.innerHTML = `
+      Title: ${item.title}
+      Description: ${item.description}
+      Deadline: ${item.dueDate}
+      Priority: ${item.priority}
+      Notes:
+      ${item.notes}
+      `;
 
       cloneContent.appendChild(detailsClone);
       cloneContent.appendChild(editButton);
+      cloneContent.appendChild(completeButton);
       
       cloneItem.appendChild(cloneCollapsible);
       cloneItem.appendChild(cloneContent);
@@ -370,10 +396,44 @@ const dynamicExplorerParts = (() => {
     })
 
     parent.appendChild(list);
-    new SimpleBar(document.getElementById('explorer-list'), {
-      autoHide : false,
-    });
+    new SimpleBar(document.getElementById('explorer-list'));
 
+  }
+
+  const buttons = (parent) => {
+    const div = document.createElement('div');
+    div.id = 'explorer-buttons';
+
+    const expand = document.createElement('button');
+    expand.innerHTML = 'Expand All';
+
+    expand.addEventListener('click', () => {
+      Array.from(document.getElementsByClassName('collapsible-content')).map(item => {
+        item.style.display = 'grid';
+        if (!item.previousSibling.classList.contains('active')) {
+          item.previousSibling.classList.toggle('active');
+        }
+      })
+    })
+
+    const retract = document.createElement('button');
+    retract.innerHTML = 'Collapse All';
+
+    retract.addEventListener('click', () => {
+      Array.from(document.getElementsByClassName('collapsible-content')).map(item => {
+        item.style.display = 'none';
+        if (item.previousSibling.classList.contains('active')) {
+          item.previousSibling.classList.toggle('active');
+        }
+      })
+    })
+
+    dynamicFormParts.cancelButton(div);
+    div.appendChild(expand);
+    div.appendChild(retract);
+
+
+    parent.appendChild(div);
   }
   
 
@@ -383,6 +443,7 @@ const dynamicExplorerParts = (() => {
     explorerFrame,
     explorerTabs,
     itemList,
+    buttons,
   }
 })()
 
@@ -432,10 +493,7 @@ const taskExplorer = () => {
 
   dynamicExplorerParts.itemList(explorer, taskLibrary.show());
 
-  dynamicFormParts.cancelButton(explorer);
-
-
-
+  dynamicExplorerParts.buttons(explorer);
 
 }
 // creating a form to make a new task
@@ -467,9 +525,7 @@ const projectCreationMenu = () => {
   dynamicFormParts.newDateInput(form);
   dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
   dynamicFormParts.newTasklist(form);
-  new SimpleBar(document.getElementById('checkboxes'), {
-    autoHide: false,
-  });
+  new SimpleBar(document.getElementById('checkboxes'));
   const div = document.createElement('div');
   div.classList.add('form-buttons');
   div.id = 'project-buttons';        
