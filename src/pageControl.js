@@ -200,7 +200,6 @@ const dynamicFormParts = (() => {
       const checkboxLabel = document.createElement('label');
 
       let items = [...taskLibrary.show()];
-      console.log(sortAlg.timeAsc(items));
 
       sortAlg.timeAsc(items).map((item) => {
         let listItem = document.createElement('li');
@@ -351,8 +350,6 @@ const dynamicExplorerParts = (() => {
       let cloneItem = listItem.cloneNode();
       cloneItem.id = item.identifier;
 
-      console.log(item.constructor.name);
-
       let cloneCollapsible = collapsible.cloneNode();
       cloneCollapsible.innerHTML = `${item.title}`;
 
@@ -365,7 +362,6 @@ const dynamicExplorerParts = (() => {
           hiddenDiv.style.display = 'grid';
         }
       })
-
 
       let editButton = document.createElement('button');
       editButton.classList.add('edit-button');
@@ -484,7 +480,6 @@ const renderBigDate = (() => {
       stop();
       taskExplorer();
       dateHero.remove();
-      console.log(dateHero);
     })
     return {
         updateTime,

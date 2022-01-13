@@ -12,6 +12,14 @@ export default class Task {
         } else {
         this.identifier = Date.now();
         }
+        this.complete = false;
+    }
+    markComplete(bool) {
+        if (bool === true) {
+            this.complete = true;
+        } else if (bool === false) {
+            this.complete = false;
+        };
     }
     summary() {
         console.log(`I am task, ${this.title}, due on ${format(new Date(), 'yyyy-MM-dd')} with level ${this.priority} priority & id:${this.identifier}`);

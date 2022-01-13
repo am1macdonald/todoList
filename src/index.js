@@ -49,7 +49,6 @@ newProjectButton.addEventListener('click', () => {
 
 const startButton = document.getElementById('start-button');
 startButton.addEventListener('click', () => {
-  console.log('index ref');
   contentState.setState(true);
 })
 
