@@ -111,13 +111,21 @@ export function addNewProject () {
       return node.value;
     }
   });
+
+  let tasks = Array.from(document.getElementsByClassName('task-list-item')).filter(item => {
+    //console.log(item.firstChild.checked);
+    return item.firstChild.checked === true
+  }).map(item => {
+    return item.firstChild.id;
+  })
+
   // checks for contents of each child node
   for (let i = 0; i < nodeArr.length - 1; i++) {
       if (nodeArr[i].length == 0) {
           return console.error("err: missing fields");
       }
   }
-  let newProject = new Project(...nodeArr, []);
+  let newProject = new Project(...nodeArr, tasks);
   
   projectLibrary.addToLibrary(newProject);
   projectLibrary.show();

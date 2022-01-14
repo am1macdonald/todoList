@@ -1,6 +1,6 @@
 import { compareAsc, format, parseISO } from 'date-fns';
-import './pageFunctions.js';
-import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, sortAlg } from './pageFunctions.js';
+import './libraryManagement.js';
+import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, sortAlg } from './libraryManagement.js';
 import SimpleBar from 'simplebar';
 import 'simplebar/dist/simplebar.css';
 
@@ -388,23 +388,58 @@ const dynamicExplorerParts = (() => {
 
       let detailsClone = details.cloneNode();
       if (item.constructor.name === 'Task') {
-        detailsClone.innerHTML = `
-        Title: ${item.title}
-        Description: ${item.description}
-        Deadline: ${item.dueDate}
-        Priority: ${item.priority}
-        Notes:
-        ${item.notes}`;
+        detailsClone.innerHTML = 
+`Title: ${item.title}
+Description: ${item.description}
+Deadline: ${item.dueDate}
+Priority: ${item.priority}
+Notes:
+${item.notes}`;
       } else if (item.constructor.name === 'Project') {
-        detailsClone.innerHTML = `
-        Title: ${item.title}
-        Description: ${item.description}
-        Deadline: ${item.dueDate}
-        Notes:
-        ${item.notes}
-        Tasks: 
-        `;
+
+        detailsClone.innerHTML = 
+`Title: ${item.title}
+Description: ${item.description}
+Deadline: ${item.dueDate}
+Notes:
+${item.notes}
+Tasks:`;
+        
+        let taskList = document.createElement('ul');
+        taskList.classList.add('project-tasklist');
+        let listItem = document.createElement('li');
+        let taskItem = document.createElement('input');
+        taskItem.type = 'checkbox';
+        let taskLabel = document.createElement('label');
+  
+        item.tasks.map(task => {
+          console.log(taskLibrary.show().filter(obj => {
+            if (obj.identifier.toString() === task) {
+              let newListItem = listItem.cloneNode();
+              let newTaskItem = taskItem.cloneNode();
+              newTaskItem.id = obj.title;
+              newTaskItem.name = obj.title;
+              newTaskItem.value = obj.identifier;
+              let newLabel = taskLabel.cloneNode();
+              newLabel.setAttribute('for', obj.title);
+              newLabel.innerHTML = obj.title;
+
+              newListItem.appendChild(newTaskItem);
+              newListItem.appendChild(newLabel);
+              taskList.appendChild(newListItem);
+
+            }
+          }));  
+        })
+        cloneContent.appendChild
+        new SimpleBar(taskList);
+        cloneContent.appendChild(taskList);
+        
       }
+
+
+
+
 
       cloneContent.appendChild(detailsClone);
       cloneContent.appendChild(editButton);

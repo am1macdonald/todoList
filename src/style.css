@@ -147,13 +147,14 @@ h3 {
 }
 
 .styled-button {
+  padding: 0;
   color: hsla(302, 16%, 45%, 1);
   background-color: hsl(36, 33%, 97%);
   border: 2px solid hsla(302, 16%, 45%, 1);
   width: 150px;
-  height: 35px;
+  height: 38px;
   font-family: 'Oswald', sans-serif;
-  font-size: 2.8vmin;
+  font-size: 2.6vmin;
   font-weight: bold;
   position: relative;
   box-shadow: 5px 6px 0px hsla(302, 16%, 45%, 1);
@@ -182,9 +183,6 @@ h3 {
   transition: all 0.25s ease;
 }
 .form-button {
-  height: 29px;
-  width: 120px;
-  font-size: 2.4vmin;
 }
 #checklist-div {
   display: flex;
@@ -223,11 +221,22 @@ h3 {
   grid-template-rows: 1fr 1fr;
 }
 .collapsible-content pre {
+  padding-left: 2vw;
+  text-align: left;
   grid-row-start: 1;
-  grid-row-end: 3;
 }
 .collapsible-content button {
   align-self: center;
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.edit-button {
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+.complete-button {
+  grid-row-start: 2;
+  grid-row-end: 3;
 }
 #explorer-frame {
   height: 100vh;
@@ -285,4 +294,8 @@ h3 {
 .edit-button {
   width: 3vmin;
   height: 1vmin;
+}
+.project-tasklist {
+  padding-left: 2vw;
+  height: 110px;
 }
