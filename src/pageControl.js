@@ -47,16 +47,17 @@ const renderStaticElements = () => {
           let button = document.createElement('button');
           button.id = `new-${name.toLowerCase()}-button`;
           button.classList.add('nav-button');
-          button.innerHTML = `New ${name} >>`;
+          button.classList.add('styled-button');
+          button.innerHTML = `new ${name} >>`;
           nav.appendChild(button);
         }
     
         
         nav.appendChild(header);
         nav.appendChild(taskContainer);
-        newNavButton('Task');
+        newNavButton('task');
         nav.appendChild(projectContainer);
-        newNavButton('Project');
+        newNavButton('project');
         
         page.prepend(nav);
         renderListToNav(taskLibrary.show(), 'task');
@@ -145,6 +146,7 @@ const dynamicFormParts = (() => {
         listDiv.id = 'checklist-div'
         const listUl = document.createElement('ul');
         listUl.id = 'checklist-list';
+        const simpleBar = new SimpleBar(listUl);
         let textInput = document.createElement('input');
         textInput.type = 'text';
         textInput.placeholder = 'Add an item...';
@@ -154,23 +156,28 @@ const dynamicFormParts = (() => {
         const addItem = document.createElement('button');
         addItem.type = 'button';
         addItem.innerHTML = 'add >>';
+        addItem.classList.add('styled-button');
+        addItem.classList.add('form-button');
         const removeItem = document.createElement('button');
         removeItem.type = 'button';
         removeItem.innerHTML = 'remove >>';
+        removeItem.classList.add('styled-button');
+        removeItem.classList.add('form-button');
         addItem.addEventListener('click', function(e){
             e.preventDefault();
             if (textInput.value.length > 0){
                 let listItem = document.createElement('li');
                 listItem.classList.add('checklist-item');
                 listItem.innerHTML = '- ' + textInput.value;
-                listUl.appendChild(listItem);
+                simpleBar.getContentElement().appendChild(listItem);
                 textInput.value = '';
+                
             }
         });
         removeItem.addEventListener('click', function(e){
             e.preventDefault();
-            if (listUl.childElementCount > 0) {
-                listUl.removeChild(listUl.lastElementChild);
+            if (simpleBar.getContentElement().childElementCount > 0) {
+                simpleBar.getContentElement().removeChild(simpleBar.getContentElement().lastElementChild);
             }
         })
 
@@ -184,7 +191,6 @@ const dynamicFormParts = (() => {
         parent.appendChild(label);
         parent.appendChild(listDiv);
 
-        new SimpleBar(listUl);
         
     };
 
@@ -234,6 +240,8 @@ const dynamicFormParts = (() => {
         const submitButton = document.createElement('button');
         submitButton.type = 'button';
         submitButton.innerHTML = 'create >>';
+        submitButton.classList.add('styled-button');
+        submitButton.classList.add('form-button');
         submitButton.addEventListener('click', () => {
           
           if (parent.id === 'task-buttons') {
@@ -260,6 +268,8 @@ const dynamicFormParts = (() => {
         const cancelButton = document.createElement('button');
         cancelButton.type = 'button';
         cancelButton.innerHTML = 'cancel >>';
+        cancelButton.classList.add('styled-button');
+        cancelButton.classList.add('form-button');
         cancelButton.addEventListener('click', () => {
             clearContent();
         });
@@ -367,11 +377,11 @@ const dynamicExplorerParts = (() => {
 
       let editButton = document.createElement('button');
       editButton.classList.add('edit-button');
-      editButton.innerHTML = 'Edit';
+      editButton.innerHTML = 'edit';
 
       let completeButton = document.createElement('button');
       completeButton.classList.add('complete-button');
-      completeButton.innerHTML = 'Mark Complete';
+      completeButton.innerHTML = 'mark complete';
 
 
       let cloneContent = contentDiv.cloneNode();
@@ -394,7 +404,7 @@ const dynamicExplorerParts = (() => {
         ${item.notes}
         Tasks: 
         `;
-      };
+      }
 
       cloneContent.appendChild(detailsClone);
       cloneContent.appendChild(editButton);
@@ -415,7 +425,9 @@ const dynamicExplorerParts = (() => {
     div.id = 'explorer-buttons';
 
     const expand = document.createElement('button');
-    expand.innerHTML = 'Expand All';
+    expand.innerHTML = 'expand All';
+    expand.classList.add('styled-button');
+    expand.classList.add('form-button');
 
     expand.addEventListener('click', () => {
       Array.from(document.getElementsByClassName('collapsible-content')).map(item => {
@@ -427,7 +439,9 @@ const dynamicExplorerParts = (() => {
     })
 
     const retract = document.createElement('button');
-    retract.innerHTML = 'Collapse All';
+    retract.innerHTML = 'collapse All';
+    retract.classList.add('styled-button');
+    retract.classList.add('form-button');
 
     retract.addEventListener('click', () => {
       Array.from(document.getElementsByClassName('collapsible-content')).map(item => {
@@ -462,7 +476,8 @@ const renderBigDate = (() => {
     dateToday.id = 'date-today';
     const startButton = document.createElement('button');
     startButton.id = 'start-button';
-    startButton.innerHTML = 'Get Started >>';
+    startButton.innerHTML = 'get to work >>';
+    startButton.classList.add('styled-button');
 
 
     dateHero.appendChild(dateToday);
