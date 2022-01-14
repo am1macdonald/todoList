@@ -183,6 +183,8 @@ const dynamicFormParts = (() => {
 
         parent.appendChild(label);
         parent.appendChild(listDiv);
+
+        new SimpleBar(listUl);
         
     };
 

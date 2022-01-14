@@ -171,8 +171,8 @@ h3 {
 .data-entry button {
   color: hsl(43, 100%, 59%);
   background-color: rgba(0, 0, 0, 0);
-  border: none;
-  width: 12rem;
+  border: 2px solid hsl(43, 100%, 59%);
+  width: 8rem;
   height: auto;
   font-family: 'Oswald', sans-serif;
   font-size: 2.8vmin;
@@ -188,10 +188,11 @@ h3 {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  max-height: 480px;
 }
 .form-buttons {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
 }
