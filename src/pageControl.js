@@ -368,6 +368,13 @@ const dynamicExplorerParts = (() => {
         }
       })
 
+      let hiddenDiv = document.createElement('div');
+      hiddenDiv.classList.add('collapsible-content');
+      hiddenDiv.style.display = "none";
+
+      let hiddenContentList = document.createElement('ul');
+      hiddenContentList.classList.add('hidden-content-list');
+
       let editButton = document.createElement('button');
       editButton.classList.add('edit-button');
       editButton.innerHTML = 'edit';
@@ -375,13 +382,6 @@ const dynamicExplorerParts = (() => {
       let completeButton = document.createElement('button');
       completeButton.classList.add('complete-button');
       completeButton.innerHTML = 'mark complete';
-
-      let hiddenDiv = document.createElement('div');
-      hiddenDiv.classList.add('collapsible-content');
-      hiddenDiv.style.display = "none";
-
-      let hiddenContentList = document.createElement('ul');
-      hiddenContentList.classList.add('hidden-content-list');
 
       for (let prop in item) {
         let propListItem = document.createElement('li');
@@ -411,19 +411,56 @@ const dynamicExplorerParts = (() => {
               propListItem = undefined;
             }
             break;
-          case (prop === 'checklist'):
-            
+          case (prop === 'checklist'):            
             if (Object.keys(item[prop]).length > 0) {
-              propListItem.innerHTML = `Checklist:\n`;
-
-              console.log(item[prop]);
+              let hiddenChecklist = document.createElement('ul');
+              let hiddenChecklistPara = document.createElement('p');
+              hiddenChecklistPara.innerHTML = `Checklist:`;
               for (let checkItem in item[prop]) {
-                console.log(checkItem);
+                let hiddenChecklistItem = document.createElement('li');
+                hiddenChecklistItem.innerHTML = `${checkItem}`;
+                hiddenChecklist.appendChild(hiddenChecklistItem);
               }
-
+              propListItem.appendChild(hiddenChecklistPara);
+              propListItem.appendChild(hiddenChecklist);
               hiddenContentList.appendChild(propListItem);
             }
             break;
+          case (prop === 'tasks'):
+            if (item[prop].length > 0) {
+              let hiddenTaskListPara = document.createElement('p');
+              hiddenTaskListPara.innerHTML = 'Tasks:'
+              let hiddenTaskList = document.createElement('ul');
+              item[prop].map(task => {
+                taskLibrary.show().filter(obj => {
+                  if (obj.identifier.toString() === task) {                    
+                    let listItem = document.createElement('li');
+                    let taskItem = document.createElement('input');
+                    taskItem.type = 'checkbox';
+                    taskItem.id = obj.title;
+                    taskItem.name = obj.title;
+                    taskItem.value = obj.identifier;
+                    let taskLabel = document.createElement('label');
+                    taskLabel.setAttribute('for', obj.title);
+                    taskLabel.innerHTML = obj.title;
+                    listItem.appendChild(taskItem);
+                    listItem.appendChild(taskLabel);
+                    hiddenTaskList.appendChild(listItem);
+                  }
+                })
+              })
+              new SimpleBar(hiddenTaskList);
+              propListItem.appendChild(hiddenTaskListPara);
+              propListItem.appendChild(hiddenTaskList);
+            }
+            hiddenContentList.appendChild(propListItem);
+            break;
+          // case (prop === 'complete'):
+          //   console.log(item[prop]);
+          //   if (item[prop] === true) {
+          //     hiddenDiv.classList.add('completed');
+          //   }
+          //   break;
           default:
             propListItem.innerHTML = `${prop}: ${item[prop]}`;
 
@@ -433,49 +470,7 @@ const dynamicExplorerParts = (() => {
 
       let hiddenButtonDiv = document.createElement('div');
       hiddenButtonDiv.classList.add('hidden-button-div');
-
-      // if (item.constructor.name === 'Project') {
-
-//         detailsClone.innerHTML = 
-// `Title: ${item.title}
-// Description: ${item.description}
-// Deadline: ${item.dueDate}
-// Notes:
-// ${item.notes}
-// Tasks:`;
-        
-//         let taskList = document.createElement('ul');
-//         taskList.classList.add('project-tasklist');
-//         let listItem = document.createElement('li');
-//         let taskItem = document.createElement('input');
-//         taskItem.type = 'checkbox';
-//         let taskLabel = document.createElement('label');
-  
-//         item.tasks.map(task => {
-//           console.log(taskLibrary.show().filter(obj => {
-//             if (obj.identifier.toString() === task) {
-//               let newListItem = listItem.cloneNode();
-//               let newTaskItem = taskItem.cloneNode();
-//               newTaskItem.id = obj.title;
-//               newTaskItem.name = obj.title;
-//               newTaskItem.value = obj.identifier;
-//               let newLabel = taskLabel.cloneNode();
-//               newLabel.setAttribute('for', obj.title);
-//               newLabel.innerHTML = obj.title;
-
-//               newListItem.appendChild(newTaskItem);
-//               newListItem.appendChild(newLabel);
-//               taskList.appendChild(newListItem);
-
-//             }
-//           }));  
-//         })
-//         new SimpleBar(taskList);
-//         //hiddenDiv.appendChild(taskList);        
-//       }
-
-
-      
+     
 
 
       hiddenDiv.appendChild(hiddenContentList);

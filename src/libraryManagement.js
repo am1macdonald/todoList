@@ -15,7 +15,7 @@ export const taskLibrary = (() => {
     ];
     if (window.localStorage.getItem('task-library')) {
       arr = JSON.parse(window.localStorage.getItem('task-library')).map(task => {
-        return new Task(task.title, task.description, task.dueDate, task.priority, task.notes, task.checklist, task.identifier);
+        return new Task(task.title, task.description, task.dueDate, task.priority, task.notes, task.checklist, task.identifier, task.complete);
       });
     }
     const show = () => arr;
@@ -34,7 +34,7 @@ export const projectLibrary = (() => {
   let arr = [];
   if (window.localStorage.getItem('project-library')) {
     arr = JSON.parse(window.localStorage.getItem('project-library')).map(project => {
-      return new Project(project.title, project.description, project.dueDate, project.notes, project.tasks)
+      return new Project(project.title, project.description, project.dueDate, project.notes, project.tasks, project.complete);
     });
   }
   const show = () => arr;
@@ -113,7 +113,6 @@ export function addNewProject () {
   });
 
   let tasks = Array.from(document.getElementsByClassName('task-list-item')).filter(item => {
-    //console.log(item.firstChild.checked);
     return item.firstChild.checked === true
   }).map(item => {
     return item.firstChild.id;

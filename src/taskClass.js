@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 export default class Task {
-    constructor(title, description, dueDate,  priority = 1, notes, checklist = {}, identifier) {
+    constructor(title, description, dueDate,  priority = 1, notes, checklist = {}, identifier, complete = false) {
         this.title = title;
         this.description = description;
         this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
@@ -12,7 +12,7 @@ export default class Task {
         } else {
         this.identifier = Date.now();
         }
-        this.complete = false;
+        this.complete = complete;
     }
     markComplete(bool) {
         if (bool === true) {
