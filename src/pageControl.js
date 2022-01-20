@@ -347,8 +347,7 @@ const dynamicExplorerParts = (() => {
     const list = document.createElement('ul');
     list.id = 'explorer-list';
 
-    let listItem = document.createElement('li');
-    listItem.classList.add('explorer-list-item');
+    
 
     let collapsible = document.createElement('button');
     collapsible.type = 'button';
@@ -359,8 +358,9 @@ const dynamicExplorerParts = (() => {
     let details = document.createElement('pre');
 
     sortAlg.timeAsc(library).map(item => {
-      let cloneItem = listItem.cloneNode();
-      cloneItem.id = item.identifier;
+      let listItem = document.createElement('li');
+      listItem.classList.add('explorer-list-item');
+      listItem.id = item.identifier;
 
       let cloneCollapsible = collapsible.cloneNode();
       cloneCollapsible.innerHTML = `${item.title}`;
@@ -384,7 +384,7 @@ const dynamicExplorerParts = (() => {
       completeButton.innerHTML = 'mark complete';
 
 
-      let cloneContent = contentDiv.cloneNode();
+      let cloneContentDiv = contentDiv.cloneNode();
 
       let detailsClone = details.cloneNode();
       if (item.constructor.name === 'Task') {
@@ -431,23 +431,21 @@ Tasks:`;
             }
           }));  
         })
-        cloneContent.appendChild
         new SimpleBar(taskList);
-        cloneContent.appendChild(taskList);
-        
+        //cloneContentDiv.appendChild(taskList);        
       }
 
 
-
-
-
-      cloneContent.appendChild(detailsClone);
-      cloneContent.appendChild(editButton);
-      cloneContent.appendChild(completeButton);
       
-      cloneItem.appendChild(cloneCollapsible);
-      cloneItem.appendChild(cloneContent);
-      list.appendChild(cloneItem);
+
+
+      //cloneContentDiv.appendChild(detailsClone);
+      //cloneContentDiv.appendChild(editButton);
+      //cloneContentDiv.appendChild(completeButton);
+      
+      listItem.appendChild(cloneCollapsible);
+      listItem.appendChild(cloneContentDiv);
+      list.appendChild(listItem);
     })
 
     parent.appendChild(list);

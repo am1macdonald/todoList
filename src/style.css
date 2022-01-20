@@ -217,7 +217,7 @@ h3 {
 .collapsible-content {
   text-align: justify;
   display: grid;
-  grid-template-columns: 8fr 1fr;
+  grid-template-columns: 3fr 1fr;
   grid-template-rows: 1fr 1fr;
 }
 .collapsible-content pre {
@@ -247,7 +247,7 @@ h3 {
 }
 #explorer {
   height: 90vh;
-  width: 90%;
+  width: 60%;
   display: grid;
   grid-template-rows: 8vh 75vh 7vh;
   background-color: rgba(172, 255, 47, 0);
