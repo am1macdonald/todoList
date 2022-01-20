@@ -347,8 +347,6 @@ const dynamicExplorerParts = (() => {
     const list = document.createElement('ul');
     list.id = 'explorer-list';
 
-    let details = document.createElement('pre');
-
     sortAlg.timeAsc(library).map(item => {
       let listItem = document.createElement('li');
       listItem.classList.add('explorer-list-item');
@@ -382,67 +380,106 @@ const dynamicExplorerParts = (() => {
       hiddenDiv.classList.add('collapsible-content');
       hiddenDiv.style.display = "none";
 
-      let hiddenContentDiv = document.createElement('div');
-      hiddenContentDiv.classList.add('hidden-content-div');
+      let hiddenContentList = document.createElement('ul');
+      hiddenContentList.classList.add('hidden-content-list');
+
+      for (let prop in item) {
+        let propListItem = document.createElement('li');
+
+        switch(true) {
+          case (prop === 'title'):
+            propListItem.innerHTML = `Title: ${item[prop]}`;
+            hiddenContentList.appendChild(propListItem);
+            break;
+          case (prop === 'description'):
+            propListItem.innerHTML = `Description: ${item[prop]}`;
+            hiddenContentList.appendChild(propListItem);
+            break;
+          case (prop === 'dueDate'):
+            propListItem.innerHTML = `Due On: ${item[prop]}`;
+            hiddenContentList.appendChild(propListItem);
+            break;
+          case (prop === 'priority'):
+            propListItem.innerHTML = `Priority: ${item[prop]}`;
+            hiddenContentList.appendChild(propListItem);
+            break;
+          case (prop === 'notes'):
+            if (item[prop].length > 0){
+              propListItem.innerHTML = `Notes: ${item[prop]}`;
+              hiddenContentList.appendChild(propListItem);
+            } else {              
+              propListItem = undefined;
+            }
+            break;
+          case (prop === 'checklist'):
+            
+            if (Object.keys(item[prop]).length > 0) {
+              propListItem.innerHTML = `Checklist:\n`;
+
+              console.log(item[prop]);
+              for (let checkItem in item[prop]) {
+                console.log(checkItem);
+              }
+
+              hiddenContentList.appendChild(propListItem);
+            }
+            break;
+          default:
+            propListItem.innerHTML = `${prop}: ${item[prop]}`;
+
+            hiddenContentList.appendChild(propListItem);
+        }
+      }
 
       let hiddenButtonDiv = document.createElement('div');
       hiddenButtonDiv.classList.add('hidden-button-div');
 
-      let detailsClone = details.cloneNode();
-      if (item.constructor.name === 'Task') {
-        detailsClone.innerHTML = 
-`Title: ${item.title}
-Description: ${item.description}
-Deadline: ${item.dueDate}
-Priority: ${item.priority}
-Notes:
-${item.notes}`;
-      } else if (item.constructor.name === 'Project') {
+      // if (item.constructor.name === 'Project') {
 
-        detailsClone.innerHTML = 
-`Title: ${item.title}
-Description: ${item.description}
-Deadline: ${item.dueDate}
-Notes:
-${item.notes}
-Tasks:`;
+//         detailsClone.innerHTML = 
+// `Title: ${item.title}
+// Description: ${item.description}
+// Deadline: ${item.dueDate}
+// Notes:
+// ${item.notes}
+// Tasks:`;
         
-        let taskList = document.createElement('ul');
-        taskList.classList.add('project-tasklist');
-        let listItem = document.createElement('li');
-        let taskItem = document.createElement('input');
-        taskItem.type = 'checkbox';
-        let taskLabel = document.createElement('label');
+//         let taskList = document.createElement('ul');
+//         taskList.classList.add('project-tasklist');
+//         let listItem = document.createElement('li');
+//         let taskItem = document.createElement('input');
+//         taskItem.type = 'checkbox';
+//         let taskLabel = document.createElement('label');
   
-        item.tasks.map(task => {
-          console.log(taskLibrary.show().filter(obj => {
-            if (obj.identifier.toString() === task) {
-              let newListItem = listItem.cloneNode();
-              let newTaskItem = taskItem.cloneNode();
-              newTaskItem.id = obj.title;
-              newTaskItem.name = obj.title;
-              newTaskItem.value = obj.identifier;
-              let newLabel = taskLabel.cloneNode();
-              newLabel.setAttribute('for', obj.title);
-              newLabel.innerHTML = obj.title;
+//         item.tasks.map(task => {
+//           console.log(taskLibrary.show().filter(obj => {
+//             if (obj.identifier.toString() === task) {
+//               let newListItem = listItem.cloneNode();
+//               let newTaskItem = taskItem.cloneNode();
+//               newTaskItem.id = obj.title;
+//               newTaskItem.name = obj.title;
+//               newTaskItem.value = obj.identifier;
+//               let newLabel = taskLabel.cloneNode();
+//               newLabel.setAttribute('for', obj.title);
+//               newLabel.innerHTML = obj.title;
 
-              newListItem.appendChild(newTaskItem);
-              newListItem.appendChild(newLabel);
-              taskList.appendChild(newListItem);
+//               newListItem.appendChild(newTaskItem);
+//               newListItem.appendChild(newLabel);
+//               taskList.appendChild(newListItem);
 
-            }
-          }));  
-        })
-        new SimpleBar(taskList);
-        //hiddenDiv.appendChild(taskList);        
-      }
+//             }
+//           }));  
+//         })
+//         new SimpleBar(taskList);
+//         //hiddenDiv.appendChild(taskList);        
+//       }
 
 
       
 
 
-      //hiddenDiv.appendChild(detailsClone);
-      //hiddenDiv.appendChild(editButton);
+      hiddenDiv.appendChild(hiddenContentList);
+      hiddenDiv.appendChild(hiddenButtonDiv);
       //hiddenDiv.appendChild(completeButton);
       
       listItem.appendChild(collapsible);
