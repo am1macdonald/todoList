@@ -347,14 +347,6 @@ const dynamicExplorerParts = (() => {
     const list = document.createElement('ul');
     list.id = 'explorer-list';
 
-    
-
-    let collapsible = document.createElement('button');
-    collapsible.type = 'button';
-    collapsible.classList.add('collapsible');
-    let contentDiv = document.createElement('div');
-    contentDiv.classList.add('collapsible-content');
-    contentDiv.style.display = "none";
     let details = document.createElement('pre');
 
     sortAlg.timeAsc(library).map(item => {
@@ -362,10 +354,13 @@ const dynamicExplorerParts = (() => {
       listItem.classList.add('explorer-list-item');
       listItem.id = item.identifier;
 
-      let cloneCollapsible = collapsible.cloneNode();
-      cloneCollapsible.innerHTML = `${item.title}`;
+      let collapsible = document.createElement('button');
+      collapsible.type = 'button';
+      collapsible.classList.add('collapsible');
 
-      cloneCollapsible.addEventListener('click', function () {
+      collapsible.innerHTML = `${item.title}`;
+
+      collapsible.addEventListener('click', function () {
         this.classList.toggle('active');
         var hiddenDiv = this.nextElementSibling;
         if (hiddenDiv.style.display === 'grid') {
@@ -383,8 +378,15 @@ const dynamicExplorerParts = (() => {
       completeButton.classList.add('complete-button');
       completeButton.innerHTML = 'mark complete';
 
+      let hiddenDiv = document.createElement('div');
+      hiddenDiv.classList.add('collapsible-content');
+      hiddenDiv.style.display = "none";
 
-      let cloneContentDiv = contentDiv.cloneNode();
+      let hiddenContentDiv = document.createElement('div');
+      hiddenContentDiv.classList.add('hidden-content-div');
+
+      let hiddenButtonDiv = document.createElement('div');
+      hiddenButtonDiv.classList.add('hidden-button-div');
 
       let detailsClone = details.cloneNode();
       if (item.constructor.name === 'Task') {
@@ -432,19 +434,19 @@ Tasks:`;
           }));  
         })
         new SimpleBar(taskList);
-        //cloneContentDiv.appendChild(taskList);        
+        //hiddenDiv.appendChild(taskList);        
       }
 
 
       
 
 
-      //cloneContentDiv.appendChild(detailsClone);
-      //cloneContentDiv.appendChild(editButton);
-      //cloneContentDiv.appendChild(completeButton);
+      //hiddenDiv.appendChild(detailsClone);
+      //hiddenDiv.appendChild(editButton);
+      //hiddenDiv.appendChild(completeButton);
       
-      listItem.appendChild(cloneCollapsible);
-      listItem.appendChild(cloneContentDiv);
+      listItem.appendChild(collapsible);
+      listItem.appendChild(hiddenDiv);
       list.appendChild(listItem);
     })
 
