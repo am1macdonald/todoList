@@ -1,5 +1,4 @@
 import { compareAsc, format, parseISO } from 'date-fns';
-import './libraryManagement.js';
 import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, sortAlg } from './libraryManagement.js';
 import SimpleBar from 'simplebar';
 import 'simplebar/dist/simplebar.css';
@@ -93,6 +92,7 @@ const dynamicFormParts = (() => {
         label.innerHTML = labelText;
         const input = document.createElement('input');
         input.id = name;
+        input.classList.add('text-input');
         input.type = 'text';
         input.placeholder = placeholder;
         
@@ -150,17 +150,18 @@ const dynamicFormParts = (() => {
         let textInput = document.createElement('input');
         textInput.type = 'text';
         textInput.placeholder = 'Add an item...';
-        textInput.id = 'checklist-text-input'
+        textInput.id = 'checklist-text-input';
+        textInput.classList.add('text-input');
         const buttonDiv = document.createElement('div');
         buttonDiv.classList.add('form-buttons');
         const addItem = document.createElement('button');
         addItem.type = 'button';
-        addItem.innerHTML = 'add >>';
+        addItem.innerHTML = 'add';
         addItem.classList.add('styled-button');
         addItem.classList.add('form-button');
         const removeItem = document.createElement('button');
         removeItem.type = 'button';
-        removeItem.innerHTML = 'remove >>';
+        removeItem.innerHTML = 'remove';
         removeItem.classList.add('styled-button');
         removeItem.classList.add('form-button');
         addItem.addEventListener('click', function(e){
@@ -239,7 +240,7 @@ const dynamicFormParts = (() => {
     const submitButton = (parent) => {
         const submitButton = document.createElement('button');
         submitButton.type = 'button';
-        submitButton.innerHTML = 'create >>';
+        submitButton.innerHTML = 'create';
         submitButton.classList.add('styled-button');
         submitButton.classList.add('form-button');
         submitButton.addEventListener('click', () => {
@@ -506,7 +507,6 @@ const dynamicExplorerParts = (() => {
         hiddenDiv.classList.toggle('completed');
       })
 
-
       hiddenDiv.appendChild(hiddenContentList);
       hiddenDiv.appendChild(hiddenButtonDiv);
       //hiddenDiv.appendChild(completeButton);
@@ -530,7 +530,7 @@ const dynamicExplorerParts = (() => {
     div.id = 'explorer-buttons';
 
     const expand = document.createElement('button');
-    expand.innerHTML = 'expand All';
+    expand.innerHTML = 'expand all';
     expand.classList.add('styled-button');
     expand.classList.add('form-button');
 
@@ -544,7 +544,7 @@ const dynamicExplorerParts = (() => {
     })
 
     const retract = document.createElement('button');
-    retract.innerHTML = 'collapse All';
+    retract.innerHTML = 'collapse all';
     retract.classList.add('styled-button');
     retract.classList.add('form-button');
 
@@ -651,7 +651,7 @@ const projectCreationMenu = () => {
   dynamicFormParts.newDateInput(form);
   dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
   dynamicFormParts.newTasklist(form);
-  new SimpleBar(document.getElementById('checkboxes'));
+  new SimpleBar(document.getElementById('checkboxes'), {autoHide: false});
   const div = document.createElement('div');
   div.classList.add('form-buttons');
   div.id = 'project-buttons';        

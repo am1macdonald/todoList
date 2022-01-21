@@ -132,7 +132,7 @@ h3 {
 .data-entry * {
   padding-bottom: 5px;
 }
-.data-entry input {
+.text-input {
   background: none;
   border: none;
   border-bottom: 1px solid;
@@ -150,6 +150,9 @@ h3 {
   border-bottom: 2px solid;
   border-color: rgba(0, 120, 138, 0.473);
   outline: none;
+}
+#due-date:focus {
+  padding-bottom: 5px;
 }
 #explorer-buttons {
   display: flex;
@@ -169,10 +172,13 @@ h3 {
   width: 150px;
   height: 38px;
   font-family: 'Oswald', sans-serif;
-  font-size: 2.6vmin;
+  font-size: 2.5vmin;
   font-weight: bold;
   position: relative;
   box-shadow: 5px 6px 0px hsla(302, 16%, 45%, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .styled-button:hover {
@@ -220,6 +226,7 @@ h3 {
 .task-list-item {
   display: grid;
   grid-template-columns: 1fr 5fr;
+  padding: 1vh 0;
 }
 .collapsible-content {
   padding: 1vw;
