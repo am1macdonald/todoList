@@ -307,6 +307,7 @@ h3 {
   border-left: 2px solid hsla(302, 16%, 45%, 1);
   border-right: 2px solid hsla(302, 16%, 45%, 1);
   max-height: 100%;
+  background-color: hsl(45, 29%, 97%);
 
   box-shadow: 7px 8px 0px hsla(302, 16%, 45%, 1);
 }
