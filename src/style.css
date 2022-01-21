@@ -151,8 +151,17 @@ h3 {
   border-color: rgba(0, 120, 138, 0.473);
   outline: none;
 }
+#due-date {
+  border: solid 2px hsla(302, 16%, 45%, 1);
+  width: fit-content;
+}
 #due-date:focus {
   padding-bottom: 5px;
+}
+#priority {
+  background-color: white;
+  width: fit-content;
+  border: solid 2px hsla(302, 16%, 45%, 1);
 }
 #explorer-buttons {
   display: flex;
@@ -211,7 +220,8 @@ h3 {
   max-height: 480px;
 }
 #checklist-list {
-  height: 100px;
+  height: auto;
+  max-height: 110px;
   width: 100%;
 }
 .form-buttons {

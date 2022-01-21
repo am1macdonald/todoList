@@ -147,6 +147,7 @@ const dynamicFormParts = (() => {
         const listUl = document.createElement('ul');
         listUl.id = 'checklist-list';
         const simpleBar = new SimpleBar(listUl, {autoHide: false});
+        
         let textInput = document.createElement('input');
         textInput.type = 'text';
         textInput.placeholder = 'Add an item...';
@@ -172,6 +173,7 @@ const dynamicFormParts = (() => {
                 listItem.innerHTML = '- ' + textInput.value;
                 simpleBar.getContentElement().appendChild(listItem);
                 textInput.value = '';
+                listItem.scrollIntoView();
                 
             }
         });
