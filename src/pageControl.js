@@ -500,6 +500,11 @@ const dynamicExplorerParts = (() => {
       hiddenButtonDiv.appendChild(removeButton);
       hiddenButtonDiv.classList.add('hidden-button-div');
      
+      completeButton.addEventListener('click', () => {
+        item.markComplete();
+        taskLibrary.updateLocalStorage();
+        hiddenDiv.classList.toggle('completed');
+      })
 
 
       hiddenDiv.appendChild(hiddenContentList);

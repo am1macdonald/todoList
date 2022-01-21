@@ -14,11 +14,13 @@ export default class Task {
         }
         this.complete = complete;
     }
-    markComplete(bool) {
-        if (bool === true) {
-            this.complete = true;
-        } else if (bool === false) {
+    markComplete() {
+        if (this.complete === true) {
             this.complete = false;
+        console.log(`${this.title} is now incomplete!`);
+        } else if (this.complete === false) {
+            this.complete = true;
+            console.log(`${this.title} is now complete!`);
         }
     }
     edit(description, dueDate, priority, notes) {

@@ -19,14 +19,19 @@ export const taskLibrary = (() => {
       });
     }
     const show = () => arr;
+    const updateLocalStorage = () => {
+      window.localStorage.setItem('task-library', JSON.stringify(arr));
+    }
     const addToLibrary = (task) => {
         arr.push(task);
         arr[arr.length-1].summary();
-        window.localStorage.setItem('task-library', JSON.stringify(arr));
+        updateLocalStorage();
     };
+
     return {
         addToLibrary,
         show,
+        updateLocalStorage,
     };
 })();
 

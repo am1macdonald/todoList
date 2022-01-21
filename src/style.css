@@ -299,7 +299,7 @@ h3 {
   background-color: none;
 }
 .inactive-tab {
-  filter: brightness(0.7);
+  filter: brightness(0.8);
 }
 .inactive-tab:hover {
   color: hsl(45, 29%, 97%);
