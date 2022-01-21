@@ -414,6 +414,7 @@ const dynamicExplorerParts = (() => {
         let propListItem = document.createElement('li');
         propListItem.classList.add('hidden-details');
 
+        // looks at the properties being passed in and renders elements accordingly
         switch(true) {
           case (prop === 'title'):
             propListItem.innerHTML = `Title: ${item[prop]}`;
@@ -439,7 +440,7 @@ const dynamicExplorerParts = (() => {
               propListItem = undefined;
             }
             break;
-          case (prop === 'checklist'):            
+          case (prop === 'checklist'):
             if (Object.keys(item[prop]).length > 0) {
               let hiddenChecklist = document.createElement('ul');
               let hiddenChecklistPara = document.createElement('p');
@@ -461,6 +462,8 @@ const dynamicExplorerParts = (() => {
               hiddenTaskListPara.innerHTML = 'Tasks:'
               let hiddenTaskList = document.createElement('ul');
               item[prop].map(task => {
+
+                // gets the task from the task-library based on the task-ID
                 taskLibrary.show().filter(obj => {
                   if (obj.identifier.toString() === task) {                    
                     let listItem = document.createElement('li');
@@ -470,6 +473,14 @@ const dynamicExplorerParts = (() => {
                     taskItem.id = obj.title;
                     taskItem.name = obj.title;
                     taskItem.value = obj.identifier;
+                    // checks the box if the task is complete
+                    if (obj.complete === true) {
+                      taskItem.checked = true;
+                    }
+                    // updates the tasks 'complete' property when the box is checked 
+                    taskItem.addEventListener('click', () => {
+                      obj.markComplete();
+                    })
                     let taskLabel = document.createElement('label');
                     taskLabel.setAttribute('for', obj.title);
                     taskLabel.innerHTML = obj.title;
@@ -511,7 +522,6 @@ const dynamicExplorerParts = (() => {
 
       hiddenDiv.appendChild(hiddenContentList);
       hiddenDiv.appendChild(hiddenButtonDiv);
-      //hiddenDiv.appendChild(completeButton);
       
       listItem.appendChild(collapsible);
       listItem.appendChild(hiddenDiv);
