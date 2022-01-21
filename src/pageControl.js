@@ -317,6 +317,7 @@ const dynamicExplorerParts = (() => {
     const taskTab = document.createElement('button');
     taskTab.id = 'task-tab-button';
     taskTab.classList.add('tab-button');
+    taskTab.classList.add('active-tab');
     taskTab.innerHTML = 'Tasks';
 
     taskTab.addEventListener('click', () => {
@@ -336,8 +337,12 @@ const dynamicExplorerParts = (() => {
       itemList(listContainer, projectLibrary.show());   
     })
 
+    const tabPlaceholder = document.createElement('div');
+    tabPlaceholder.id = 'tab-placeholder';
+
     div.appendChild(taskTab);
     div.appendChild(projectTab);
+    div.appendChild(tabPlaceholder);
 
     parent.appendChild(div);
 

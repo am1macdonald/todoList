@@ -145,7 +145,16 @@ h3 {
   border-color: rgba(0, 120, 138, 0.473);
   outline: none;
 }
+#explorer-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 2px solid hsla(302, 16%, 45%, 1);
+  padding: 0vh 0vw;
+  background-color: hsl(45, 29%, 97%);
 
+  box-shadow: 7px 8px 0px hsla(302, 16%, 45%, 1);
+}
 .styled-button {
   padding: 0;
   color: hsla(302, 16%, 45%, 1);
@@ -180,7 +189,7 @@ h3 {
   z-index: -1;
   border: 2px solid hsla(302, 16%, 45%, 1);
 
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
 }
 .form-button {
 }
@@ -211,10 +220,8 @@ h3 {
   display: grid;
   grid-template-columns: 1fr 5fr;
 }
-.active {
-  background-color: lavenderblush;
-}
 .collapsible-content {
+  padding: 1vw;
   text-align: justify;
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -222,20 +229,14 @@ h3 {
   transition: all 0.3s ease;
 }
 .completed{
-
+  box-shadow: inset 0 0 1vw green;
 }
 .hidden-details {
-  padding-left: 2vw;
   text-align: left;
   grid-row-start: 1;
 }
 .hidden-list-item {
   padding-left: 1vw;
-}
-.collapsible-content button {
-  align-self: center;
-  grid-column-start: 2;
-  grid-column-end: 3;
 }
 .edit-button {
   grid-row-start: 1;
@@ -254,7 +255,7 @@ h3 {
 }
 #explorer {
   height: 90vh;
-  width: 60%;
+  width: auto;
   display: grid;
   grid-template-rows: 8vh 75vh 7vh;
   background-color: rgba(172, 255, 47, 0);
@@ -264,15 +265,50 @@ h3 {
   display: grid;
   grid-template-columns: 20vw 20vw 20vw;
 }
+.tab-button {
+  padding: 0;
+  color: hsla(302, 16%, 45%, 1);
+  background-color: hsl(36, 33%, 97%);
+  border: 2px solid hsla(302, 16%, 45%, 1);
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.6vmin;
+  font-weight: bold;
+  position: relative;
+  box-shadow: 5px 0px 0px hsla(302, 16%, 45%, 1);
+
+}
+
+.tab-button:hover {
+  color: hsl(45, 29%, 97%);
+  background-color: hsla(302, 16%, 45%, 1);
+  border: 2px solid hsl(45, 29%, 97%);
+  position: relative;
+  box-shadow: 5px 0px 0px hsla(36, 33%, 97%, 0);
+  border: none;
+  transition: all 0.3s ease;
+}
+#tab-placeholder {
+  border-bottom: 2px solid hsla(302, 16%, 45%, 1);
+
+}
 #task-tab-button {
+
+  border-top-left-radius: 1vmin;
+}
+#project-tab-button {
+
+  border-top-right-radius: 1vmin;
+}
+.active-tab {
   border: 2px solid hsla(302, 16%, 45%, 1);
   border-bottom: none;
-  border-top-left-radius: 1vmin;
 }
 #list-container {
   border-left: 2px solid hsla(302, 16%, 45%, 1);
   border-right: 2px solid hsla(302, 16%, 45%, 1);
   max-height: 100%;
+
+  box-shadow: 7px 8px 0px hsla(302, 16%, 45%, 1);
 }
 #explorer-list {
   display: flex;
@@ -281,19 +317,16 @@ h3 {
   align-items: flex-start;
   max-height: inherit;
 }
-#explorer-buttons {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border: 2px solid hsla(302, 16%, 45%, 1);
-  padding: 0vh 0vw;
-}
+
 .explorer-list-item {
   width: 100%;
   height: auto;
 }
+.collapsible-content {
 
-.explorer-list-item button {
+}
+
+.collapsible {
   width: 100%;
   height: 7vh;
   
@@ -306,7 +339,7 @@ h3 {
   position: relative;
   border: none;
 }
-.explorer-list-item button:hover {
+.collapsible:hover {
   
   color: hsl(45, 29%, 97%);
   background-color: hsla(302, 16%, 45%, 1);
@@ -315,6 +348,14 @@ h3 {
   box-shadow: 5px 6px 0px hsla(36, 33%, 97%, 0);
   border: none;
   transition: all 0.3s ease;
+}
+.active {
+  color: hsl(45, 29%, 97%);
+  background-color: hsla(302, 16%, 45%, 1);
+  border: 2px solid hsl(45, 29%, 97%);
+  position: relative;
+  box-shadow: 5px 6px 0px hsla(36, 33%, 97%, 0);
+  border: none;
 }
 .list-item-border {
   border-top: 2px solid hsla(302, 16%, 45%, 1);  
