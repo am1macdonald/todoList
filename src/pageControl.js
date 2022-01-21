@@ -146,7 +146,7 @@ const dynamicFormParts = (() => {
         listDiv.id = 'checklist-div'
         const listUl = document.createElement('ul');
         listUl.id = 'checklist-list';
-        const simpleBar = new SimpleBar(listUl);
+        const simpleBar = new SimpleBar(listUl, {autoHide: false});
         let textInput = document.createElement('input');
         textInput.type = 'text';
         textInput.placeholder = 'Add an item...';
@@ -350,7 +350,9 @@ const dynamicExplorerParts = (() => {
     sortAlg.timeAsc(library).map(item => {
       let listItem = document.createElement('li');
       listItem.classList.add('explorer-list-item');
-      listItem.id = item.identifier;
+      if (item.constructor.name === 'Task' ){
+        listItem.id = item.identifier;
+      }
 
       let collapsible = document.createElement('button');
       collapsible.type = 'button';
@@ -385,6 +387,7 @@ const dynamicExplorerParts = (() => {
 
       for (let prop in item) {
         let propListItem = document.createElement('li');
+        propListItem.classList.add('hidden-details');
 
         switch(true) {
           case (prop === 'title'):
@@ -418,6 +421,7 @@ const dynamicExplorerParts = (() => {
               hiddenChecklistPara.innerHTML = `Checklist:`;
               for (let checkItem in item[prop]) {
                 let hiddenChecklistItem = document.createElement('li');
+                hiddenChecklistItem.classList.add('hidden-list-item');
                 hiddenChecklistItem.innerHTML = `${checkItem}`;
                 hiddenChecklist.appendChild(hiddenChecklistItem);
               }
@@ -435,6 +439,7 @@ const dynamicExplorerParts = (() => {
                 taskLibrary.show().filter(obj => {
                   if (obj.identifier.toString() === task) {                    
                     let listItem = document.createElement('li');
+                    listItem.classList.add('hidden-list-item');
                     let taskItem = document.createElement('input');
                     taskItem.type = 'checkbox';
                     taskItem.id = obj.title;
@@ -449,22 +454,21 @@ const dynamicExplorerParts = (() => {
                   }
                 })
               })
-              new SimpleBar(hiddenTaskList);
               propListItem.appendChild(hiddenTaskListPara);
               propListItem.appendChild(hiddenTaskList);
             }
             hiddenContentList.appendChild(propListItem);
             break;
-          // case (prop === 'complete'):
-          //   console.log(item[prop]);
-          //   if (item[prop] === true) {
-          //     hiddenDiv.classList.add('completed');
-          //   }
-          //   break;
+          case (prop === 'complete'):
+            console.log(item[prop]);
+            if (item[prop] === true) {
+              hiddenDiv.classList.add('completed');
+            }
+            break;
+          case (prop === 'identifier'):            
+            break;
           default:
-            propListItem.innerHTML = `${prop}: ${item[prop]}`;
-
-            hiddenContentList.appendChild(propListItem);
+            console.error('unknown property');
         }
       }
 
@@ -481,7 +485,11 @@ const dynamicExplorerParts = (() => {
       listItem.appendChild(hiddenDiv);
       list.appendChild(listItem);
     })
-
+    Array.from(list.childNodes).map(node => {
+      if (node !== list.firstChild) {
+        node.classList.add('list-item-border');
+      }
+    });
     parent.appendChild(list);
     new SimpleBar(document.getElementById('explorer-list'));
 

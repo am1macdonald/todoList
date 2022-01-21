@@ -1,12 +1,12 @@
 import { format } from 'date-fns';
 export default class Project {
-    constructor(title, description, dueDate, notes, tasks = []) {
+    constructor(title, description, dueDate, notes, tasks = [], complete = false) {
         this.title = title;
         this.description = description;
         this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
         this.notes = notes;
         this.tasks = tasks;
-        this.complete = false;
+        this.complete = complete;
     }
     markComplete(bool) {
       if (bool === true) {
