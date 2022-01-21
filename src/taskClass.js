@@ -21,6 +21,12 @@ export default class Task {
             this.complete = false;
         }
     }
+    edit(description, dueDate, priority, notes) {
+      this.description = description;
+      this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
+      this.priority = priority;
+      this.notes = notes;
+    }
     summary() {
         console.log(`I am task, ${this.title}, due on ${format(new Date(), 'yyyy-MM-dd')} with level ${this.priority} priority & id:${this.identifier}`);
     }

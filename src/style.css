@@ -118,15 +118,19 @@ h3 {
 .data-entry {
   display: flex;
   justify-content: space-between;
-  height: 90vh;
+  height: auto;
   width: clamp( 50vw, 80%, 680px );
   display: inherit;
   flex-direction: column;
   line-height: 1.5em;
   font-weight: 300;
+  padding: 2vh 2vw;
+  border: solid 2px hsla(302, 16%, 45%, 1);
+  background-color: hsl(45, 29%, 97%);
+  box-shadow: 9px 10px 0px hsla(302, 16%, 45%, 1);
 }
 .data-entry * {
-  padding-bottom: 2px;
+  padding-bottom: 5px;
 }
 .data-entry input {
   background: none;
@@ -136,11 +140,13 @@ h3 {
 
   height: 2.4vmin;
   width: 100%;
+  margin: 1px 2px;
+  margin-bottom: 10px;
   font-size: 1.6vmin;
   font-family: 'Oswald', sans-serif;
 }
 .data-entry input:focus {
-  padding-bottom: 1px;
+  padding-bottom: 4px;
   border-bottom: 2px solid;
   border-color: rgba(0, 120, 138, 0.473);
   outline: none;
@@ -150,7 +156,7 @@ h3 {
   justify-content: space-around;
   align-items: center;
   border: 2px solid hsla(302, 16%, 45%, 1);
-  padding: 0vh 0vw;
+  padding: 0;
   background-color: hsl(45, 29%, 97%);
 
   box-shadow: 7px 8px 0px hsla(302, 16%, 45%, 1);
@@ -186,12 +192,10 @@ h3 {
   left: 5px;
   right: -5px;
   bottom: -6px;
-  z-index: -1;
+  z-index: 1;
   border: 2px solid hsla(302, 16%, 45%, 1);
 
   transition: all 0.3s ease;
-}
-.form-button {
 }
 #checklist-div {
   display: flex;
@@ -203,9 +207,6 @@ h3 {
 #checklist-list {
   height: 100px;
   width: 100%;
-}
-#checklist-text-input {
-  margin: .9vh 0vw;
 }
 .form-buttons {
   display: flex;
@@ -271,22 +272,13 @@ h3 {
   background-color: hsl(36, 33%, 97%);
   border: 2px solid hsla(302, 16%, 45%, 1);
   font-family: 'Oswald', sans-serif;
-  font-size: 2.6vmin;
-  font-weight: bold;
+  font-size: 2.8vmin;
+  font-style: italic;
   position: relative;
   box-shadow: 5px 0px 0px hsla(302, 16%, 45%, 1);
 
 }
 
-.tab-button:hover {
-  color: hsl(45, 29%, 97%);
-  background-color: hsla(302, 16%, 45%, 1);
-  border: 2px solid hsl(45, 29%, 97%);
-  position: relative;
-  box-shadow: 5px 0px 0px hsla(36, 33%, 97%, 0);
-  border: none;
-  transition: all 0.3s ease;
-}
 #tab-placeholder {
   border-bottom: 2px solid hsla(302, 16%, 45%, 1);
 
@@ -303,12 +295,27 @@ h3 {
   border: 2px solid hsla(302, 16%, 45%, 1);
   border-bottom: none;
 }
+.active-tab:hover {
+  background-color: none;
+}
+.inactive-tab {
+  filter: brightness(0.7);
+}
+.inactive-tab:hover {
+  color: hsl(45, 29%, 97%);
+  background-color: hsla(302, 16%, 45%, 1);
+  border: 2px solid hsl(45, 29%, 97%);
+  position: relative;
+  box-shadow: 5px 0px 0px hsla(36, 33%, 97%, 0);
+  border: none;
+  transition: all 0.3s ease;
+  filter: brightness(1);
+}
 #list-container {
   border-left: 2px solid hsla(302, 16%, 45%, 1);
   border-right: 2px solid hsla(302, 16%, 45%, 1);
   max-height: 100%;
   background-color: hsl(45, 29%, 97%);
-
   box-shadow: 7px 8px 0px hsla(302, 16%, 45%, 1);
 }
 #explorer-list {
@@ -319,24 +326,15 @@ h3 {
   max-height: inherit;
 }
 
-.explorer-list-item {
-  width: 100%;
-  height: auto;
-}
-.collapsible-content {
-
-}
-
 .collapsible {
   width: 100%;
-  height: 7vh;
-  
+  height: 7vh;  
   padding: 0;
   color: hsla(302, 16%, 45%, 1);
   background-color: hsl(36, 33%, 97%);
   font-family: 'Oswald', sans-serif;
   font-size: 2.6vmin;
-  font-weight: bold;
+  font-weight: normal;
   position: relative;
   border: none;
 }
@@ -358,13 +356,63 @@ h3 {
   box-shadow: 5px 6px 0px hsla(36, 33%, 97%, 0);
   border: none;
 }
+.explorer-list-item {
+  width: 100%;
+  height: auto;
+}
+.collapsible-content {
+
+}
+.hidden-content-list {
+
+}
+.hidden-button-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .list-item-border {
   border-top: 2px solid hsla(302, 16%, 45%, 1);  
 }
 
-.edit-button {
-  width: 3vmin;
-  height: 1vmin;
+.hidden-button {
+  padding: 0;
+  margin: 1vh;
+  color: hsla(302, 16%, 45%, 1);
+  background-color: hsl(36, 33%, 97%);
+  border: 2px solid hsla(302, 16%, 45%, 1);
+  width: 150px;
+  height: 38px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.6vmin;
+  font-weight: bold;
+  position: relative;
+  box-shadow: 5px 6px 0px hsla(302, 16%, 45%, 1);
+}
+.hidden-button:hover {
+  color: hsl(45, 29%, 97%);
+  background-color: hsla(302, 16%, 45%, 1);
+  border: 2px solid hsl(45, 29%, 97%);
+  position: relative;
+  box-shadow: 5px 6px 0px hsla(36, 33%, 97%, 0);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.hidden-button:hover::after {
+  content: '';
+  position: absolute;
+  background-color: rgba(133, 96, 132, 0);
+  top: 6px;
+  left: 5px;
+  right: -5px;
+  bottom: -6px;
+  z-index: -1;
+  border: 2px solid hsla(302, 16%, 45%, 1);
+
+  transition: all 0.3s ease;
 }
 .project-tasklist {
   padding-left: 2vw;

@@ -320,21 +320,32 @@ const dynamicExplorerParts = (() => {
     taskTab.classList.add('active-tab');
     taskTab.innerHTML = 'Tasks';
 
-    taskTab.addEventListener('click', () => {
-      let listContainer = document.getElementById('list-container');
-      listContainer.removeChild(listContainer.childNodes[0]);
-      itemList(listContainer, taskLibrary.show());
-    })
-
     const projectTab = document.createElement('button');
     projectTab.id = `project-tab-button`;
     projectTab.classList.add('tab-button');
+    projectTab.classList.add('inactive-tab');
     projectTab.innerHTML = 'Projects';
 
+    taskTab.addEventListener('click', () => {
+      if (taskTab.classList.contains('inactive-tab')) {
+        let listContainer = document.getElementById('list-container');
+        listContainer.removeChild(listContainer.childNodes[0]);
+        itemList(listContainer, taskLibrary.show());
+        taskTab.classList.replace('inactive-tab', 'active-tab');
+        projectTab.classList.replace('active-tab', 'inactive-tab');
+      }
+    })
     projectTab.addEventListener('click', () => {
-      let listContainer = document.getElementById('list-container');
-      listContainer.removeChild(listContainer.childNodes[0]);
-      itemList(listContainer, projectLibrary.show());   
+      
+      if(projectTab.classList.contains('inactive-tab')) {
+        let listContainer = document.getElementById('list-container');
+        listContainer.removeChild(listContainer.childNodes[0]);
+        itemList(listContainer, projectLibrary.show());
+        projectTab.classList.replace('inactive-tab', 'active-tab');
+        taskTab.classList.replace('active-tab', 'inactive-tab');
+      }
+
+
     })
 
     const tabPlaceholder = document.createElement('div');
@@ -343,7 +354,6 @@ const dynamicExplorerParts = (() => {
     div.appendChild(taskTab);
     div.appendChild(projectTab);
     div.appendChild(tabPlaceholder);
-
     parent.appendChild(div);
 
   }
@@ -384,11 +394,18 @@ const dynamicExplorerParts = (() => {
 
       let editButton = document.createElement('button');
       editButton.classList.add('edit-button');
+      editButton.classList.add('hidden-button');
       editButton.innerHTML = 'edit';
 
       let completeButton = document.createElement('button');
       completeButton.classList.add('complete-button');
-      completeButton.innerHTML = 'mark complete';
+      completeButton.classList.add('hidden-button');
+      completeButton.innerHTML = 'complete';
+
+      let removeButton = document.createElement('button');
+      removeButton.classList.add('remove-button');
+      removeButton.classList.add('hidden-button');
+      removeButton.innerHTML = 'remove item';
 
       for (let prop in item) {
         let propListItem = document.createElement('li');
@@ -478,6 +495,9 @@ const dynamicExplorerParts = (() => {
       }
 
       let hiddenButtonDiv = document.createElement('div');
+      hiddenButtonDiv.appendChild(completeButton);
+      hiddenButtonDiv.appendChild(editButton);
+      hiddenButtonDiv.appendChild(removeButton);
       hiddenButtonDiv.classList.add('hidden-button-div');
      
 
@@ -634,7 +654,7 @@ const projectCreationMenu = () => {
   dynamicFormParts.cancelButton(div);
   const footNote = document.createElement('p');
   footNote.id = 'project-form-footnote';
-  footNote.innerHTML = '*Additional tasks can be added later from the project screen';
+  footNote.innerHTML = '*Additional tasks can be added later from the project explorer';
   form.appendChild(footNote);
   form.appendChild(div);
 }

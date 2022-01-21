@@ -14,7 +14,13 @@ export default class Project {
       } else if (bool === false) {
           this.complete = false;
       }
-  }
+    }
+    edit(description, dueDate, notes) {
+      this.description = description;
+      this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
+      this.notes = notes;
+
+    }
     summary() {
         console.log(`I am project ${this.title}`);
     }
