@@ -46,7 +46,7 @@ h2 {
 
 h3 {
   font-family: 'Oswald', sans-serif;
-  font-size: 3.6vh;
+  font-size: 3.55vh;
   color: hsla(302, 16%, 45%, 1);
   font-weight: 600;
   font-style: italic;
@@ -119,6 +119,7 @@ h3 {
   display: flex;
   justify-content: space-between;
   height: auto;
+  max-height: 90vh;
   width: clamp( 50vw, 80%, 680px );
   display: inherit;
   flex-direction: column;
@@ -129,8 +130,9 @@ h3 {
   background-color: hsl(45, 29%, 97%);
   box-shadow: 9px 10px 0px hsla(302, 16%, 45%, 1);
 }
-.data-entry * {
-  padding-bottom: 5px;
+.data-entry label {
+  padding-bottom: 0.1rem;
+  font-size: 2.6vh ;
 }
 .text-input {
   background: none;
@@ -154,9 +156,10 @@ h3 {
 #due-date {
   border: solid 2px hsla(302, 16%, 45%, 1);
   width: fit-content;
+  max-height: 122px;
 }
 #due-date:focus {
-  padding-bottom: 5px;
+  padding-bottom: 1px;
 }
 #priority {
   background-color: white;
@@ -225,6 +228,9 @@ h3 {
   max-height: 110px;
   width: 100%;
 }
+.checklist-item {
+  font-size: 2.4vh;
+}
 .form-buttons {
   display: flex;
   justify-content: space-around;
@@ -232,7 +238,7 @@ h3 {
   width: 100%;
 }
 #checkboxes {
-  height: 25vh;
+  max-height: 18vh;
 }
 .task-list-item {
   display: grid;
