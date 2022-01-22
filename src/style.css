@@ -167,17 +167,6 @@ h3 {
   width: fit-content;
   border: solid 2px hsla(302, 16%, 45%, 1);
 }
-#explorer-buttons {
-  display: flex;
-  height: auto;
-  justify-content: space-around;
-  align-items: center;
-  border: 2px solid hsla(302, 16%, 45%, 1);
-  padding: 0;
-  background-color: hsl(45, 29%, 97%);
-
-  box-shadow: 7px 8px 0px hsla(302, 16%, 45%, 1);
-}
 .styled-button {
   padding: 0;
   color: hsla(302, 16%, 45%, 1);
@@ -280,16 +269,17 @@ h3 {
   align-items: center;
 }
 #explorer {
-  height: 90vh;
+  height: auto;
+  max-height: 95vh;
   width: auto;
   display: grid;
-  grid-template-rows: 8vh 75vh 7vh;
+  grid-template-rows: 8vh 75vh auto;
   background-color: rgba(172, 255, 47, 0);
-  padding-bottom: 1vh;
 }
 #explorer-tabs {
   display: grid;
-  grid-template-columns: 20vw 20vw 20vw;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
 }
 .tab-button {
   padding: 0;
@@ -441,6 +431,18 @@ h3 {
 .project-tasklist {
   padding-left: 2vw;
   height: 110px;
+}
+#explorer-buttons {
+  display: flex;
+  height: auto;
+  justify-content: space-around;
+  align-items: center;
+  border: 2px solid hsla(302, 16%, 45%, 1);
+  padding-top: 0.3rem;
+  padding-bottom: 0.6rem;
+  background-color: hsl(45, 29%, 97%);
+
+  box-shadow: 7px 8px 0px hsla(302, 16%, 45%, 1);
 }
 .simplebar-placeholder { 
   width: auto!important;
