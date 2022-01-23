@@ -398,16 +398,19 @@ const dynamicExplorerParts = (() => {
       let editButton = document.createElement('button');
       editButton.classList.add('edit-button');
       editButton.classList.add('hidden-button');
+      editButton.classList.add('styled-button');
       editButton.innerHTML = 'edit';
 
       let completeButton = document.createElement('button');
       completeButton.classList.add('complete-button');
       completeButton.classList.add('hidden-button');
+      completeButton.classList.add('styled-button');
       completeButton.innerHTML = 'complete';
 
       let removeButton = document.createElement('button');
       removeButton.classList.add('remove-button');
       removeButton.classList.add('hidden-button');
+      removeButton.classList.add('styled-button');
       removeButton.innerHTML = 'remove item';
 
       for (let prop in item) {

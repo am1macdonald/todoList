@@ -138,20 +138,20 @@ h3 {
 .text-input {
   background: none;
   border: none;
-  border-bottom: 1px solid;
+  border-bottom: 0.1rem solid;
   border-color: hsla(120, 5%, 84%, 1);
 
   font-size: 1.9vmin;
   font-family: 'Oswald', sans-serif;
   
-  height: 2.4h;
+  height: 1rem;
   width: 100%;
-  margin: 1px 2px;
-  margin-bottom: 10px;
+  margin: 0.2rem 0rem;
+  margin-bottom: 0.2rem;
 }
 .data-entry input:focus {
-  padding-bottom: 4px;
-  border-bottom: 2px solid;
+  padding-bottom: 0.01rem;
+  border-bottom: 0.15rem solid;
   border-color: rgba(0, 120, 138, 0.473);
   outline: none;
 }
@@ -221,12 +221,18 @@ h3 {
 }
 .checklist-item {
   font-size: 2.4vmin;
+  max-height: 1.2rem
 }
 .form-buttons {
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
+}
+.form-buttons .styled-button {
+  font-size: 2.4vmin;
+  height: 1.5rem;
+  width: 5.5rem;
 }
 #checkboxes {
   max-height: 18vh;
@@ -345,7 +351,7 @@ h3 {
 
 .collapsible {
   width: 100%;
-  height: auto;
+  height: 2.5rem;
   min-height: 5.5vh;
   padding: 0.1rem 0;
   color: hsla(302, 16%, 45%, 1);
@@ -396,41 +402,11 @@ h3 {
 }
 
 .hidden-button {
-  padding: 0;
   margin: 1vh;
-  color: hsla(302, 16%, 45%, 1);
-  background-color: hsl(36, 33%, 97%);
-  border: 2px solid hsla(302, 16%, 45%, 1);
-  width: 150px;
-  height: 38px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 2.6vmin;
-  font-weight: bold;
-  position: relative;
-  box-shadow: 5px 6px 0px hsla(302, 16%, 45%, 1);
-}
-.hidden-button:hover {
-  color: hsl(45, 29%, 97%);
-  background-color: hsla(302, 16%, 45%, 1);
-  border: 2px solid hsl(45, 29%, 97%);
-  position: relative;
-  box-shadow: 5px 6px 0px hsla(36, 33%, 97%, 0);
-  border: none;
-  transition: all 0.3s ease;
+  width: 8rem;
+  height: 2.3rem;
 }
 
-.hidden-button:hover::after {
-  content: '';
-  position: absolute;
-  background-color: rgba(133, 96, 132, 0);
-  top: 6px;
-  left: 5px;
-  right: -5px;
-  bottom: -6px;
-  z-index: -1;
-  border: 2px solid hsla(302, 16%, 45%, 1);
-  transition: all 0.3s ease;
-}
 .project-tasklist {
   padding-left: 2vw;
   height: 110px;
@@ -451,4 +427,10 @@ h3 {
 }
 .simplebar-placeholder { 
   width: auto!important;
+}
+
+@media only screen and (max-height: 650px) {
+  #checklist-list {
+    max-height: 80px;
+  }
 }
