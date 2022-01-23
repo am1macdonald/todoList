@@ -17,10 +17,8 @@ export default class Task {
     markComplete() {
         if (this.complete === true) {
             this.complete = false;
-        console.log(`${this.title} is now incomplete!`);
         } else if (this.complete === false) {
             this.complete = true;
-            console.log(`${this.title} is now complete!`);
         }
     }
     edit(description, dueDate, priority, notes) {

@@ -8,10 +8,10 @@ export default class Project {
         this.tasks = tasks;
         this.complete = complete;
     }
-    markComplete(bool) {
-      if (bool === true) {
+    markComplete() {
+        if (this.complete === false) {
           this.complete = true;
-      } else if (bool === false) {
+        } else if (this.complete === true) {
           this.complete = false;
       }
     }
