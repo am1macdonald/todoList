@@ -2,6 +2,7 @@ import { compareAsc, format, parseISO } from 'date-fns';
 import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, sortAlg } from './libraryManagement.js';
 import SimpleBar from 'simplebar';
 import 'simplebar/dist/simplebar.css';
+import Task from './taskClass.js';
 
 
 const content = document.getElementById('content');
@@ -17,7 +18,7 @@ const renderStaticElements = () => {
         nav.id = 'sidebar';
     
         const header = document.createElement('h1');
-        header.id = 'title';
+        header.id = 'page-title';
         header.innerHTML = 'Do.';
     
         const taskContainer = document.createElement('div');
@@ -68,13 +69,13 @@ const renderStaticElements = () => {
 const dynamicFormParts = (() => {
 
         // create the popup for adding new tasks
-    const newFormWindow = (type) => {
+    const newFormWindow = (type, headerText) => {
 
         const container = document.createElement('div');
         container.id = 'form-container';
 
         const formHeader = document.createElement('h3');
-        formHeader.innerHTML = `New ${type}`;
+        formHeader.innerHTML = `${headerText}`;
 
         const form = document.createElement('form');
         form.name = `${type} creation form`;
@@ -138,7 +139,7 @@ const dynamicFormParts = (() => {
     }
 
         // input for a task checklist
-    const newChecklist = (parent) => {
+    const newChecklist = (parent, obj) => {
         const label = document.createElement('label');
         label.for = 'checklist';
         label.innerHTML = 'Checklist.';
@@ -184,6 +185,17 @@ const dynamicFormParts = (() => {
             }
         })
 
+        if (obj) {
+          for (let checklistItem in obj.checklist) {
+            console.log(checklistItem);
+            let listItem = document.createElement('li');
+            listItem.classList.add('checklist-item');
+            listItem.innerHTML = '- ' + `${checklistItem}`;
+            simpleBar.getContentElement().appendChild(listItem);
+            listItem.scrollIntoView();
+          }
+        }
+
         buttonDiv.appendChild(addItem);
         buttonDiv.appendChild(removeItem);
 
@@ -193,8 +205,6 @@ const dynamicFormParts = (() => {
 
         parent.appendChild(label);
         parent.appendChild(listDiv);
-
-        
     };
 
     const newTasklist = (parent) => {
@@ -266,16 +276,41 @@ const dynamicFormParts = (() => {
         parent.appendChild(submitButton);
     };
 
+    const saveButton = (parent) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.innerHTML = 'save';
+      button.classList.add('styled-button');
+      button.classList.add('form-button');
+      // button.addEventListener('click', () => {
+        
+      //   if (parent.id === 'task-buttons') {
+      //     addNewTask();
+      //     if (stateManager.getAdded()) {
+      //       renderListToNav(taskLibrary.show(), 'task');
+      //       clearContent();
+      //       stateManager.setAdded(false);
+      //     }
+      //   } else if (parent.id === 'project-buttons') {
+      //       addNewProject();
+      //       if (stateManager.getAdded()) {
+      //         renderListToNav(projectLibrary.show(), 'project');
+      //         clearContent();
+      //         stateManager.setAdded(false);
+      //       }
+      //   }
+      // });
+      parent.appendChild(button);
+  };
+
         // form cancel button
-    const cancelButton = (parent) => {
+    const cancelButton = (parent, callback) => {
         const cancelButton = document.createElement('button');
         cancelButton.type = 'button';
         cancelButton.innerHTML = 'cancel >>';
         cancelButton.classList.add('styled-button');
         cancelButton.classList.add('form-button');
-        cancelButton.addEventListener('click', () => {
-            clearContent();
-        });
+        cancelButton.addEventListener('click', callback);
         parent.appendChild(cancelButton);
     };
 
@@ -288,6 +323,7 @@ const dynamicFormParts = (() => {
         newChecklist,
         newTasklist,
         submitButton,
+        saveButton,
         cancelButton
     }
 
@@ -390,7 +426,7 @@ const dynamicExplorerParts = (() => {
 
       let hiddenDiv = document.createElement('div');
       hiddenDiv.classList.add('collapsible-content');
-      hiddenDiv.style.display = "none";
+      hiddenDiv.style.display = 'none';
 
       let hiddenContentList = document.createElement('ul');
       hiddenContentList.classList.add('hidden-content-list');
@@ -517,6 +553,20 @@ const dynamicExplorerParts = (() => {
       hiddenButtonDiv.appendChild(removeButton);
       hiddenButtonDiv.classList.add('hidden-button-div');
      
+
+
+      editButton.addEventListener('click', () => {
+        document.getElementById('explorer-frame').style.display = 'none';
+        if (item.constructor === Task) {
+          editTaskMenu(item);
+        } else if (item.constructor === Project) {
+          //editProjectMenu(item);
+        }
+      })
+
+
+
+
       completeButton.addEventListener('click', () => {
         item.markComplete();
         taskLibrary.updateLocalStorage();
@@ -572,7 +622,7 @@ const dynamicExplorerParts = (() => {
       })
     })
 
-    dynamicFormParts.cancelButton(div);
+    dynamicFormParts.cancelButton(div, clearContent);
     div.appendChild(expand);
     div.appendChild(retract);
 
@@ -639,7 +689,7 @@ const taskExplorer = () => {
 }
 // creating a form to make a new task
 const taskCreationMenu = () => {
-    dynamicFormParts.newFormWindow('Task');
+    dynamicFormParts.newFormWindow('Task', 'New Task');
     let form = document.getElementById('task-form');
     form.classList.add('data-entry');
     dynamicFormParts.newTextInput(form, 'title', 'Title.', 'Enter task name...', true);
@@ -652,13 +702,40 @@ const taskCreationMenu = () => {
     div.classList.add('form-buttons');    
     div.id = 'task-buttons';      
     dynamicFormParts.submitButton(div);
-    dynamicFormParts.cancelButton(div);
+    dynamicFormParts.cancelButton(div, clearContent);
     form.appendChild(div);
 };
+// creating a form to make edit a task
+const editTaskMenu = (obj) => {
+  console.table(obj);
+  dynamicFormParts.newFormWindow('task-edit', `Edit ${obj.title}`);
+  let form = document.getElementById('task-edit-form');
+  form.classList.add('data-entry');
+  dynamicFormParts.newTextInput(form, 'title', 'Title.', '', true);
+  dynamicFormParts.newTextInput(form, 'description', 'Details.', '', true);
+  dynamicFormParts.newDateInput(form);
+  dynamicFormParts.newPriorityDropdown(form, 5);
+  dynamicFormParts.newChecklist(form, obj);
+  // dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
+  const div = document.createElement('div');
+  div.classList.add('form-buttons');   
+  div.id = 'task-buttons';      
+  dynamicFormParts.saveButton(div);
+  dynamicFormParts.cancelButton(div, () => {
+    document.getElementById('explorer-frame').removeAttribute('style');
+    document.getElementById('form-container').remove();
+  });
+  form.appendChild(div);
+  document.getElementById('title').value = obj.title;
+  document.getElementById('description').value = obj.description;
+  document.getElementById('due-date').value = obj.dueDate;
+  document.getElementById('priority').value = obj.priority;
 
+  
+}
 // creating a form to make a new project
 const projectCreationMenu = () => {
-  dynamicFormParts.newFormWindow('Project');
+  dynamicFormParts.newFormWindow('Project', 'New Projct');
   let form = document.getElementById('project-form');
   form.classList.add('data-entry');
   dynamicFormParts.newTextInput(form, 'title', 'Title.', 'Enter project name...', true);
@@ -671,7 +748,7 @@ const projectCreationMenu = () => {
   div.classList.add('form-buttons');
   div.id = 'project-buttons';        
   dynamicFormParts.submitButton(div);
-  dynamicFormParts.cancelButton(div);
+  dynamicFormParts.cancelButton(div, clearContent);
   const footNote = document.createElement('p');
   footNote.id = 'project-form-footnote';
   footNote.innerHTML = '*Additional tasks can be added later from the project explorer';
@@ -684,7 +761,7 @@ const clearContent = () => {
     while (content.firstChild) {
       content.removeChild(content.firstChild);
     }
-};
+}
 
 // renders the five tasks or projects, that are due the soonest, to the navbar
 
@@ -730,4 +807,4 @@ export {
     projectCreationMenu,
     clearContent,
     renderListToNav,
-};
+}
