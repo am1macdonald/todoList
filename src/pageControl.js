@@ -573,9 +573,12 @@ const dynamicExplorerParts = (() => {
       removeButton.addEventListener('click', () => {
         if (item.constructor === Task) {
           taskLibrary.removeFromLibrary(item);
+          renderListToNav(taskLibrary.show(), 'task');
+        } else if (item.constructor === Project) {
+          projectLibrary.removeFromLibrary(item);
+          renderListToNav(projectLibrary.show(), 'project');
         }
         listItem.remove();
-        renderListToNav(taskLibrary.show(), 'task');
       })
 
       

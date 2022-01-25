@@ -52,13 +52,25 @@ export const projectLibrary = (() => {
     });
   }
   const show = () => arr;
+  const updateLocalStorage = () => {
+    window.localStorage.setItem('project-library', JSON.stringify(arr));
+  }
   const addToLibrary = (project) => {
       arr.push(project);
       arr[arr.length-1].summary();
-      window.localStorage.setItem('project-library', JSON.stringify(arr));
+      updateLocalStorage();
   };
+  const removeFromLibrary = (project) => {
+    arr = arr.filter(storedProject => {
+      if (storedProject.identifier !== project.identifier) {
+        return project;
+      }
+    })
+    updateLocalStorage();
+  }
   return {
       addToLibrary,
+      removeFromLibrary,
       show,
   };
 })();
