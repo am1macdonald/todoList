@@ -2,7 +2,6 @@
   font-family: 'Oswald';
   src: url(http://127.0.0.1:5500/dist/7aae63364e12a102a22a.ttf);
 }
-
 body { 
   width: 100vw;
   height: 100vh;  
@@ -10,16 +9,17 @@ body {
   background: linear-gradient(145deg, rgba(250,249,246,1) 83%, rgba(0,121,140,1) 94%, rgba(31,27,27,1) 100%); 
   font-family: 'Oswald', sans-serif;
   font-weight: normal;
+/*   overflow: hidden; */
 }
-
 #page {
   display: grid;
   grid-template-columns: minmax(auto, 230px) auto;
 }
 
-nav {  
-  padding: 1vmin;
-  height: 98vh;
+nav {
+  box-sizing: border-box;
+  padding: 1vh 1vw;
+  max-height: 98vh;
   width: auto;  
   display: grid;
   grid-template-rows: 1fr 3fr 1fr 3fr 1fr;
@@ -50,7 +50,7 @@ h3 {
   color: hsla(302, 16%, 45%, 1);
   font-weight: 600;
   font-style: italic;
-  padding-bottom: 0.2rem;
+  padding-bottom: 0.3rem;
   text-align: center;
 }
 
@@ -62,8 +62,8 @@ h3 {
 #start-button {
   height: auto;
   width: auto;
-  padding: 0.4rem 2rem;
-  font-size: 4vmin;
+  padding: 0.2rem 1.2rem;
+  font-size: 3.8vmin;
 }
 
 #content {
@@ -78,10 +78,10 @@ h3 {
   box-sizing: content-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  height: 25vh;
-  width: auto;
+  height: 50vh;
+  width: fit-content;
 }
 
 #date-today {
@@ -92,15 +92,15 @@ h3 {
   line-height: 1.1em;
   text-align: center;
   width: auto;
-  height: 15vh;
-  margin-bottom: 1rem;
+  height: auto;
+  margin-bottom: 1em;
 }
 
 #form-container {
   width: 100%;
   height: 100vh;
+  margin: auto;
   box-sizing: border-box;
-  padding: 3vmin;
   background-color: rgba(245, 245, 245, 0);
   display: flex;
   justify-content: center;
@@ -126,42 +126,43 @@ h3 {
   flex-direction: column;
   line-height: 1.5em;
   font-weight: 300;
-  padding: 2vh 2vw;
+  padding: 2em;
   border: solid 2px hsla(302, 16%, 45%, 1);
   background-color: hsl(45, 29%, 97%);
   box-shadow: 9px 10px 0px hsla(302, 16%, 45%, 1);
 }
 .data-entry label {
   font-size: 2.7vmin;
-  padding-bottom: 0.1rem;
+  padding-bottom: 0.2em;
 }
 .text-input {
   background: none;
   border: none;
-  border-bottom: 0.1rem solid;
+  border-bottom: 0.1em solid;
   border-color: hsla(120, 5%, 84%, 1);
 
   font-size: 1.9vmin;
   font-family: 'Oswald', sans-serif;
   
-  height: 1rem;
+  height: 1em;
   width: 100%;
-  margin: 0.2rem 0rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.2em;
+  padding-bottom: 0.5em;
 }
 .data-entry input:focus {
-  padding-bottom: 0.01rem;
-  border-bottom: 0.15rem solid;
   border-color: rgba(0, 120, 138, 0.473);
+  box-shadow: 0 0.15em 0.15em -2px rgba(0, 120, 138, 0.473);
   outline: none;
 }
 #due-date {
   border: solid 2px hsla(302, 16%, 45%, 1);
   width: fit-content;
-  max-height: 122px;
+  min-height: 17px;
+  
+  padding: 0.05em;
 }
 #due-date:focus {
-  padding-bottom: 1px;
+  padding: 0.05em;
 }
 #priority {
   background-color: white;
@@ -173,13 +174,13 @@ h3 {
   color: hsla(302, 16%, 45%, 1);
   background-color: hsl(36, 33%, 97%);
   border: 2px solid hsla(302, 16%, 45%, 1);
-  width: 150px;
-  height: 2.2rem;
+  width: 7em;
+  height: 1.8em;
   font-family: 'Oswald', sans-serif;
   font-size: 2.5vmin;
   font-weight: bold;
   position: relative;
-  box-shadow: 5px 6px 0px hsla(302, 16%, 45%, 1);
+  box-shadow: 4px 5px 0px hsla(302, 16%, 45%, 1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -190,7 +191,7 @@ h3 {
   background-color: hsla(302, 16%, 45%, 1);
   border: 2px solid hsl(45, 29%, 97%);
   position: relative;
-  box-shadow: 5px 6px 0px hsla(36, 33%, 97%, 0);
+  box-shadow: 4px 5px 0px hsla(36, 33%, 97%, 0);
   border: none;
   transition: all 0.3s ease;
 }
@@ -198,10 +199,10 @@ h3 {
   content: '';
   position: absolute;
   background-color: rgba(133, 96, 132, 0);
-  top: 6px;
-  left: 5px;
-  right: -5px;
-  bottom: -6px;
+  top: 5px;
+  left: 4px;
+  right: -4px;
+  bottom: -5px;
   z-index: 1;
   border: 2px solid hsla(302, 16%, 45%, 1);
 
@@ -212,16 +213,15 @@ h3 {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  max-height: 480px;
+  padding-bottom: 0.5em;
 }
 #checklist-list {
   height: auto;
-  max-height: 110px;
+  max-height: 18vh;
   width: 100%;
 }
 .checklist-item {
-  font-size: 2.4vmin;
-  max-height: 1.2rem
+  font-size: 2.4vmin;  
 }
 .form-buttons {
   display: flex;
@@ -231,8 +231,7 @@ h3 {
 }
 .form-buttons .styled-button {
   font-size: 2.4vmin;
-  height: 1.5rem;
-  width: 5.5rem;
+  padding: 1rem 1.2rem
 }
 #checkboxes {
   max-height: 18vh;
@@ -278,7 +277,7 @@ h3 {
 #explorer {
   height: auto;
   max-height: 95vh;
-  width: auto;
+  width: max(50%, 375px);
   display: grid;
   grid-template-rows: auto 75vh auto;
   background-color: rgba(172, 255, 47, 0);
@@ -287,10 +286,10 @@ h3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   width: 100%;
-  height: 7vh;
+  height: auto;
 }
 .tab-button {
-  padding: 0.4rem 0;
+  padding-bottom: 0.1em;
   color: hsla(302, 16%, 45%, 1);
   background-color: hsl(36, 33%, 97%);
   border: 2px solid hsla(302, 16%, 45%, 1);
@@ -299,7 +298,8 @@ h3 {
   font-style: italic;
   position: relative;
   box-shadow: 5px 0px 0px hsla(302, 16%, 45%, 1);
-
+  height: 2em;
+  text-align: center;
 }
 
 #tab-placeholder {
@@ -434,3 +434,8 @@ h3 {
     max-height: 80px;
   }
 }
+
+/* * {
+  outline: 1px solid #f00 !important;
+}
+ */
