@@ -15,10 +15,11 @@ export default class Project {
           this.complete = false;
       }
     }
-    edit(description, dueDate, notes) {
+    edit(description, dueDate, notes, tasks) {
       this.description = description;
       this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
       this.notes = notes;
+      this.tasks = tasks;
 
     }
     summary() {

@@ -188,7 +188,6 @@ const dynamicFormParts = (() => {
 
         if (obj) {
           for (let checklistItem in obj.checklist) {
-            console.log(checklistItem);
             let listItem = document.createElement('li');
             listItem.classList.add('checklist-item');
             listItem.innerHTML = '- ' + `${checklistItem}`;
@@ -208,7 +207,7 @@ const dynamicFormParts = (() => {
         parent.appendChild(listDiv);
     };
 
-    const newTasklist = (parent) => {
+    const newTasklist = (parent, obj) => {
       const label = document.createElement('label');
       label.setAttribute('for', 'checkboxes'); 
       label.innerHTML = 'Tasks.';
@@ -236,10 +235,17 @@ const dynamicFormParts = (() => {
         cloneCheckboxLabel.setAttribute('for', `${item.identifier}`);
         cloneCheckboxLabel.innerHTML = `${item.title}`;
 
+        if (obj) {
+          if (obj.tasks.includes(item.identifier.toString())) {
+            cloneCheckbox.checked = true;
+          }
+        }
+       
         listItem.appendChild(cloneCheckbox);
         listItem.appendChild(cloneCheckboxLabel);
         checkboxes.appendChild(listItem);
       })
+
 
 
       listDiv.appendChild(label);
@@ -277,30 +283,19 @@ const dynamicFormParts = (() => {
         parent.appendChild(submitButton);
     };
 
-    const saveButton = (parent) => {
+    const saveButton = (parent, obj) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.innerHTML = 'save';
       button.classList.add('styled-button');
       button.classList.add('form-button');
-      // button.addEventListener('click', () => {
-        
-      //   if (parent.id === 'task-buttons') {
-      //     addNewTask();
-      //     if (stateManager.getAdded()) {
-      //       renderListToNav(taskLibrary.show(), 'task');
-      //       clearContent();
-      //       stateManager.setAdded(false);
-      //     }
-      //   } else if (parent.id === 'project-buttons') {
-      //       addNewProject();
-      //       if (stateManager.getAdded()) {
-      //         renderListToNav(projectLibrary.show(), 'project');
-      //         clearContent();
-      //         stateManager.setAdded(false);
-      //       }
-      //   }
-      // });
+      button.addEventListener('click', () => {        
+        if (obj.constructor === Task) {
+          obj.edit();
+        } else if (obj.constructor === Project) {
+          obj.edit();
+        }
+      })
       parent.appendChild(button);
   };
 
@@ -536,7 +531,6 @@ const dynamicExplorerParts = (() => {
             hiddenContentList.appendChild(propListItem);
             break;
           case (prop === 'complete'):
-            console.log(item[prop]);
             if (item[prop] === true) {
               hiddenDiv.classList.add('completed');
             }
@@ -708,7 +702,6 @@ const taskCreationMenu = () => {
 };
 // creating a form to make edit a task
 const editTaskMenu = (obj) => {
-  console.table(obj);
   dynamicFormParts.newFormWindow('task-edit', `Edit ${obj.title}`);
   let form = document.getElementById('task-edit-form');
   form.classList.add('data-entry');
@@ -717,10 +710,10 @@ const editTaskMenu = (obj) => {
   dynamicFormParts.newDateInput(form);
   dynamicFormParts.newPriorityDropdown(form, 5);
   dynamicFormParts.newChecklist(form, obj);
-  // dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
+  dynamicFormParts.newTextInput(form, 'notes', 'Notes.', '', false);
   const div = document.createElement('div');
   div.classList.add('form-buttons');   
-  div.id = 'task-buttons';      
+  div.id = 'task-buttons';
   dynamicFormParts.saveButton(div);
   dynamicFormParts.cancelButton(div, () => {
     document.getElementById('explorer-frame').removeAttribute('style');
@@ -731,8 +724,7 @@ const editTaskMenu = (obj) => {
   document.getElementById('description').value = obj.description;
   document.getElementById('due-date').value = obj.dueDate;
   document.getElementById('priority').value = obj.priority;
-
-  
+  document.getElementById('notes').value = obj.notes;  
 }
 // creating a form to make a new project
 const projectCreationMenu = () => {
@@ -758,15 +750,17 @@ const projectCreationMenu = () => {
 }
 // creating a form to make edit a task
 const editProjectMenu = (obj) => {
-  console.table(obj);
   dynamicFormParts.newFormWindow('project-edit', `Edit ${obj.title}`);
   let form = document.getElementById('project-edit-form');
   form.classList.add('data-entry');
   dynamicFormParts.newTextInput(form, 'title', 'Title.', '', true);
-  // dynamicFormParts.newTextInput(form, 'description', 'Details.', '', true);
-  // dynamicFormParts.newDateInput(form);
-  // dynamicFormParts.newChecklist(form, obj);
-  // // dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
+  dynamicFormParts.newTextInput(form, 'description', 'Details.', '', true);
+  dynamicFormParts.newDateInput(form);
+  dynamicFormParts.newTasklist(form, obj);
+  new SimpleBar(document.getElementById('checkboxes'), {autoHide: false});
+
+
+  dynamicFormParts.newTextInput(form, 'notes', 'Notes.', '', false);
   const div = document.createElement('div');
   div.classList.add('form-buttons');   
   div.id = 'task-buttons';      
@@ -777,8 +771,9 @@ const editProjectMenu = (obj) => {
   });
   form.appendChild(div);
   document.getElementById('title').value = obj.title;
-  // document.getElementById('description').value = obj.description;
-  // document.getElementById('due-date').value = obj.dueDate;
+  document.getElementById('description').value = obj.description;
+  document.getElementById('due-date').value = obj.dueDate;
+  document.getElementById('notes').value = obj.notes;  
 
   
 }
