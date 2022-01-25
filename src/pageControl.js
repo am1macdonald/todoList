@@ -568,6 +568,17 @@ const dynamicExplorerParts = (() => {
         hiddenDiv.classList.toggle('completed');
       })
 
+
+
+      removeButton.addEventListener('click', () => {
+        if (item.constructor === Task) {
+          taskLibrary.removeFromLibrary(item);
+        }
+        listItem.remove();
+        renderListToNav(taskLibrary.show(), 'task');
+      })
+
+      
       hiddenDiv.appendChild(hiddenContentList);
       hiddenDiv.appendChild(hiddenButtonDiv);
       

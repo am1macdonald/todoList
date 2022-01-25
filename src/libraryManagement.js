@@ -27,9 +27,18 @@ export const taskLibrary = (() => {
         arr[arr.length-1].summary();
         updateLocalStorage();
     };
+    const removeFromLibrary = (task) => {
+      arr = arr.filter(storedTask => {
+        if (storedTask.identifier !== task.identifier) {
+          return task;
+        }
+      })
+      updateLocalStorage();
+    }
 
     return {
         addToLibrary,
+        removeFromLibrary,
         show,
         updateLocalStorage,
     };
@@ -135,6 +144,8 @@ export function addNewProject () {
   projectLibrary.show();
   stateManager.setAdded(true);
 }
+
+
 
 
 export const stateManager = (() => {
