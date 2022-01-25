@@ -3,6 +3,7 @@ import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, s
 import SimpleBar from 'simplebar';
 import 'simplebar/dist/simplebar.css';
 import Task from './taskClass.js';
+import Project from './projectClass.js';
 
 
 const content = document.getElementById('content');
@@ -560,7 +561,7 @@ const dynamicExplorerParts = (() => {
         if (item.constructor === Task) {
           editTaskMenu(item);
         } else if (item.constructor === Project) {
-          //editProjectMenu(item);
+          editProjectMenu(item);
         }
       })
 
@@ -755,7 +756,32 @@ const projectCreationMenu = () => {
   form.appendChild(footNote);
   form.appendChild(div);
 }
+// creating a form to make edit a task
+const editProjectMenu = (obj) => {
+  console.table(obj);
+  dynamicFormParts.newFormWindow('project-edit', `Edit ${obj.title}`);
+  let form = document.getElementById('project-edit-form');
+  form.classList.add('data-entry');
+  dynamicFormParts.newTextInput(form, 'title', 'Title.', '', true);
+  // dynamicFormParts.newTextInput(form, 'description', 'Details.', '', true);
+  // dynamicFormParts.newDateInput(form);
+  // dynamicFormParts.newChecklist(form, obj);
+  // // dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false);
+  const div = document.createElement('div');
+  div.classList.add('form-buttons');   
+  div.id = 'task-buttons';      
+  dynamicFormParts.saveButton(div);
+  dynamicFormParts.cancelButton(div, () => {
+    document.getElementById('explorer-frame').removeAttribute('style');
+    document.getElementById('form-container').remove();
+  });
+  form.appendChild(div);
+  document.getElementById('title').value = obj.title;
+  // document.getElementById('description').value = obj.description;
+  // document.getElementById('due-date').value = obj.dueDate;
 
+  
+}
 // clears the form from the main menu
 const clearContent = () => {
     while (content.firstChild) {
