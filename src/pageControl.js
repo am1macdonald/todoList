@@ -1,5 +1,5 @@
 import { compareAsc, format, parseISO } from 'date-fns';
-import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, sortAlg } from './libraryManagement.js';
+import { addNewProject, addNewTask, stateManager, taskLibrary, projectLibrary, sortAlg, editTask, editProject } from './libraryManagement.js';
 import SimpleBar from 'simplebar';
 import 'simplebar/dist/simplebar.css';
 import Task from './taskClass.js';
@@ -289,11 +289,12 @@ const dynamicFormParts = (() => {
       button.innerHTML = 'save';
       button.classList.add('styled-button');
       button.classList.add('form-button');
-      button.addEventListener('click', () => {        
-        if (obj.constructor === Task) {
-          obj.edit();
-        } else if (obj.constructor === Project) {
-          obj.edit();
+      button.addEventListener('click', () => {      
+        if (confirm('Are you sure?') === true) {  if (obj.constructor === Task) {
+            editTask(obj);
+          } else if (obj.constructor === Project) {
+            editProject(obj);
+          }
         }
       })
       parent.appendChild(button);
@@ -558,17 +559,11 @@ const dynamicExplorerParts = (() => {
           editProjectMenu(item);
         }
       })
-
-
-
-
       completeButton.addEventListener('click', () => {
         item.markComplete();
         taskLibrary.updateLocalStorage();
         hiddenDiv.classList.toggle('completed');
       })
-
-
       removeButton.addEventListener('click', () => {
         if (confirm('Are you sure you want to remove?') === true) {
           if (item.constructor === Task) {
@@ -590,11 +585,7 @@ const dynamicExplorerParts = (() => {
       listItem.appendChild(hiddenDiv);
       list.appendChild(listItem);
     })
-    // Array.from(list.childNodes).map(node => {
-    //   if (node !== list.firstChild) {
-    //     node.classList.add('list-item-border');
-    //   }
-    // });
+    
     parent.appendChild(list);
     new SimpleBar(document.getElementById('explorer-list'));
 
@@ -720,7 +711,6 @@ const editTaskMenu = (obj) => {
   dynamicFormParts.newFormWindow('task-edit', `Edit ${obj.title}`);
   let form = document.getElementById('task-edit-form');
   form.classList.add('data-entry');
-  dynamicFormParts.newTextInput(form, 'title', 'Title.', '', true);
   dynamicFormParts.newTextInput(form, 'description', 'Details.', '', true);
   dynamicFormParts.newDateInput(form);
   dynamicFormParts.newPriorityDropdown(form, 5);
@@ -729,17 +719,16 @@ const editTaskMenu = (obj) => {
   const div = document.createElement('div');
   div.classList.add('form-buttons');   
   div.id = 'task-buttons';
-  dynamicFormParts.saveButton(div);
+  dynamicFormParts.saveButton(div, obj);
   dynamicFormParts.cancelButton(div, () => {
     document.getElementById('explorer-frame').removeAttribute('style');
     document.getElementById('form-container').remove();
   });
   form.appendChild(div);
-  document.getElementById('title').value = obj.title;
   document.getElementById('description').value = obj.description;
   document.getElementById('due-date').value = obj.dueDate;
   document.getElementById('priority').value = obj.priority;
-  document.getElementById('notes').value = obj.notes;  
+  document.getElementById('notes').value = obj.notes;
 }
 // creating a form to make a new project
 const projectCreationMenu = () => {

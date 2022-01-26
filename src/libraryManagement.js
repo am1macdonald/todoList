@@ -80,7 +80,7 @@ export const projectLibrary = (() => {
       show,
   };
 })();
-export function addNewTask() {
+export const addNewTask = () => {
     let taskForm = '';
 
     if (document.getElementById('task-form') !== null) {
@@ -124,7 +124,24 @@ export function addNewTask() {
     taskLibrary.show();
     stateManager.setAdded(true);
   }
-export function addNewProject () {
+export const editTask = (obj) => {
+  let description = document.getElementById('description').value;
+  let dueDate = document.getElementById('due-date').value;
+  let priority = document.getElementById('priority').value; 
+  let notes = document.getElementById('notes').value;
+  let listItems = document.getElementsByClassName('checklist-item');
+    let checklistObj = {};
+    for (let item of listItems) {
+        checklistObj[
+          item
+          .innerHTML
+          .slice(2,item.innerHTML.length)] = false;
+    }
+
+  obj.edit(description, dueDate, priority, notes, checklistObj);
+
+}
+export const addNewProject = () => {
   let projectForm = '';
 
   if (document.getElementById('project-form') !== null) {
@@ -163,6 +180,9 @@ export function addNewProject () {
   projectLibrary.addToLibrary(newProject);
   projectLibrary.show();
   stateManager.setAdded(true);
+}
+export const editProject = () => {
+
 }
 export const stateManager = (() => {
   // state for adding things to the libraries
