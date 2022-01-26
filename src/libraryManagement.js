@@ -2,7 +2,7 @@ import { compareAsc, parseISO } from 'date-fns';
 import Project from './projectClass.js';
 import Task from './taskClass.js';
 
-export const taskLibrary = (() => {    
+export const taskLibrary = (() => {
     let arr = [    
       {"title":"6 task","description":"More stuff","dueDate":"2026-12-30","priority":"1","notes":"","checklist":{},"identifier":16408544564564},      
       {"title":"3","description":"123123","dueDate":"2023-12-30","priority":"1","notes":"","checklist":{},"identifier":1640854693381},
@@ -14,7 +14,10 @@ export const taskLibrary = (() => {
       {"title":"first task","description":"stuff","dueDate":"2021-12-31","priority":"1","notes":"","checklist":{},"identifier":1640854644788}
     ];
     if (window.localStorage.getItem('task-library')) {
-      arr = JSON.parse(window.localStorage.getItem('task-library')).map(task => {
+      arr = JSON
+      .parse(window.localStorage
+        .getItem('task-library'))
+        .map(task => {
         return new Task(task.title, task.description, task.dueDate, task.priority, task.notes, task.checklist, task.identifier, task.complete);
       });
     }
@@ -28,7 +31,8 @@ export const taskLibrary = (() => {
         updateLocalStorage();
     };
     const removeFromLibrary = (task) => {
-      arr = arr.filter(storedTask => {
+      arr = arr
+      .filter(storedTask => {
         if (storedTask.identifier !== task.identifier) {
           return task;
         }
@@ -43,11 +47,13 @@ export const taskLibrary = (() => {
         updateLocalStorage,
     };
 })();
-
 export const projectLibrary = (() => {    
   let arr = [];
-  if (window.localStorage.getItem('project-library')) {
-    arr = JSON.parse(window.localStorage.getItem('project-library')).map(project => {
+  if (window.localStorage
+    .getItem('project-library')) {
+    arr = JSON.parse(window.localStorage
+      .getItem('project-library'))
+      .map(project => {
       return new Project(project.title, project.description, project.dueDate, project.notes, project.tasks, project.complete);
     });
   }
@@ -74,7 +80,6 @@ export const projectLibrary = (() => {
       show,
   };
 })();
-
 export function addNewTask() {
     let taskForm = '';
 
@@ -87,7 +92,8 @@ export function addNewTask() {
     
     // array from text-input nodes from the task form
     let nodeArr = 
-    Array.from(taskForm.childNodes)
+    Array
+    .from(taskForm.childNodes)
     .filter(node => node.tagName == 'INPUT' || node.tagName == 'SELECT')
     .map (node => {
       if (node.id === 'due-date') {
@@ -107,7 +113,10 @@ export function addNewTask() {
     let listItems = document.getElementsByClassName('checklist-item');
     let checklistObj = {};
     for (let item of listItems) {
-        checklistObj[item.innerHTML.slice(2,item.innerHTML.length)] = false;
+        checklistObj[
+          item
+          .innerHTML
+          .slice(2,item.innerHTML.length)] = false;
     }
     let newTask = new Task(...nodeArr, checklistObj, Date.now());
     
@@ -115,7 +124,6 @@ export function addNewTask() {
     taskLibrary.show();
     stateManager.setAdded(true);
   }
-
 export function addNewProject () {
   let projectForm = '';
 
@@ -156,10 +164,6 @@ export function addNewProject () {
   projectLibrary.show();
   stateManager.setAdded(true);
 }
-
-
-
-
 export const stateManager = (() => {
   // state for adding things to the libraries
   let _added = false;
@@ -174,7 +178,6 @@ export const stateManager = (() => {
     setAdded,
   }
 })()
-
 //module for sorting algorithms
 export const sortAlg = (() => {
   //sorts by time ascending

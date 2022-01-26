@@ -383,22 +383,14 @@ h3 {
 .explorer-list-item {
   width: 100%;
   height: auto;
+  border-bottom: 2px solid hsla(302, 16%, 45%, 1); 
 }
-.collapsible-content {
 
-}
-.hidden-content-list {
-
-}
 .hidden-button-div {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.list-item-border {
-  border-top: 2px solid hsla(302, 16%, 45%, 1);  
 }
 
 .hidden-button {

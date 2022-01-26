@@ -569,16 +569,17 @@ const dynamicExplorerParts = (() => {
       })
 
 
-
       removeButton.addEventListener('click', () => {
-        if (item.constructor === Task) {
-          taskLibrary.removeFromLibrary(item);
-          renderListToNav(taskLibrary.show(), 'task');
-        } else if (item.constructor === Project) {
-          projectLibrary.removeFromLibrary(item);
-          renderListToNav(projectLibrary.show(), 'project');
+        if (confirm('Are you sure you want to remove?') === true) {
+          if (item.constructor === Task) {
+            taskLibrary.removeFromLibrary(item);
+            renderListToNav(taskLibrary.show(), 'task');
+          } else if (item.constructor === Project) {
+            projectLibrary.removeFromLibrary(item);
+            renderListToNav(projectLibrary.show(), 'project');
+          }
+          listItem.remove();
         }
-        listItem.remove();
       })
 
       
@@ -589,11 +590,11 @@ const dynamicExplorerParts = (() => {
       listItem.appendChild(hiddenDiv);
       list.appendChild(listItem);
     })
-    Array.from(list.childNodes).map(node => {
-      if (node !== list.firstChild) {
-        node.classList.add('list-item-border');
-      }
-    });
+    // Array.from(list.childNodes).map(node => {
+    //   if (node !== list.firstChild) {
+    //     node.classList.add('list-item-border');
+    //   }
+    // });
     parent.appendChild(list);
     new SimpleBar(document.getElementById('explorer-list'));
 
