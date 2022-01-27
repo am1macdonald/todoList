@@ -604,10 +604,6 @@ const dynamicExplorerParts = (() => {
   }
   const refreshItemList = (str) => {
     let listContainer = document.getElementById('list-container');
-    let arr = Array.from(document.getElementsByClassName('active')); 
-    arr.map(node => {
-      console.log((Array.from(listContainer.childNodes)).indexOf(node.parentElement));
-    })
     if (str === 'task') {
       listContainer.removeChild(listContainer.childNodes[0]);
       itemList(listContainer, taskLibrary.show());
