@@ -41,7 +41,7 @@ nav h1 {
   align-items: left;
   padding-left: 0.8em;
 }
-#task-list li {
+.nav-list-item {
   font-size: 3vmin;
   line-height: 1.3em;
 }

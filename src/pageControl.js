@@ -812,6 +812,7 @@ const renderListToNav = (library, target) => {
   const list = document.getElementById(`${target}-list`);
   list.innerHTML = '';
   const listItem = document.createElement('li');
+  listItem.classList.add('nav-list-item');
   let temp = [...library];
   let topFive = [];
   temp.map(item => {
