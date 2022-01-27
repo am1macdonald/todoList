@@ -285,15 +285,24 @@ const dynamicFormParts = (() => {
 
     const saveButton = (parent, obj) => {
       const button = document.createElement('button');
+      const explorer = document.getElementById('explorer-frame');
       button.type = 'button';
       button.innerHTML = 'save';
       button.classList.add('styled-button');
       button.classList.add('form-button');
-      button.addEventListener('click', () => {      
-        if (confirm('Are you sure?') === true) {  if (obj.constructor === Task) {
+      button.addEventListener('click', () => {
+        let form = document.getElementById('form-container');
+        if (confirm('Are you sure?') === true) {  
+          if (obj.constructor === Task) {
             editTask(obj);
+            form.remove();
+            explorer.style.display = 'flex';
+            dynamicExplorerParts.refreshItemList('task');
           } else if (obj.constructor === Project) {
             editProject(obj);
+            form.remove();
+            explorer.style.display = 'flex';
+            dynamicExplorerParts.refreshItemList('project');
           }
         }
       })
@@ -364,9 +373,7 @@ const dynamicExplorerParts = (() => {
 
     taskTab.addEventListener('click', () => {
       if (taskTab.classList.contains('inactive-tab')) {
-        let listContainer = document.getElementById('list-container');
-        listContainer.removeChild(listContainer.childNodes[0]);
-        itemList(listContainer, taskLibrary.show());
+        refreshItemList('task');
         taskTab.classList.replace('inactive-tab', 'active-tab');
         projectTab.classList.replace('active-tab', 'inactive-tab');
       }
@@ -374,9 +381,7 @@ const dynamicExplorerParts = (() => {
     projectTab.addEventListener('click', () => {
       
       if(projectTab.classList.contains('inactive-tab')) {
-        let listContainer = document.getElementById('list-container');
-        listContainer.removeChild(listContainer.childNodes[0]);
-        itemList(listContainer, projectLibrary.show());
+        refreshItemList('project');
         projectTab.classList.replace('inactive-tab', 'active-tab');
         taskTab.classList.replace('active-tab', 'inactive-tab');
       }
@@ -445,6 +450,9 @@ const dynamicExplorerParts = (() => {
       removeButton.classList.add('hidden-button');
       removeButton.classList.add('styled-button');
       removeButton.innerHTML = 'remove item';
+      if (item.complete === true) {
+        completeButton.classList.add('complete-button-active');
+      }
 
       for (let prop in item) {
         let propListItem = document.createElement('li');
@@ -552,17 +560,22 @@ const dynamicExplorerParts = (() => {
 
 
       editButton.addEventListener('click', () => {
-        document.getElementById('explorer-frame').style.display = 'none';
+        let explorer = document.getElementById('explorer-frame');
+        explorer.style.display = 'none';
         if (item.constructor === Task) {
           editTaskMenu(item);
+          //explorer.remove();
+
         } else if (item.constructor === Project) {
           editProjectMenu(item);
+          //explorer.remove();
         }
       })
       completeButton.addEventListener('click', () => {
         item.markComplete();
         taskLibrary.updateLocalStorage();
         hiddenDiv.classList.toggle('completed');
+        completeButton.classList.toggle('complete-button-active');
       })
       removeButton.addEventListener('click', () => {
         if (confirm('Are you sure you want to remove?') === true) {
@@ -588,9 +601,21 @@ const dynamicExplorerParts = (() => {
     
     parent.appendChild(list);
     new SimpleBar(document.getElementById('explorer-list'));
-
   }
-
+  const refreshItemList = (str) => {
+    let listContainer = document.getElementById('list-container');
+    let arr = Array.from(document.getElementsByClassName('active')); 
+    arr.map(node => {
+      console.log((Array.from(listContainer.childNodes)).indexOf(node.parentElement));
+    })
+    if (str === 'task') {
+      listContainer.removeChild(listContainer.childNodes[0]);
+      itemList(listContainer, taskLibrary.show());
+    } else if (str === 'project') {
+      listContainer.removeChild(listContainer.childNodes[0]);
+      itemList(listContainer, projectLibrary.show());
+    }
+  }
   const buttons = (parent) => {
     const div = document.createElement('div');
     div.id = 'explorer-buttons';
@@ -635,6 +660,7 @@ const dynamicExplorerParts = (() => {
     explorerFrame,
     explorerTabs,
     itemList,
+    refreshItemList,
     buttons,
   }
 })()
@@ -677,16 +703,14 @@ const renderBigDate = (() => {
 
 // creates task explorer
 const taskExplorer = () => {
-
   dynamicExplorerParts.explorerFrame();
   const explorer = document.getElementById('explorer');
-  dynamicExplorerParts.explorerTabs(explorer, 'task');
+  dynamicExplorerParts.explorerTabs(explorer);
   const listContainer = document.createElement('div');
   listContainer.id = 'list-container';
   explorer.appendChild(listContainer);
   dynamicExplorerParts.itemList(listContainer, taskLibrary.show());
   dynamicExplorerParts.buttons(explorer);
-
 }
 // creating a form to make a new task
 const taskCreationMenu = () => {
@@ -706,6 +730,7 @@ const taskCreationMenu = () => {
     dynamicFormParts.cancelButton(div, clearContent);
     form.appendChild(div);
 };
+
 // creating a form to make edit a task
 const editTaskMenu = (obj) => {
   dynamicFormParts.newFormWindow('task-edit', `Edit ${obj.title}`);
@@ -721,7 +746,7 @@ const editTaskMenu = (obj) => {
   div.id = 'task-buttons';
   dynamicFormParts.saveButton(div, obj);
   dynamicFormParts.cancelButton(div, () => {
-    document.getElementById('explorer-frame').removeAttribute('style');
+    document.getElementById('explorer-frame').style.display = 'flex';
     document.getElementById('form-container').remove();
   });
   form.appendChild(div);
@@ -730,9 +755,10 @@ const editTaskMenu = (obj) => {
   document.getElementById('priority').value = obj.priority;
   document.getElementById('notes').value = obj.notes;
 }
+
 // creating a form to make a new project
 const projectCreationMenu = () => {
-  dynamicFormParts.newFormWindow('Project', 'New Projct');
+  dynamicFormParts.newFormWindow('Project', 'New Project');
   let form = document.getElementById('project-form');
   form.classList.add('data-entry');
   dynamicFormParts.newTextInput(form, 'title', 'Title.', 'Enter project name...', true);
@@ -752,29 +778,26 @@ const projectCreationMenu = () => {
   form.appendChild(footNote);
   form.appendChild(div);
 }
+
 // creating a form to make edit a task
 const editProjectMenu = (obj) => {
   dynamicFormParts.newFormWindow('project-edit', `Edit ${obj.title}`);
   let form = document.getElementById('project-edit-form');
   form.classList.add('data-entry');
-  dynamicFormParts.newTextInput(form, 'title', 'Title.', '', true);
   dynamicFormParts.newTextInput(form, 'description', 'Details.', '', true);
   dynamicFormParts.newDateInput(form);
   dynamicFormParts.newTasklist(form, obj);
   new SimpleBar(document.getElementById('checkboxes'), {autoHide: false});
-
-
   dynamicFormParts.newTextInput(form, 'notes', 'Notes.', '', false);
   const div = document.createElement('div');
   div.classList.add('form-buttons');   
   div.id = 'task-buttons';      
-  dynamicFormParts.saveButton(div);
+  dynamicFormParts.saveButton(div, obj);
   dynamicFormParts.cancelButton(div, () => {
-    document.getElementById('explorer-frame').removeAttribute('style');
     document.getElementById('form-container').remove();
+    document.getElementById('explorer-frame').style.display = 'flex';
   });
   form.appendChild(div);
-  document.getElementById('title').value = obj.title;
   document.getElementById('description').value = obj.description;
   document.getElementById('due-date').value = obj.dueDate;
   document.getElementById('notes').value = obj.notes;  
@@ -789,7 +812,6 @@ const clearContent = () => {
 }
 
 // renders the five tasks or projects, that are due the soonest, to the navbar
-
 const renderListToNav = (library, target) => {
   const list = document.getElementById(`${target}-list`);
   list.innerHTML = '';

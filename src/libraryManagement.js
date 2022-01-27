@@ -181,8 +181,16 @@ export const addNewProject = () => {
   projectLibrary.show();
   stateManager.setAdded(true);
 }
-export const editProject = () => {
-
+export const editProject = (obj) => {
+  let description = document.getElementById('description').value;
+  let dueDate = document.getElementById('due-date').value;
+  let notes = document.getElementById('notes').value;
+  let tasks = Array.from(document.getElementsByClassName('task-list-item')).filter(item => {
+    return item.firstChild.checked === true
+  }).map(item => {
+    return item.firstChild.id;
+  })
+  obj.edit(description, dueDate, notes, tasks);
 }
 export const stateManager = (() => {
   // state for adding things to the libraries

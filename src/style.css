@@ -78,15 +78,15 @@ h3 {
   box-sizing: content-box;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 50vh;
+  height: 30vh;
   width: fit-content;
 }
 
 #date-today {
   font-family: 'Oswald', sans-serif;
-  font-size: clamp(30px, 5vmin, 50px);
+  font-size: 5vmin;
   color: hsla(302, 16%, 45%, 1);
   font-weight: 300;
   line-height: 1.1em;
@@ -266,6 +266,30 @@ h3 {
 .complete-button {
   grid-row-start: 2;
   grid-row-end: 3;
+}
+.complete-button-active {
+  color: hsl(45, 29%, 97%);
+  background-color: hsla(302, 16%, 45%, 1);
+  border: 2px solid hsl(45, 29%, 97%);
+  position: relative;
+  box-shadow: 4px 5px 0px hsla(36, 33%, 97%, 0);
+  border: none;
+  transition: all 0.3s ease;
+}
+.complete-button-active::after {
+  content: '';
+  position: absolute;
+  background-color: rgba(133, 96, 132, 0);
+  top: 5px;
+  left: 4px;
+  right: -4px;
+  bottom: -5px;
+  z-index: 1;
+  border: 2px solid hsla(302, 16%, 45%, 1);
+  transition: all 0.3s ease;
+}
+.complete-button-active:hover {
+  transform: scale(0.95);
 }
 #explorer-frame {
   height: 100vh;

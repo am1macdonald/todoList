@@ -23,19 +23,6 @@ export default class Project {
       this.notes = notes;
       this.tasks = tasks;
     }
-
-    cleanTasks(library) {
-      let temp = library.map(task => {
-        return task.identifier.toString();
-      })
-      let arr = [...this.tasks];
-      this.tasks = arr.filter(id => {
-        if (temp.includes(id)) {
-          return id;
-        }
-      })
-    }
-
     summary() {
         console.log(`I am project ${this.title}`);
     }
