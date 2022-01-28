@@ -4,9 +4,20 @@ node_modules
 # Project todo list
 todo.txt
 
+# web-logic file
+src/web-logic.js
+
 # todo list for the Project
 project todo list.txt
+
+# renderBackground modules
+renderBackground.js
 
 # style refs
 styleRefs.css
 
+# Ingore HTML
+*.html
+
+# ignore dist
+./dist

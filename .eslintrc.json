@@ -4,12 +4,13 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["standard"],
+  "extends": ["standard", "prettier"],
   "parserOptions": {
     "ecmaVersion": 13,
     "sourceType": "module"
   },
   "rules": {
-    "import/no-unused-modules": [1, { "unusedExports": true }]
+    "import/no-unused-modules": [1, { "unusedExports": true }],
+    "curly": ["error", "all"]
   }
 }
