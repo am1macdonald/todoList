@@ -1,5 +1,3 @@
-###### Under Construction
----
 # To-Do List
 Thanks for checking out my take on the classic To-Do list project.
 ## About
