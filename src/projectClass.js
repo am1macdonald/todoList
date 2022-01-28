@@ -1,29 +1,35 @@
-import { format } from 'date-fns';
+import { format } from 'date-fns'
 export default class Project {
-    constructor(title, description, dueDate, notes, tasks = [], complete = false) {
-        this.title = title;
-        this.description = description;
-        this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
-        this.notes = notes;
-        this.tasks = tasks;
-        this.complete = complete;
+  constructor (title, description, dueDate, notes, tasks = [], identifier, complete = false) {
+    this.title = title
+    this.description = description
+    this.dueDate = format(new Date(dueDate), 'yyyy-MM-dd')
+    this.notes = notes
+    this.tasks = tasks
+    if (typeof identifier === 'number') {
+      this.identifier = identifier
+    } else {
+      this.identifier = Date.now()
     }
-    
-    markComplete() {
-        if (this.complete === false) {
-          this.complete = true;
-        } else if (this.complete === true) {
-          this.complete = false;
-      }
-    }
+    this.complete = complete
+  }
 
-    edit(description, dueDate, notes, tasks) {
-      this.description = description;
-      this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
-      this.notes = notes;
-      this.tasks = tasks;
+  markComplete () {
+    if (this.complete === false) {
+      this.complete = true
+    } else if (this.complete === true) {
+      this.complete = false
     }
-    summary() {
-        console.log(`I am project ${this.title}`);
-    }
+  }
+
+  edit (description, dueDate, notes, tasks) {
+    this.description = description
+    this.dueDate = format(new Date(dueDate), 'yyyy-MM-dd')
+    this.notes = notes
+    this.tasks = tasks
+  }
+
+  summary () {
+    console.log(`I am project ${this.title}`)
+  }
 }
