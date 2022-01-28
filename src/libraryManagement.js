@@ -68,7 +68,8 @@ export const projectLibrary = (() => {
   return {
     addToLibrary,
     removeFromLibrary,
-    show
+    show,
+    updateLocalStorage
   }
 })()
 export const addNewTask = () => {
@@ -130,6 +131,7 @@ export const editTask = (obj) => {
   }
 
   obj.edit(description, dueDate, priority, notes, checklistObj)
+  taskLibrary.updateLocalStorage()
 }
 export const addNewProject = () => {
   let projectForm = ''
@@ -181,6 +183,7 @@ export const editProject = (obj) => {
     return item.firstChild.id
   })
   obj.edit(description, dueDate, notes, tasks)
+  projectLibrary.updateLocalStorage()
 }
 export const stateManager = (() => {
   // state for adding things to the libraries

@@ -215,7 +215,7 @@ const dynamicFormParts = (() => {
 
     const items = [...taskLibrary.show()]
 
-    sortAlg.timeAsc(items).map((item) => {
+    sortAlg.timeAsc(items).forEach((item) => {
       const listItem = document.createElement('li')
       listItem.classList.add('task-list-item')
 
@@ -485,9 +485,9 @@ const dynamicExplorerParts = (() => {
               const hiddenTaskListPara = document.createElement('p')
               hiddenTaskListPara.innerHTML = 'Tasks:'
               const hiddenTaskList = document.createElement('ul')
-              item[prop].map(task => {
+              item[prop].forEach(task => {
                 // gets the task from the task-library based on the task-ID
-                taskLibrary.show().filter(obj => {
+                taskLibrary.show().forEach(obj => {
                   if (obj.identifier.toString() === task) {
                     const listItem = document.createElement('li')
                     listItem.classList.add('hidden-list-item')
@@ -550,6 +550,7 @@ const dynamicExplorerParts = (() => {
       completeButton.addEventListener('click', () => {
         item.markComplete()
         taskLibrary.updateLocalStorage()
+        projectLibrary.updateLocalStorage()
         hiddenDiv.classList.toggle('completed')
         completeButton.classList.toggle('complete-button-active')
       })
@@ -575,6 +576,7 @@ const dynamicExplorerParts = (() => {
     })
 
     parent.appendChild(list)
+    // eslint-disable-next-line no-new
     new SimpleBar(document.getElementById('explorer-list'))
   }
   const refreshItemList = (str) => {
@@ -597,7 +599,7 @@ const dynamicExplorerParts = (() => {
     expand.classList.add('form-button')
 
     expand.addEventListener('click', () => {
-      Array.from(document.getElementsByClassName('collapsible-content')).map(item => {
+      Array.from(document.getElementsByClassName('collapsible-content')).forEach(item => {
         item.style.display = 'grid'
         if (!item.previousSibling.classList.contains('active')) {
           item.previousSibling.classList.toggle('active')
@@ -611,7 +613,7 @@ const dynamicExplorerParts = (() => {
     retract.classList.add('form-button')
 
     retract.addEventListener('click', () => {
-      Array.from(document.getElementsByClassName('collapsible-content')).map(item => {
+      Array.from(document.getElementsByClassName('collapsible-content')).forEach(item => {
         item.style.display = 'none'
         if (item.previousSibling.classList.contains('active')) {
           item.previousSibling.classList.toggle('active')
@@ -735,6 +737,7 @@ const projectCreationMenu = () => {
   dynamicFormParts.newDateInput(form)
   dynamicFormParts.newTextInput(form, 'notes', 'Notes.', 'Additional notes...', false)
   dynamicFormParts.newTasklist(form)
+  // eslint-disable-next-line no-new
   new SimpleBar(document.getElementById('checkboxes'), { autoHide: false })
   const div = document.createElement('div')
   div.classList.add('form-buttons')
@@ -756,6 +759,7 @@ const editProjectMenu = (obj) => {
   dynamicFormParts.newTextInput(form, 'description', 'Details.', '', true)
   dynamicFormParts.newDateInput(form)
   dynamicFormParts.newTasklist(form, obj)
+  // eslint-disable-next-line no-new
   new SimpleBar(document.getElementById('checkboxes'), { autoHide: false })
   dynamicFormParts.newTextInput(form, 'notes', 'Notes.', '', false)
   const div = document.createElement('div')
@@ -786,7 +790,7 @@ const renderListToNav = (library, target) => {
   listItem.classList.add('nav-list-item')
   const temp = [...library]
   const topFive = []
-  temp.map(item => {
+  temp.forEach(item => {
     if (topFive.length === 0) {
       topFive.push(item)
     } else {
@@ -808,7 +812,7 @@ const renderListToNav = (library, target) => {
       topFive.pop()
     }
   })
-  topFive.map(item => {
+  topFive.forEach(item => {
     const newListItem = listItem.cloneNode()
     newListItem.innerHTML = item.title
     list.appendChild(newListItem)
@@ -819,7 +823,5 @@ export {
   renderStaticElements,
   renderBigDate,
   taskCreationMenu,
-  projectCreationMenu,
-  clearContent,
-  renderListToNav
+  projectCreationMenu
 }
