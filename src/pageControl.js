@@ -199,7 +199,7 @@ const dynamicFormParts = (() => {
     parent.appendChild(label)
     parent.appendChild(listDiv)
   }
-
+  // compiles tasks for the project creation menu
   const newTasklist = (parent, obj) => {
     const label = document.createElement('label')
     label.setAttribute('for', 'checkboxes')
@@ -271,7 +271,7 @@ const dynamicFormParts = (() => {
     })
     parent.appendChild(submitButton)
   }
-
+  // save button for the edit menus
   const saveButton = (parent, obj) => {
     const button = document.createElement('button')
     const explorer = document.getElementById('explorer-frame')
