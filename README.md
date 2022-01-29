@@ -8,7 +8,7 @@ My to-do list, simply-named "Do.", is a lightweight way to keep track of project
 ## Technologies
 "Do." was built with nothing but Vanilla JavaScript, some HTML, CSS, and some quality of life tools. As a new developer, deepening my understanding of the fundamentals is my greatest focus.
 ### Tools
-This project relies on Webpack for bundling. Webpack allows me to break my code down into more concise modules and have my dependencies managed for me.  This being the second project I have used Webpack for; I made a departure from the Webpack tutorials and utilized the command line tools for setup.
+This project relies on Webpack for bundling. Webpack allows me to break my code down into more concise modules and have my dependencies managed for me.  This being the second time I have used Webpack; I made a departure from the Webpack tutorials and utilized the command line tools for setup.
 ### Packages / Dependencies
 I did include a couple of Node packages in this project for quality of life. These are:
 *[date-fns](https://www.npmjs.com/package/date-fns)
