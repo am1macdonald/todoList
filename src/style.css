@@ -14,64 +14,57 @@ body {
   );
   font-family: "Oswald", sans-serif;
   font-weight: normal;
-}
-#page {
   display: grid;
-  grid-template-columns: minmax(auto, 230px) auto;
+  grid-template-columns: minmax(auto, 230px) auto;  
+  color: hsla(302, 16%, 45%, 1);
 }
 
+h1 {
+  font-size: 5rem;
+  font-weight: 800;
+  font-style: italic;
+  width: 100%;
+  text-align: justify;
+}
+h2 {
+  font-size: 4rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 4.3rem;
+  text-align: center;
+  margin-bottom: 4vh;
+}
+h3 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  font-style: italic;
+  padding-bottom: 1vh;
+  text-align: center;
+}
+h4 {
+  font-size: 1.75rem;
+  font-weight: 200;
+  font-style: italic;
+  padding-bottom: 1vh;
+  text-align: justify;
+}
 nav {
-  box-sizing: border-box;
   padding: 1vh 1vw;
   max-height: 98vh;
-  width: auto;
   display: grid;
   grid-template-rows: 1fr 3fr 1fr 3fr 1fr;
 }
 
-nav h1 {
-  font-size: clamp(39px, 6vmin, 55px);
-  font-weight: 600;
-  font-style: italic;
-  color: hsla(302, 16%, 45%, 1);
-  font-family: "Oswald", sans-serif;
-  width: 100%;
-  text-align: justify;
-}
-#task-list {
+nav ul {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: left;
 }
-.nav-list-item {
-  font-size: 3vmin;
+nav ul li {
+  font-size: calc(1.2rem + 0.1vw);
   line-height: 1.5em;
-  margin-left: 0.5em;
-  list-style: circle;
-}
-h2 {
-  font-family: "Oswald", sans-serif;
-  font-size: 3.8vmin;
-  color: hsla(302, 16%, 45%, 1);
-  font-weight: 0;
-  font-style: italic;
-  padding-bottom: 3vmin;
-}
-
-h3 {
-  font-family: "Oswald", sans-serif;
-  font-size: 3.6vmin;
-  color: hsla(302, 16%, 45%, 1);
-  font-weight: 600;
-  font-style: italic;
-  padding-bottom: 0.3rem;
-  text-align: center;
-}
-
-.nav-container {
-  width: 100%;
-  height: 100%;
+  margin-left: 1vw;
 }
 
 #start-button {
@@ -97,18 +90,6 @@ h3 {
   align-items: center;
   height: 30vh;
   width: fit-content;
-}
-
-#date-today {
-  font-family: "Oswald", sans-serif;
-  font-size: 5vmin;
-  color: hsla(302, 16%, 45%, 1);
-  font-weight: 300;
-  line-height: 1.1em;
-  text-align: center;
-  width: auto;
-  height: auto;
-  margin-bottom: 1em;
 }
 
 #form-container {
