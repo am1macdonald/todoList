@@ -15,14 +15,15 @@ I did include a couple of Node packages in this project for quality of life. The
 *[simplebar](https://www.npmjs.com/package/simplebar)
 ##Design Patterns and Techniques
 Some of the new strategies used to complete this project are:
-* **Object Oriented Programming Principles**  
+**Object Oriented Programming Principles**  
 Used to create project & task Classes. Modifications to each item were handled by methods withing their respective classes.
 
 ## Challenges
 This project met me with some challenges I had not faced before. These include:
-* Breaking up code into concise modules
-* Importing & exporting utilities
-* Integrating SOLID principles
+* Breaking up code into concise modules, spanning across multiple documents
+* Importing & exporting utilities from my modules
+* Integrating SOLID principles  
+    'Single Responsibility' Princliple
 * Configuring tools such as Webpack, Es Lint, and Prettier
 * Integrating Node Packages
 
