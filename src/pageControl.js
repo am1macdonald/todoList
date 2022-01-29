@@ -32,7 +32,7 @@ const renderStaticElements = () => {
     const taskContainer = document.createElement("div");
     taskContainer.id = "task-container";
     taskContainer.classList.add("nav-container");
-    const taskHeader = document.createElement("h2");
+    const taskHeader = document.createElement("h4");
     taskHeader.id = "task-header";
     taskHeader.innerHTML = "Tasks";
     taskContainer.appendChild(taskHeader);
@@ -43,7 +43,7 @@ const renderStaticElements = () => {
     const projectContainer = document.createElement("div");
     projectContainer.id = "project-container";
     projectContainer.classList.add("nav-container");
-    const projectHeader = document.createElement("h2");
+    const projectHeader = document.createElement("h4");
     projectHeader.id = "project-header";
     projectHeader.innerHTML = "Projects";
     projectContainer.appendChild(projectHeader);

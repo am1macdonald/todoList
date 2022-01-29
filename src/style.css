@@ -42,8 +42,8 @@ h3 {
   text-align: center;
 }
 h4 {
-  font-size: 1.75rem;
-  font-weight: 200;
+  font-size: 2.2rem;
+  font-weight: 300;
   font-style: italic;
   padding-bottom: 1vh;
   text-align: justify;
@@ -70,25 +70,22 @@ nav ul li {
 #start-button {
   height: auto;
   width: auto;
-  padding: 0.2rem 1.2rem;
-  font-size: 3.8vmin;
+  padding: 1vh 4vw;
+  font-size: 2rem;
 }
 
 #content {
-  height: auto;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 #date-hero {
-  box-sizing: content-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 30vh;
+  height: 40vh;
   width: fit-content;
 }
 
@@ -101,49 +98,47 @@ nav ul li {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  font-family: "Oswald", sans-serif;
   font-size: clamp(22px, 2vmin, 5px);
-  color: hsla(302, 16%, 45%, 1);
-  font-weight: 600;
-  line-height: 1em;
 }
 #project-form-footnote {
-  font-size: 1.9vmin;
+  font-size: 0.9rem;
 }
 
 .data-entry {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between;  
+  flex-direction: column;
+  
   height: auto;
   max-height: 90vh;
   width: clamp(50vw, 80%, 680px);
-  display: inherit;
-  flex-direction: column;
-  line-height: 1.5em;
-  font-weight: 300;
   padding: 2em;
+  
   border: solid 2px hsla(302, 16%, 45%, 1);
   background-color: hsl(45, 29%, 97%);
   box-shadow: 9px 10px 0px hsla(302, 16%, 45%, 1);
+  
+  line-height: 1.5em;
+  font-weight: 300;
 }
 .data-entry label {
-  font-size: 2.7vmin;
-  padding-bottom: 0.2em;
+  font-size: 1.5rem;
+  padding-bottom: 0.5vh;
 }
 .text-input {
+  height: 1.1rem;
+  width: 100%;
+  margin-bottom: 0.2vh;
+  padding-bottom: 0.5vh;
+  
   background: none;
   border: none;
   border-bottom: 0.1em solid;
   border-color: hsla(120, 5%, 84%, 1);
 
-  font-size: 1.9vmin;
+  font-size: 0.9rem;
   font-family: "Oswald", sans-serif;
 
-  height: 1em;
-  width: 100%;
-  margin-bottom: 0.2em;
-  padding-bottom: 0.5em;
 }
 .data-entry input:focus {
   border-color: rgba(0, 120, 138, 0.473);
@@ -151,35 +146,38 @@ nav ul li {
   outline: none;
 }
 #due-date {
-  border: solid 2px hsla(302, 16%, 45%, 1);
   width: fit-content;
   min-height: 17px;
-
-  padding: 0.05em;
-}
-#due-date:focus {
-  padding: 0.05em;
-}
-#priority {
-  background-color: white;
-  width: fit-content;
+  padding: 0.05vh;
+  
   border: solid 2px hsla(302, 16%, 45%, 1);
 }
+#due-date:focus {
+  padding: 0.05vh;
+}
+#priority {
+  width: fit-content;
+  background-color: white;
+  border: solid 2px hsla(302, 16%, 45%, 1);  
+}
 .styled-button {
-  padding: 0;
-  color: hsla(302, 16%, 45%, 1);
-  background-color: hsl(36, 33%, 97%);
-  border: 2px solid hsla(302, 16%, 45%, 1);
-  width: 7em;
-  height: 1.8em;
-  font-family: "Oswald", sans-serif;
-  font-size: 2.5vmin;
-  font-weight: bold;
   position: relative;
-  box-shadow: 4px 5px 0px hsla(302, 16%, 45%, 1);
   display: flex;
   justify-content: center;
   align-items: center;
+  
+  width: 12rem;
+  height: 3rem;
+    
+  padding: 0;
+  background-color: hsl(36, 33%, 97%);
+  border: 2px solid hsla(302, 16%, 45%, 1);
+  box-shadow: 4px 5px 0px hsla(302, 16%, 45%, 1);
+  
+  color: hsla(302, 16%, 45%, 1);
+  font-family: "Oswald", sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .styled-button:hover {
