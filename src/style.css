@@ -15,7 +15,7 @@ body {
   font-family: "Oswald", sans-serif;
   font-weight: normal;
   display: grid;
-  grid-template-columns: minmax(auto, 230px) auto;  
+  grid-template-columns: minmax(auto, 230px) auto;
   color: hsla(302, 16%, 45%, 1);
 }
 
@@ -70,8 +70,9 @@ nav ul li {
 #start-button {
   height: auto;
   width: auto;
-  padding: 1vh 4vw;
-  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  font-size: clamp(1rem, 2rem, 5vw);
+  line-height: clamp(1.1rem, 2.1rem, 5.1vw);
 }
 
 #content {
@@ -106,18 +107,18 @@ nav ul li {
 
 .data-entry {
   display: flex;
-  justify-content: space-between;  
+  justify-content: space-between;
   flex-direction: column;
-  
+
   height: auto;
   max-height: 90vh;
   width: clamp(50vw, 80%, 680px);
   padding: 2em;
-  
+
   border: solid 2px hsla(302, 16%, 45%, 1);
   background-color: hsl(45, 29%, 97%);
   box-shadow: 9px 10px 0px hsla(302, 16%, 45%, 1);
-  
+
   line-height: 1.5em;
   font-weight: 300;
 }
@@ -130,7 +131,7 @@ nav ul li {
   width: 100%;
   margin-bottom: 0.2vh;
   padding-bottom: 0.5vh;
-  
+
   background: none;
   border: none;
   border-bottom: 0.1em solid;
@@ -138,7 +139,6 @@ nav ul li {
 
   font-size: 0.9rem;
   font-family: "Oswald", sans-serif;
-
 }
 .data-entry input:focus {
   border-color: rgba(0, 120, 138, 0.473);
@@ -149,7 +149,7 @@ nav ul li {
   width: fit-content;
   min-height: 17px;
   padding: 0.05vh;
-  
+
   border: solid 2px hsla(302, 16%, 45%, 1);
 }
 #due-date:focus {
@@ -158,25 +158,24 @@ nav ul li {
 #priority {
   width: fit-content;
   background-color: white;
-  border: solid 2px hsla(302, 16%, 45%, 1);  
+  border: solid 2px hsla(302, 16%, 45%, 1);
 }
 .styled-button {
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  width: 12rem;
+
+  width: clamp(1rem, 25vw, 180px);
   height: 3rem;
-    
-  padding: 0;
+
+  padding: auto;
   background-color: hsl(36, 33%, 97%);
   border: 2px solid hsla(302, 16%, 45%, 1);
   box-shadow: 4px 5px 0px hsla(302, 16%, 45%, 1);
-  
+
   color: hsla(302, 16%, 45%, 1);
   font-family: "Oswald", sans-serif;
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 3vw, 1.5rem);
   font-weight: bold;
 }
 
@@ -224,8 +223,8 @@ nav ul li {
   width: 100%;
 }
 .form-buttons .styled-button {
-  font-size: 2.4vmin;
-  padding: 1rem 1.2rem;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  padding: auto;
 }
 #checkboxes {
   max-height: 18vh;
@@ -254,8 +253,17 @@ nav ul li {
   );
   transition: was 0.3s ease;
 }
+.hidden-content-list {
+  overflow: hidden;
+}
 .hidden-details {
-  text-align: left;
+  color: rgb(14, 30, 43);
+  box-sizing: border-box;
+  word-wrap: break-word;
+  text-align: justify;
+  font-size: 1.2rem;
+  line-height: 1.25rem;
+  padding: 0.7rem 0;
   grid-row-start: 1;
 }
 .hidden-list-item {
@@ -303,7 +311,7 @@ nav ul li {
 #explorer {
   height: auto;
   max-height: 95vh;
-  width: max(50%, 375px);
+  width: auto;
   display: grid;
   grid-template-rows: auto 75vh auto;
   background-color: rgba(172, 255, 47, 0);
@@ -320,7 +328,7 @@ nav ul li {
   background-color: hsl(36, 33%, 97%);
   border: 2px solid hsla(302, 16%, 45%, 1);
   font-family: "Oswald", sans-serif;
-  font-size: 2.8vmin;
+  font-size: min(3.3vmin, 1.5rem);
   font-style: italic;
   position: relative;
   box-shadow: 5px 0px 0px hsla(302, 16%, 45%, 1);
