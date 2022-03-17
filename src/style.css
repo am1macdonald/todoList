@@ -38,7 +38,7 @@ h3 {
   font-size: 2.5rem;
   font-weight: 300;
   font-style: italic;
-  padding-bottom: 1vh;
+  margin-bottom: 1.5vh;
   text-align: center;
 }
 h4 {
@@ -113,18 +113,21 @@ nav ul li {
   height: auto;
   max-height: 90vh;
   width: clamp(50vw, 80%, 680px);
-  padding: 2em;
+  padding: 2rem;
 
   border: solid 2px hsla(302, 16%, 45%, 1);
   background-color: hsl(45, 29%, 97%);
   box-shadow: 9px 10px 0px hsla(302, 16%, 45%, 1);
 
-  line-height: 1.5em;
+  line-height: 1.5rem;
   font-weight: 300;
 }
 .data-entry label {
   font-size: 1.5rem;
   padding-bottom: 0.5vh;
+}
+.data-entry input:not([type="checkbox"]) {
+  margin-bottom: 1.5vh;
 }
 .text-input {
   height: 1.1rem;
@@ -134,7 +137,7 @@ nav ul li {
 
   background: none;
   border: none;
-  border-bottom: 0.1em solid;
+  border-bottom: 0.1rem solid;
   border-color: hsla(120, 5%, 84%, 1);
 
   font-size: 0.9rem;
@@ -166,7 +169,7 @@ nav ul li {
   align-items: center;
 
   width: clamp(1rem, 25vw, 180px);
-  height: 3rem;
+  height: clamp(1rem, 3rem, 4rem);
 
   padding: auto;
   background-color: hsl(36, 33%, 97%);
@@ -225,6 +228,8 @@ nav ul li {
 .form-buttons .styled-button {
   font-size: clamp(1rem, 3vw, 1.2rem);
   padding: auto;
+  height: clamp(1rem, 5vh, 2.5rem);
+  width: clamp(75px, 12vw, 120px);
 }
 #checkboxes {
   max-height: 18vh;
@@ -240,6 +245,7 @@ nav ul li {
   text-align: justify;
   display: grid;
   grid-template-columns: 3fr 1fr;
+  grid-gap: 3vw;
 
   transition: all 0.3s ease;
 }

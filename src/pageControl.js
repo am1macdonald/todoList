@@ -526,7 +526,11 @@ const dynamicExplorerParts = (() => {
                     });
                     const taskLabel = document.createElement("label");
                     taskLabel.setAttribute("for", obj.title);
-                    taskLabel.innerHTML = obj.title;
+                    let title = obj.title;
+                    if (obj.title.length > 30) {
+                      title = `${obj.title.split(' ').slice(0,7).join(' ')}...`
+                    }
+                    taskLabel.innerHTML = title;
                     listItem.appendChild(taskItem);
                     listItem.appendChild(taskLabel);
                     hiddenTaskList.appendChild(listItem);
@@ -749,7 +753,11 @@ const taskCreationMenu = () => {
 
 // creating a form to make edit a task
 const editTaskMenu = (obj) => {
-  dynamicFormParts.newFormWindow("task-edit", `Edit ${obj.title}`);
+  let title = obj.title;
+  if (obj.title.length > 20) {
+    title = `${obj.title.split(' ').slice(0,4).join(' ')}...`
+  }
+  dynamicFormParts.newFormWindow("task-edit", `Edit ${title}`);
   const form = document.getElementById("task-edit-form");
   form.classList.add("data-entry");
   dynamicFormParts.newTextInput(form, "description", "Details.", "", true);
@@ -817,7 +825,11 @@ const projectCreationMenu = () => {
 
 // creating a form to make edit a task
 const editProjectMenu = (obj) => {
-  dynamicFormParts.newFormWindow("project-edit", `Edit ${obj.title}`);
+  let title = obj.title;
+  if (obj.title.length > 20) {
+    title = `${obj.title.split(' ').slice(0,4).join(' ')}...`
+  }
+  dynamicFormParts.newFormWindow("project-edit", `Edit ${title}`);
   const form = document.getElementById("project-edit-form");
   form.classList.add("data-entry");
   dynamicFormParts.newTextInput(form, "description", "Details.", "", true);
