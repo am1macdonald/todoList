@@ -237,7 +237,11 @@ const dynamicFormParts = (() => {
       const cloneCheckboxLabel = checkboxLabel.cloneNode();
 
       cloneCheckboxLabel.setAttribute("for", `${item.identifier}`);
-      cloneCheckboxLabel.innerHTML = `${item.title}`;
+      let title = item.title;
+      if (item.title.length > 30) {
+        title = `${item.title.split(' ').slice(0,7).join(' ')}...`
+      }
+      cloneCheckboxLabel.innerHTML = title;
 
       if (obj) {
         if (obj.tasks.includes(item.identifier.toString())) {
@@ -457,24 +461,24 @@ const dynamicExplorerParts = (() => {
         // looks at the properties being passed in and renders elements accordingly
         switch (true) {
           case prop === "title":
-            propListItem.innerHTML = `Title: ${item[prop]}`;
+            propListItem.innerHTML = `<u>Title:</u> <br> <br> ${item[prop]} <br>`;
             hiddenContentList.appendChild(propListItem);
             break;
           case prop === "description":
-            propListItem.innerHTML = `Description: ${item[prop]}`;
+            propListItem.innerHTML = `<u>Description:</u> <br> <br> ${item[prop]}`;
             hiddenContentList.appendChild(propListItem);
             break;
           case prop === "dueDate":
-            propListItem.innerHTML = `Due On: ${item[prop]}`;
+            propListItem.innerHTML = `<u>Due On:</u> <br> <br> ${item[prop]}`;
             hiddenContentList.appendChild(propListItem);
             break;
           case prop === "priority":
-            propListItem.innerHTML = `Priority: ${item[prop]}`;
+            propListItem.innerHTML = `<u>Priority:</u> <br> <br> ${item[prop]}`;
             hiddenContentList.appendChild(propListItem);
             break;
           case prop === "notes":
             if (item[prop].length > 0) {
-              propListItem.innerHTML = `Notes: ${item[prop]}`;
+              propListItem.innerHTML = `<u>Notes:</u> <br> <br> s${item[prop]}`;
               hiddenContentList.appendChild(propListItem);
             } else {
               propListItem = undefined;
@@ -499,7 +503,7 @@ const dynamicExplorerParts = (() => {
           case prop === "tasks":
             if (item[prop].length > 0) {
               const hiddenTaskListPara = document.createElement("p");
-              hiddenTaskListPara.innerHTML = "Tasks:";
+              hiddenTaskListPara.innerHTML = "<u>Tasks:</u> <br> <br>";
               const hiddenTaskList = document.createElement("ul");
               item[prop].forEach((task) => {
                 // gets the task from the task-library based on the task-ID
