@@ -405,7 +405,12 @@ const dynamicExplorerParts = (() => {
       collapsible.type = "button";
       collapsible.classList.add("collapsible");
 
-      collapsible.innerHTML = `${item.title}`;
+      let title = item.title;
+      if (item.title.length > 20) {
+        title = `${item.title.split(' ').slice(0,4).join(' ')}...`
+      }
+
+      collapsible.innerHTML = title;
 
       collapsible.addEventListener("click", function () {
         this.classList.toggle("active");
@@ -871,8 +876,12 @@ const renderListToNav = (library, target) => {
     }
   });
   topFive.forEach((item) => {
+    let title = item.title;
+    if (item.title.length > 20) {
+      title = `${item.title.split(' ').slice(0,4).join(' ')}...`
+    }
     const newListItem = listItem.cloneNode();
-    newListItem.innerHTML = item.title;
+    newListItem.innerHTML = title;
     list.appendChild(newListItem);
   });
 };
