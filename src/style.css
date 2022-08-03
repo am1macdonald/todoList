@@ -178,7 +178,7 @@ nav ul li {
 
   color: hsla(302, 16%, 45%, 1);
   font-family: "Oswald", sans-serif;
-  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 3vw, 1.3rem);
   font-weight: bold;
 }
 
