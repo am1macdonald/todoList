@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/am1macdonald/todoList/issues"
   },
-  "homepage": "https://github.com/am1macdonald/todoList#readme",
+  "homepage": "https://github.com/am1macdonald/to-do-list",
   "devDependencies": {
     "@babel/core": "^7.18.10",
     "@babel/preset-env": "^7.18.10",
