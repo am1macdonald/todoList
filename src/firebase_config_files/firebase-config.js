@@ -1,8 +1,5 @@
-import { initializeApp } from 'firebase/app';
-
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
-
   apiKey: "AIzaSyBZHP4QGn01AWEfD4kdtWgCKbmzXiMpWdA",
 
   authDomain: "todo-29c0d.firebaseapp.com",
@@ -13,8 +10,7 @@ const firebaseConfig = {
 
   messagingSenderId: "78402583426",
 
-  appId: "1:78402583426:web:670ee4168824147e322d9b"
-
+  appId: "1:78402583426:web:670ee4168824147e322d9b",
 };
 
 const getFirebaseConfig = () => {
@@ -27,9 +23,6 @@ const getFirebaseConfig = () => {
   } else {
     return config;
   }
-}
+};
 
-
-const app = initializeApp(firebaseConfig);
-
-export { getFirebaseConfig }
+export { getFirebaseConfig };
