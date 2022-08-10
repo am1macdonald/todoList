@@ -1,3 +1,5 @@
+import getFirebaseConfig from "./firebase_config_files/firebase-config";
+import { initializeApp } from "firebase/app";
 import "./reset.css";
 import "./style.css";
 import {
@@ -6,6 +8,8 @@ import {
   renderStaticElements,
   taskCreationMenu,
 } from "./pageControl.js";
+
+const app = initializeApp(getFirebaseConfig());
 
 renderStaticElements();
 renderBigDate.updateTime();
