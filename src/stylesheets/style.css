@@ -317,7 +317,7 @@ nav ul li {
 #explorer {
   height: auto;
   max-height: 95vh;
-  width: auto;
+  width: 80%;
   display: grid;
   grid-template-rows: auto 75vh auto;
   background-color: rgba(172, 255, 47, 0);
