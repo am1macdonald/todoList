@@ -1,15 +1,13 @@
-import getFirebaseConfig from "./firebase_config_files/firebase-config";
+import "./stylesheets/reset.css";
+import "./stylesheets/style.css";
+import { getFirebaseConfig } from "./firebase_config_files/firebase-config";
 import { initializeApp } from "firebase/app";
-import "./reset.css";
-import "./style.css";
 import {
   projectCreationMenu,
   renderBigDate,
   renderStaticElements,
   taskCreationMenu,
 } from "./pageControl.js";
-
-const app = initializeApp(getFirebaseConfig());
 
 renderStaticElements();
 renderBigDate.updateTime();
@@ -74,3 +72,8 @@ const contentState = (() => {
     setState,
   };
 })();
+
+
+const app = initializeApp(getFirebaseConfig());
+
+console.log(app)

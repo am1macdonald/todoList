@@ -11,8 +11,8 @@ import {
 } from "./libraryManagement.js";
 import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
-import Task from "./taskClass.js";
-import Project from "./projectClass.js";
+import Task from "./classes/taskClass.js";
+import Project from "./classes/projectClass.js";
 
 const content = document.getElementById("content");
 

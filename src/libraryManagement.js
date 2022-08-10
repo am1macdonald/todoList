@@ -1,7 +1,7 @@
 /* eslint-disable curly */
 import { compareAsc, parseISO } from "date-fns";
-import Project from "./projectClass.js";
-import Task from "./taskClass.js";
+import Project from "./classes/projectClass.js";
+import Task from "./classes/taskClass.js";
 
 export const taskLibrary = (() => {
   let arr = [];
