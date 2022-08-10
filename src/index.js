@@ -1,19 +1,31 @@
 import "./stylesheets/reset.css";
 import "./stylesheets/style.css";
-import { getFirebaseConfig } from "./firebase_config_files/firebase-config";
-import { initializeApp } from "firebase/app";
 import {
   projectCreationMenu,
   renderBigDate,
   renderStaticElements,
   taskCreationMenu,
+  signInPopup,
 } from "./pageControl.js";
+import { userSignIn } from "./firebase_config_files/firebase";
 
 renderStaticElements();
+
 renderBigDate.updateTime();
 
 const content = document.getElementById("content");
+const page = document.getElementById("page");
 const clock = document.getElementById("date-hero");
+const allButtons = document.querySelectorAll("button");
+
+allButtons.forEach((button) => {
+  button.disabled = true;
+});
+
+signInPopup(page, () => {
+  userSignIn();
+});
+
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
@@ -72,8 +84,3 @@ const contentState = (() => {
     setState,
   };
 })();
-
-
-const app = initializeApp(getFirebaseConfig());
-
-console.log(app)

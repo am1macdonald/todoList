@@ -25,4 +25,4 @@ const getFirebaseConfig = () => {
   }
 };
 
-export { getFirebaseConfig };
+export default getFirebaseConfig;
