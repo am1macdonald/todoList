@@ -17,7 +17,8 @@
     "url": "git+https://github.com/am1macdonald/todoList.git"
   },
   "keywords": [
-    "todo",
+    "to",
+    "do",
     "list"
   ],
   "author": "Adam MacDonald",
@@ -46,6 +47,7 @@
   },
   "dependencies": {
     "date-fns": "^2.29.1",
+    "firebase": "^9.9.2",
     "simplebar": "^5.3.8"
   }
 }
