@@ -13,6 +13,7 @@ import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
 import Task from "./classes/taskClass.js";
 import Project from "./classes/projectClass.js";
+import { userSignOut } from "./firebase_config_files/firebase";
 
 const content = document.getElementById("content");
 
@@ -51,6 +52,16 @@ const renderStaticElements = () => {
     projectList.id = "project-list";
     projectContainer.appendChild(projectList);
 
+    const signOutButton = document.createElement("button");
+    signOutButton.id = "sign-out-button";
+    signOutButton.insertAdjacentText("afterbegin", "sign out");
+    signOutButton.classList.add("styled-button");
+
+    signOutButton.addEventListener("click", () => {
+      userSignOut();
+      location.reload();
+    });
+
     const newNavButton = (name) => {
       const button = document.createElement("button");
       button.id = `new-${name.toLowerCase()}-button`;
@@ -65,6 +76,7 @@ const renderStaticElements = () => {
     newNavButton("task");
     nav.appendChild(projectContainer);
     newNavButton("project");
+    nav.appendChild(signOutButton);
 
     page.prepend(nav);
     renderListToNav(taskLibrary.show(), "task");
@@ -239,7 +251,7 @@ const dynamicFormParts = (() => {
       cloneCheckboxLabel.setAttribute("for", `${item.identifier}`);
       let title = item.title;
       if (item.title.length > 30) {
-        title = `${item.title.split(' ').slice(0,7).join(' ')}...`
+        title = `${item.title.split(" ").slice(0, 7).join(" ")}...`;
       }
       cloneCheckboxLabel.innerHTML = title;
 
@@ -411,7 +423,7 @@ const dynamicExplorerParts = (() => {
 
       let title = item.title;
       if (item.title.length > 20) {
-        title = `${item.title.split(' ').slice(0,4).join(' ')}...`
+        title = `${item.title.split(" ").slice(0, 4).join(" ")}...`;
       }
 
       collapsible.innerHTML = title;
@@ -528,7 +540,10 @@ const dynamicExplorerParts = (() => {
                     taskLabel.setAttribute("for", obj.title);
                     let title = obj.title;
                     if (obj.title.length > 30) {
-                      title = `${obj.title.split(' ').slice(0,7).join(' ')}...`
+                      title = `${obj.title
+                        .split(" ")
+                        .slice(0, 7)
+                        .join(" ")}...`;
                     }
                     taskLabel.innerHTML = title;
                     listItem.appendChild(taskItem);
@@ -755,7 +770,7 @@ const taskCreationMenu = () => {
 const editTaskMenu = (obj) => {
   let title = obj.title;
   if (obj.title.length > 20) {
-    title = `${obj.title.split(' ').slice(0,4).join(' ')}...`
+    title = `${obj.title.split(" ").slice(0, 4).join(" ")}...`;
   }
   dynamicFormParts.newFormWindow("task-edit", `Edit ${title}`);
   const form = document.getElementById("task-edit-form");
@@ -827,7 +842,7 @@ const projectCreationMenu = () => {
 const editProjectMenu = (obj) => {
   let title = obj.title;
   if (obj.title.length > 20) {
-    title = `${obj.title.split(' ').slice(0,4).join(' ')}...`
+    title = `${obj.title.split(" ").slice(0, 4).join(" ")}...`;
   }
   dynamicFormParts.newFormWindow("project-edit", `Edit ${title}`);
   const form = document.getElementById("project-edit-form");
@@ -894,7 +909,7 @@ const renderListToNav = (library, target) => {
   topFive.forEach((item) => {
     let title = item.title;
     if (item.title.length > 20) {
-      title = `${item.title.split(' ').slice(0,4).join(' ')}...`
+      title = `${item.title.split(" ").slice(0, 4).join(" ")}...`;
     }
     const newListItem = listItem.cloneNode();
     newListItem.innerHTML = title;
@@ -902,9 +917,45 @@ const renderListToNav = (library, target) => {
   });
 };
 
+const signInPopup = (parent, callback) => {
+  const pageSplash = document.createElement("div");
+  pageSplash.id = "sign-in-page-splash";
+  pageSplash.classList.add("form-container");
+
+  const signInContainer = document.createElement("div");
+  signInContainer.classList.add("data-entry");
+
+  const buttonContainer = document.createElement("div");
+  buttonContainer.classList.add("flex-row");
+
+  const signInButton = document.createElement("button");
+  signInButton.insertAdjacentText("afterbegin", "sign in");
+  signInButton.id = "sign-in-button";
+  signInButton.classList.add("styled-button");
+
+  const localSessionButton = document.createElement("button");
+  localSessionButton.insertAdjacentText("afterbegin", "work offline");
+  localSessionButton.id = "local-session-button";
+  localSessionButton.classList.add("styled-button");
+
+  const footnote = document.createElement("span");
+  footnote.insertAdjacentText("afterbegin", "*sign in to sync data");
+
+  buttonContainer.appendChild(signInButton);
+  buttonContainer.appendChild(localSessionButton);
+
+  signInContainer.appendChild(buttonContainer);
+  signInContainer.appendChild(footnote);
+
+  pageSplash.appendChild(signInContainer);
+
+  parent.appendChild(pageSplash);
+};
+
 export {
   renderStaticElements,
   renderBigDate,
   taskCreationMenu,
   projectCreationMenu,
+  signInPopup,
 };

@@ -204,6 +204,38 @@ nav ul li {
 
   transition: all 0.3s ease;
 }
+
+#sign-in-page-splash {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 999;
+  background-color: hsla(0, 1%, 18%, 0.838);
+}
+
+#sign-in-page-splash .data-entry {
+  width: max(400px, 40%);
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4vh;
+  padding: 5vh 0 1vh 0;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5vw;
+}
+
 #checklist-div {
   display: flex;
   flex-direction: column;
