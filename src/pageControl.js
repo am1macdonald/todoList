@@ -917,7 +917,7 @@ const renderListToNav = (library, target) => {
   });
 };
 
-const signInPopup = (parent, callback) => {
+const signInPopup = (parent, callback, enableButtons) => {
   const pageSplash = document.createElement("div");
   pageSplash.id = "sign-in-page-splash";
   pageSplash.classList.add("form-container");
@@ -944,6 +944,7 @@ const signInPopup = (parent, callback) => {
 
   localSessionButton.addEventListener('click', () => {
     pageSplash.remove();
+    enableButtons();
   })
 
   const footnote = document.createElement("span");

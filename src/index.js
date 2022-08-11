@@ -31,7 +31,7 @@ signInPopup(page, (target) => {
     target.remove();
     disableButtons(false);
   });
-});
+}, () => disableButtons(false));
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
