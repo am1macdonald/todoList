@@ -18,14 +18,20 @@ const page = document.getElementById("page");
 const clock = document.getElementById("date-hero");
 const allButtons = document.querySelectorAll("button");
 
-allButtons.forEach((button) => {
-  button.disabled = true;
-});
+const disableButtons = (bool) => {
+  allButtons.forEach((button) => {
+    button.disabled = bool;
+  });
+};
 
-signInPopup(page, () => {
-  userSignIn();
-});
+disableButtons(true);
 
+signInPopup(page, (target) => {
+  userSignIn(() => {
+    target.remove();
+    disableButtons(false);
+  });
+});
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {

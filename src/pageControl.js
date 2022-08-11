@@ -933,10 +933,18 @@ const signInPopup = (parent, callback) => {
   signInButton.id = "sign-in-button";
   signInButton.classList.add("styled-button");
 
+  signInButton.addEventListener('click', () => {
+    callback(pageSplash);
+  })
+
   const localSessionButton = document.createElement("button");
   localSessionButton.insertAdjacentText("afterbegin", "work offline");
   localSessionButton.id = "local-session-button";
   localSessionButton.classList.add("styled-button");
+
+  localSessionButton.addEventListener('click', () => {
+    pageSplash.remove();
+  })
 
   const footnote = document.createElement("span");
   footnote.insertAdjacentText("afterbegin", "*sign in to sync data");
