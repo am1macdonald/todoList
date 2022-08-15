@@ -13,7 +13,7 @@ import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
 import Task from "./classes/taskClass.js";
 import Project from "./classes/projectClass.js";
-import { userSignOut } from "./firebase_config_files/firebase";
+import { userSignOut } from "./firebase_files/firebase";
 
 const content = document.getElementById("content");
 
@@ -948,7 +948,7 @@ const signInPopup = (parent, callback, enableButtons) => {
   })
 
   const footnote = document.createElement("span");
-  footnote.insertAdjacentText("afterbegin", "*sign in to sync data");
+  footnote.insertAdjacentText("afterbegin", "*signing in will not erase local data");
 
   buttonContainer.appendChild(signInButton);
   buttonContainer.appendChild(localSessionButton);

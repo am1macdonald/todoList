@@ -7,7 +7,7 @@ import {
   taskCreationMenu,
   signInPopup,
 } from "./pageControl.js";
-import { userSignIn } from "./firebase_config_files/firebase";
+import { userSignIn } from "./firebase_files/firebase";
 
 renderStaticElements();
 
