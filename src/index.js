@@ -9,8 +9,10 @@ import {
 } from "./displayControl.js";
 import { userSignIn } from "./firebase_files/firebase";
 
-const setup = () => {
+const content = document.getElementById("content");
+const page = document.getElementById("page");
 
+const setup = () => {
   renderStaticElements();
 
   renderBigDate.updateTime();
@@ -18,8 +20,6 @@ const setup = () => {
 
 setup();
 
-const content = document.getElementById("content");
-const page = document.getElementById("page");
 const clock = document.getElementById("date-hero");
 const allButtons = document.querySelectorAll("button");
 
