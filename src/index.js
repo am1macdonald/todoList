@@ -6,12 +6,17 @@ import {
   renderStaticElements,
   taskCreationMenu,
   signInPopup,
-} from "./pageControl.js";
+} from "./displayControl.js";
 import { userSignIn } from "./firebase_files/firebase";
 
-renderStaticElements();
+const setup = () => {
 
-renderBigDate.updateTime();
+  renderStaticElements();
+
+  renderBigDate.updateTime();
+};
+
+setup();
 
 const content = document.getElementById("content");
 const page = document.getElementById("page");
@@ -26,12 +31,16 @@ const disableButtons = (bool) => {
 
 disableButtons(true);
 
-signInPopup(page, (target) => {
-  userSignIn(() => {
-    target.remove();
-    disableButtons(false);
-  });
-}, () => disableButtons(false));
+signInPopup(
+  page,
+  (target) => {
+    userSignIn(() => {
+      target.remove();
+      disableButtons(false);
+    });
+  },
+  () => disableButtons(false)
+);
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
