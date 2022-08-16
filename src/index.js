@@ -13,6 +13,16 @@ const content = document.getElementById("content");
 const page = document.getElementById("page");
 
 const setup = () => {
+  signInPopup(
+    page,
+    (target) => {
+      userSignIn(() => {
+        target.remove();
+        disableButtons(false);
+      });
+    },
+    () => disableButtons(false)
+  );
   renderStaticElements();
 
   renderBigDate.updateTime();
@@ -30,17 +40,6 @@ const disableButtons = (bool) => {
 };
 
 disableButtons(true);
-
-signInPopup(
-  page,
-  (target) => {
-    userSignIn(() => {
-      target.remove();
-      disableButtons(false);
-    });
-  },
-  () => disableButtons(false)
-);
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
