@@ -13,7 +13,7 @@ const content = document.getElementById("content");
 const page = document.getElementById("page");
 
 const setup = () => {
-  signInPopup(
+  const popupRef = signInPopup(
     page,
     (target) => {
       userSignIn(() => {
@@ -26,6 +26,7 @@ const setup = () => {
   renderStaticElements();
 
   renderBigDate.updateTime();
+  console.log(popupRef);
 };
 
 setup();
