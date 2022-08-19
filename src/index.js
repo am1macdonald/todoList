@@ -6,31 +6,17 @@ import {
   renderStaticElements,
   taskCreationMenu,
   signInPopup,
+  renderListToNav,
 } from "./displayControl.js";
+import { taskLibrary, projectLibrary } from "./libraryManagement.js";
 import { userSignIn } from "./firebase_files/firebase";
+
+renderStaticElements();
+
+renderBigDate.updateTime();
 
 const content = document.getElementById("content");
 const page = document.getElementById("page");
-
-const setup = () => {
-  const popupRef = signInPopup(
-    page,
-    (target) => {
-      userSignIn(() => {
-        target.remove();
-        disableButtons(false);
-      });
-    },
-    () => disableButtons(false)
-  );
-  renderStaticElements();
-
-  renderBigDate.updateTime();
-  console.log(popupRef);
-};
-
-setup();
-
 const clock = document.getElementById("date-hero");
 const allButtons = document.querySelectorAll("button");
 
@@ -41,6 +27,23 @@ const disableButtons = (bool) => {
 };
 
 disableButtons(true);
+
+const signInCallback = async (target) => {
+  await userSignIn();
+  console.log();
+  target.remove();
+  disableButtons(false);
+
+  renderListToNav(taskLibrary.show(), "task");
+  renderListToNav(projectLibrary.show(), "project");
+};
+
+// then...
+// renderlisttonav(tasklibrary.show(), "task");
+// renderlisttonav(projectlibrary.show(), "project");
+
+const popupRef = signInPopup(page, signInCallback, () => disableButtons(false));
+console.log(popupRef);
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
