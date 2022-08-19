@@ -57,8 +57,8 @@ const renderStaticElements = () => {
     signOutButton.insertAdjacentText("afterbegin", "sign out");
     signOutButton.classList.add("styled-button");
 
-    signOutButton.addEventListener("click", () => {
-      userSignOut();
+    signOutButton.addEventListener("click", async () => {
+      await userSignOut();
       location.reload();
     });
 
@@ -79,8 +79,8 @@ const renderStaticElements = () => {
     nav.appendChild(signOutButton);
 
     page.prepend(nav);
-    renderListToNav(taskLibrary.show(), "task");
-    renderListToNav(projectLibrary.show(), "project");
+    // renderlisttonav(tasklibrary.show(), "task");
+    // renderlisttonav(projectlibrary.show(), "project");
   })();
 };
 
@@ -875,6 +875,9 @@ const clearContent = () => {
 
 // renders the five tasks or projects, that are due the soonest, to the navbar
 const renderListToNav = (library, target) => {
+  if (typeof target !== "string") {
+    return;
+  }
   const list = document.getElementById(`${target}-list`);
   list.innerHTML = "";
   const listItem = document.createElement("li");
@@ -917,7 +920,7 @@ const renderListToNav = (library, target) => {
   });
 };
 
-const signInPopup = (parent, callback, enableButtons) => {
+const signInPopup = (parent, signIn, enableButtons) => {
   const pageSplash = document.createElement("div");
   pageSplash.id = "sign-in-page-splash";
   pageSplash.classList.add("form-container");
@@ -933,22 +936,23 @@ const signInPopup = (parent, callback, enableButtons) => {
   signInButton.id = "sign-in-button";
   signInButton.classList.add("styled-button");
 
-  signInButton.addEventListener('click', () => {
-    callback(pageSplash);
-  })
+  signInButton.addEventListener("click", () => signIn(pageSplash));
 
   const localSessionButton = document.createElement("button");
   localSessionButton.insertAdjacentText("afterbegin", "work offline");
   localSessionButton.id = "local-session-button";
   localSessionButton.classList.add("styled-button");
 
-  localSessionButton.addEventListener('click', () => {
+  localSessionButton.addEventListener("click", () => {
     pageSplash.remove();
     enableButtons();
-  })
+  });
 
   const footnote = document.createElement("span");
-  footnote.insertAdjacentText("afterbegin", "*signing in will not erase local data");
+  footnote.insertAdjacentText(
+    "afterbegin",
+    "*signing in will not erase local data"
+  );
 
   buttonContainer.appendChild(signInButton);
   buttonContainer.appendChild(localSessionButton);
@@ -967,4 +971,5 @@ export {
   taskCreationMenu,
   projectCreationMenu,
   signInPopup,
+  renderListToNav,
 };
