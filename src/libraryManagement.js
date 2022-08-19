@@ -2,6 +2,27 @@
 import { compareAsc, parseISO } from "date-fns";
 import Project from "./classes/projectClass.js";
 import Task from "./classes/taskClass.js";
+import { auth } from "./firebase_files/firebase.js";
+
+const populateFromLocalStorage = (arr, libType) => {
+  if (window.localStorage.getItem(`${libType}-library`)) {
+    arr = JSON.parse(window.localStorage.getItem(`${libType}-library`)).map(
+      (item) => {
+        if (libType === "Task") {
+          console.log("task");
+          return new Task({ ...item });
+        } else if (libType === "Project") {
+          console.log("project");
+          return new Task({ ...item });
+        } else return null;
+      }
+    );
+  }
+};
+
+const updateLocalStorage = (arr) => {
+  window.localStorage.setItem("task-library", JSON.stringify(arr));
+};
 
 export const taskLibrary = (() => {
   let arr = [];
@@ -22,13 +43,11 @@ export const taskLibrary = (() => {
     );
   }
   const show = () => arr;
-  const updateLocalStorage = () => {
-    window.localStorage.setItem("task-library", JSON.stringify(arr));
-  };
+
   const addToLibrary = (task) => {
     arr.push(task);
     arr[arr.length - 1].summary();
-    updateLocalStorage();
+    updateLocalStorage(arr);
   };
   const removeFromLibrary = (task) => {
     arr = arr.filter((storedTask) => {
@@ -36,7 +55,7 @@ export const taskLibrary = (() => {
         return task;
       } else return false;
     });
-    updateLocalStorage();
+    updateLocalStorage(arr);
   };
 
   return {
@@ -46,6 +65,7 @@ export const taskLibrary = (() => {
     updateLocalStorage,
   };
 })();
+
 export const projectLibrary = (() => {
   let arr = [];
   if (window.localStorage.getItem("project-library")) {
@@ -64,13 +84,10 @@ export const projectLibrary = (() => {
     );
   }
   const show = () => arr;
-  const updateLocalStorage = () => {
-    window.localStorage.setItem("project-library", JSON.stringify(arr));
-  };
   const addToLibrary = (project) => {
     arr.push(project);
     arr[arr.length - 1].summary();
-    updateLocalStorage();
+    updateLocalStorage(arr);
   };
   const removeFromLibrary = (project) => {
     arr = arr.filter((storedProject) => {
@@ -78,7 +95,7 @@ export const projectLibrary = (() => {
         return project;
       } else return false;
     });
-    updateLocalStorage();
+    updateLocalStorage(arr);
   };
   return {
     addToLibrary,
