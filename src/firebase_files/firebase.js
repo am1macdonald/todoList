@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
 import getFirebaseConfig from "./firebase-config";
 import {
   getAuth,
@@ -12,6 +13,20 @@ const app = initializeApp(getFirebaseConfig());
 const auth = getAuth();
 
 const provider = new GoogleAuthProvider();
+
+const db = getFirestore(app);
+
+const getQuerySnapshot = async () => {
+  const querySnapshot = await getDocs(collection(db, "users"));
+  querySnapshot.forEach((doc) => {
+    console.log(`${doc.id} => ${doc.username}`);
+  });
+};
+
+const getUser = async () => {
+  const user = await auth.currentUser;
+  console.log("Hello", user.displayName);
+};
 
 const userSignIn = async () => {
   const data = await signInWithPopup(auth, provider)
@@ -48,4 +63,4 @@ const userSignOut = async () => {
   return null;
 };
 
-export { userSignIn, userSignOut, auth };
+export { userSignIn, userSignOut, getQuerySnapshot, getUser };

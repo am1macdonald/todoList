@@ -9,7 +9,11 @@ import {
   renderListToNav,
 } from "./displayControl.js";
 import { taskLibrary, projectLibrary } from "./libraryManagement.js";
-import { userSignIn } from "./firebase_files/firebase";
+import {
+  userSignIn,
+  getQuerySnapshot,
+  getUser,
+} from "./firebase_files/firebase";
 
 renderStaticElements();
 
@@ -30,10 +34,12 @@ disableButtons(true);
 
 const signInCallback = async (target) => {
   await userSignIn();
+  getUser();
   console.log();
   target.remove();
   disableButtons(false);
 
+  getQuerySnapshot();
   renderListToNav(taskLibrary.show(), "task");
   renderListToNav(projectLibrary.show(), "project");
 };
