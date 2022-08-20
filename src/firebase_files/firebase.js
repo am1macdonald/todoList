@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 import getFirebaseConfig from "./firebase-config";
 import {
   getAuth,
@@ -7,6 +13,7 @@ import {
   signOut,
   GoogleAuthProvider,
 } from "firebase/auth";
+import { projectLibrary, taskLibrary } from "../libraryManagement";
 
 const app = initializeApp(getFirebaseConfig());
 
@@ -26,6 +33,28 @@ const getQuerySnapshot = async () => {
 const getUser = async () => {
   const user = await auth.currentUser;
   console.log("Hello", user.displayName);
+};
+
+const getUserName = () => {
+  return auth.currentUser.displayName;
+};
+
+const isUserSignedIn = () => {
+  return !!auth().currentUser;
+};
+
+const addNewUser = async (obj) => {
+  const { uid } = await auth.currentUser;
+
+  return setDoc(
+    doc(db, "users", uid),
+    {
+      name: getUserName(),
+      tasks: 'tasks',
+      projects: 'projects',
+    },
+    { merge: true }
+  );
 };
 
 const userSignIn = async () => {
@@ -63,4 +92,4 @@ const userSignOut = async () => {
   return null;
 };
 
-export { userSignIn, userSignOut, getQuerySnapshot, getUser };
+export { userSignIn, userSignOut, getQuerySnapshot, getUser, addNewUser };
