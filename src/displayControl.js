@@ -920,7 +920,7 @@ const renderListToNav = (library, target) => {
   });
 };
 
-const signInPopup = (parent, signIn, enableButtons) => {
+const signInPopup = (parent, signIn, localSession, enableButtons) => {
   const pageSplash = document.createElement("div");
   pageSplash.id = "sign-in-page-splash";
   pageSplash.classList.add("form-container");
@@ -943,10 +943,7 @@ const signInPopup = (parent, signIn, enableButtons) => {
   localSessionButton.id = "local-session-button";
   localSessionButton.classList.add("styled-button");
 
-  localSessionButton.addEventListener("click", () => {
-    pageSplash.remove();
-    enableButtons();
-  });
+  localSessionButton.addEventListener("click", () => localSession(pageSplash));
 
   const footnote = document.createElement("span");
   footnote.insertAdjacentText(

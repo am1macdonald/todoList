@@ -46,11 +46,17 @@ const signInCallback = async (target) => {
   wrapUpSignIn(target);
 };
 
+const localSessionCallback = (target) => {
+  wrapUpSignIn(target);
+};
+
 // then...
 // renderlisttonav(tasklibrary.show(), "task");
 // renderlisttonav(projectlibrary.show(), "project");
 
-const popupRef = signInPopup(page, signInCallback, () => disableButtons(false));
+const popupRef = signInPopup(page, signInCallback, localSessionCallback, () =>
+  disableButtons(false)
+);
 console.log(popupRef);
 
 // Observer puts the clock back up when the content is empty && setsState to false.
