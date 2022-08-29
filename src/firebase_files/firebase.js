@@ -13,7 +13,6 @@ import {
   signOut,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { projectLibrary, taskLibrary } from "../libraryManagement";
 
 const app = initializeApp(getFirebaseConfig());
 
@@ -50,8 +49,8 @@ const addNewUser = async (obj) => {
     doc(db, "users", uid),
     {
       name: getUserName(),
-      tasks: 'tasks',
-      projects: 'projects',
+      tasks: "tasks",
+      projects: "projects",
     },
     { merge: true }
   );
