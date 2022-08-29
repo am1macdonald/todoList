@@ -14,20 +14,13 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 
+/* ----- Authentication ------ */
+
 const app = initializeApp(getFirebaseConfig());
 
 const auth = getAuth();
 
 const provider = new GoogleAuthProvider();
-
-const db = getFirestore(app);
-
-const getQuerySnapshot = async () => {
-  const querySnapshot = await getDocs(collection(db, "users"));
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${doc.username}`);
-  });
-};
 
 const getUser = async () => {
   const user = await auth.currentUser;
@@ -40,20 +33,6 @@ const getUserName = () => {
 
 const isUserSignedIn = () => {
   return !!auth().currentUser;
-};
-
-const addNewUser = async (obj) => {
-  const { uid } = await auth.currentUser;
-
-  return setDoc(
-    doc(db, "users", uid),
-    {
-      name: getUserName(),
-      tasks: "tasks",
-      projects: "projects",
-    },
-    { merge: true }
-  );
 };
 
 const userSignIn = async () => {
@@ -89,6 +68,33 @@ const userSignOut = async () => {
       console.error(error);
     });
   return null;
+};
+
+/* ----- Database Manipulation ------ */
+
+const db = getFirestore(app);
+
+const colRef = collection(db, "userData");
+
+const getQuerySnapshot = async () => {
+  const querySnapshot = await getDocs(collection(db, "users"));
+  querySnapshot.forEach((doc) => {
+    console.log(`${doc.id} => ${doc.username}`);
+  });
+};
+
+
+const addNewUser = async (obj) => {
+  const { uid } = await auth.currentUser;
+
+  return setDoc(
+    doc(db, "userData", uid),
+    {
+      tasks: ["a task"],
+      projects: ["a project"],
+    },
+    { merge: true }
+  );
 };
 
 export { userSignIn, userSignOut, getQuerySnapshot, getUser, addNewUser };
