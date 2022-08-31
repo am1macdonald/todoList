@@ -1,7 +1,10 @@
 const LibraryFactory = () => {
   const library = {};
 
-  const show = () => library;
+  const show = () => {
+    console.log(library);
+    return library;
+  };
 
   const addToLibrary = (itemId, item) => {
     library[itemId] = item;

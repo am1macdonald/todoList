@@ -9,7 +9,13 @@ import {
   renderListToNav,
 } from "./displayControl.js";
 import { taskLibrary, projectLibrary } from "./libraryManagement.js";
-import { userSignIn, getUser, addNewUser } from "./firebase_files/firebase";
+import {
+  userSignIn,
+  getUser,
+  addNewUser,
+  fetchUserDocs,
+  userIsSignedIn,
+} from "./firebase_files/firebase";
 
 renderStaticElements();
 
@@ -28,9 +34,11 @@ const disableButtons = (bool) => {
 
 disableButtons(true);
 
-const wrapUpSignIn = (target) => {
+const wrapUpSignIn = async (target) => {
   target.remove();
   disableButtons(false);
+  console.log(await fetchUserDocs());
+  console.log(userIsSignedIn());
   renderListToNav(taskLibrary.show(), "task");
   renderListToNav(projectLibrary.show(), "project");
 };

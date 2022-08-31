@@ -288,12 +288,11 @@ const dynamicFormParts = (() => {
           stateManager.setAdded(false);
         }
       } else if (parent.id === "project-buttons") {
-        addNewProject();
-        if (stateManager.getAdded()) {
+        addNewProject(() => {
           renderListToNav(projectLibrary.show(), "project");
           clearContent();
           stateManager.setAdded(false);
-        }
+        });
       }
     });
     parent.appendChild(submitButton);

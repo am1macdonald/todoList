@@ -2,7 +2,8 @@
 import { compareAsc, parseISO } from "date-fns";
 import Project from "./classes/projectClass.js";
 import Task from "./classes/taskClass.js";
-import { auth } from "./firebase_files/firebase.js";
+import LibraryFactory from "./factories/LibraryFactory.js";
+import { addProjectToDatabase } from "./firebase_files/firebase.js";
 
 const populateFromLocalStorage = (arr, libType) => {
   if (window.localStorage.getItem(`${libType}-library`)) {
@@ -20,9 +21,17 @@ const populateFromLocalStorage = (arr, libType) => {
   }
 };
 
+const convertObjectFromDatabase = (obj, ClassName) => {
+  const keys = Object.keys(obj);
+
+  console.log(keys);
+};
+
 const updateLocalStorage = (arr) => {
   window.localStorage.setItem("task-library", JSON.stringify(arr));
 };
+
+const protoTaskLibrary = LibraryFactory();
 
 export const taskLibrary = (() => {
   let arr = [];
@@ -66,23 +75,25 @@ export const taskLibrary = (() => {
   };
 })();
 
+const protoProjectLibrary = LibraryFactory();
+
 export const projectLibrary = (() => {
   let arr = [];
-  if (window.localStorage.getItem("project-library")) {
-    arr = JSON.parse(window.localStorage.getItem("project-library")).map(
-      (project) => {
-        return new Project(
-          project.title,
-          project.description,
-          project.dueDate,
-          project.notes,
-          project.tasks,
-          project.identifier,
-          project.complete
-        );
-      }
-    );
-  }
+  // if (window.localStorage.getItem("project-library")) {
+  //   arr = JSON.parse(window.localStorage.getItem("project-library")).map(
+  //     (project) => {
+  //       return new Project(
+  //         project.title,
+  //         project.description,
+  //         project.dueDate,
+  //         project.notes,
+  //         project.tasks,
+  //         project.identifier,
+  //         project.complete
+  //       );
+  //     }
+  //   );
+  // }
   const show = () => arr;
   const addToLibrary = (project) => {
     arr.push(project);
@@ -157,7 +168,7 @@ export const editTask = (obj) => {
   obj.edit(description, dueDate, priority, notes, checklistObj);
   taskLibrary.updateLocalStorage();
 };
-export const addNewProject = () => {
+export const addNewProject = async (callback) => {
   let projectForm = "";
 
   if (document.getElementById("project-form") !== null) {
@@ -193,6 +204,12 @@ export const addNewProject = () => {
     }
   }
   const newProject = new Project(...nodeArr, tasks);
+
+  const projectID = await addProjectToDatabase(newProject);
+
+  protoProjectLibrary.addToLibrary(projectID, newProject);
+  protoProjectLibrary.show();
+  callback();
 
   projectLibrary.addToLibrary(newProject);
   projectLibrary.show();
