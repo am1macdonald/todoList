@@ -1,13 +1,10 @@
-const LibraryFactory = (database) => {
+const LibraryFactory = () => {
   const library = {};
-
-  const dbRef = database;
 
   const show = () => library;
 
-  const addToLibrary = async (item) => {
-    const id = await dbRef.add(item);
-    library[id] = item;
+  const addToLibrary = (itemId, item) => {
+    library[itemId] = item;
   };
 
   const removeFromLibrary = (itemId) => {
