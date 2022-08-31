@@ -1,21 +1,17 @@
-const LibraryFactory = () => {
-  let arr = [];
+const LibraryFactory = (database) => {
+  const library = {};
 
-  const show = () => arr;
+  const dbRef = database;
 
-  const addToLibrary = (task) => {
-    arr.push(task);
-    arr[arr.length - 1].summary();
+  const show = () => library;
+
+  const addToLibrary = async (item) => {
+    const id = await dbRef.add(item);
+    library[id] = item;
   };
 
-  const removeFromLibrary = (task) => {
-    arr = arr.filter((storedTask) => {
-      if (storedTask.identifier !== task.identifier) {
-        return task;
-      } else {
-        return false;
-      }
-    });
+  const removeFromLibrary = (itemId) => {
+    delete library[itemId];
   };
 
   return {
