@@ -3,7 +3,25 @@ import { compareAsc, parseISO } from "date-fns";
 import Project from "./classes/projectClass.js";
 import Task from "./classes/taskClass.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
-import { addProjectToDatabase } from "./firebase_files/firebase.js";
+import {
+  addToDatabase,
+  projectConverter,
+  taskConverter,
+} from "./firebase_files/firebase.js";
+
+const protoTaskLibrary = LibraryFactory();
+const protoProjectLibrary = LibraryFactory();
+
+const populateLibrary = (libraryName, data) => {
+  for (const key in data) {
+    console.log(data[key]);
+  }
+};
+
+const populateAll = (taskData, projectData) => {
+  populateLibrary(protoTaskLibrary, taskData);
+  populateLibrary(protoProjectLibrary, projectData);
+};
 
 const populateFromLocalStorage = (arr, libType) => {
   if (window.localStorage.getItem(`${libType}-library`)) {
@@ -21,17 +39,9 @@ const populateFromLocalStorage = (arr, libType) => {
   }
 };
 
-const convertObjectFromDatabase = (obj, ClassName) => {
-  const keys = Object.keys(obj);
-
-  console.log(keys);
-};
-
 const updateLocalStorage = (arr) => {
   window.localStorage.setItem("task-library", JSON.stringify(arr));
 };
-
-const protoTaskLibrary = LibraryFactory();
 
 export const taskLibrary = (() => {
   let arr = [];
@@ -75,8 +85,6 @@ export const taskLibrary = (() => {
   };
 })();
 
-const protoProjectLibrary = LibraryFactory();
-
 export const projectLibrary = (() => {
   let arr = [];
   // if (window.localStorage.getItem("project-library")) {
@@ -115,7 +123,7 @@ export const projectLibrary = (() => {
     updateLocalStorage,
   };
 })();
-export const addNewTask = () => {
+export const addNewTask = async (callback) => {
   let taskForm = "";
 
   if (document.getElementById("task-form") !== null) {
@@ -149,6 +157,16 @@ export const addNewTask = () => {
     checklistObj[item.innerHTML.slice(2, item.innerHTML.length)] = false;
   }
   const newTask = new Task(...nodeArr, checklistObj, Date.now());
+
+  // new code
+
+  const taskID = await addToDatabase(newTask, "tasks", taskConverter);
+
+  protoTaskLibrary.addToLibrary(taskID, newTask);
+  protoTaskLibrary.show();
+  callback();
+
+  // old code
 
   taskLibrary.addToLibrary(newTask);
   taskLibrary.show();
@@ -205,11 +223,19 @@ export const addNewProject = async (callback) => {
   }
   const newProject = new Project(...nodeArr, tasks);
 
-  const projectID = await addProjectToDatabase(newProject);
+  // new code
+
+  const projectID = await addToDatabase(
+    newProject,
+    "projects",
+    projectConverter
+  );
 
   protoProjectLibrary.addToLibrary(projectID, newProject);
   protoProjectLibrary.show();
   callback();
+
+  // old code
 
   projectLibrary.addToLibrary(newProject);
   projectLibrary.show();
@@ -273,3 +299,5 @@ export const sortAlg = (() => {
     timeAsc,
   };
 })();
+
+export { populateAll };
