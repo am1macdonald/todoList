@@ -8,13 +8,18 @@ import {
   signInPopup,
   renderListToNav,
 } from "./displayControl.js";
-import { taskLibrary, projectLibrary } from "./libraryManagement.js";
+import {
+  taskLibrary,
+  projectLibrary,
+  populateAll,
+} from "./libraryManagement.js";
 import {
   userSignIn,
   getUser,
   addNewUser,
-  fetchUserDocs,
-  userIsSignedIn,
+  getCollection,
+  projectConverter,
+  taskConverter,
 } from "./firebase_files/firebase";
 
 renderStaticElements();
@@ -34,13 +39,15 @@ const disableButtons = (bool) => {
 
 disableButtons(true);
 
-const wrapUpSignIn = async (target) => {
-  target.remove();
-  disableButtons(false);
-  console.log(await fetchUserDocs());
-  console.log(userIsSignedIn());
+const callListRenderers = () => {
   renderListToNav(taskLibrary.show(), "task");
   renderListToNav(projectLibrary.show(), "project");
+};
+
+const wrapUpSignIn = (target) => {
+  target.remove();
+  disableButtons(false);
+  populateAll();
 };
 
 const signInCallback = async (target) => {
@@ -48,24 +55,23 @@ const signInCallback = async (target) => {
     await userSignIn();
     getUser();
     addNewUser();
+    const projectSnap = await getCollection("projects", projectConverter);
+    const taskSnap = await getCollection("tasks", taskConverter);
+    populateAll(taskSnap, projectSnap);
+    wrapUpSignIn(target);
   } catch (err) {
     console.error(err);
   }
-  wrapUpSignIn(target);
 };
 
 const localSessionCallback = (target) => {
   wrapUpSignIn(target);
+  callListRenderers();
 };
 
-// then...
-// renderlisttonav(tasklibrary.show(), "task");
-// renderlisttonav(projectlibrary.show(), "project");
-
-const popupRef = signInPopup(page, signInCallback, localSessionCallback, () =>
+signInPopup(page, signInCallback, localSessionCallback, () =>
   disableButtons(false)
 );
-console.log(popupRef);
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
