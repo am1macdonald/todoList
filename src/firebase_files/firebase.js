@@ -16,6 +16,7 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import Project from "../classes/projectClass";
+import Task from "../classes/taskClass";
 
 /* ----- Authentication ------ */
 
@@ -34,6 +35,7 @@ const provider = new GoogleAuthProvider();
 const getUser = async () => {
   const user = await auth.currentUser;
   console.log("Hello", user.displayName);
+  return auth.currentUser.uid;
 };
 
 const userIsSignedIn = () => {
@@ -97,44 +99,74 @@ const projectConverter = {
       ...project,
     };
   },
-  fromFirestore: (snapshot, options) => {
+  fromFirestore: (doc) => {
     const { title, description, dueDate, notes, tasks, identifier, complete } =
-      snapshot.data(options);
-    return new Project({
+      doc.data();
+    return new Project(
       title,
       description,
       dueDate,
       notes,
       tasks,
       identifier,
-      complete,
-    });
+      complete
+    );
   },
 };
 
-const addProjectToDatabase = async (obj) => {
+const taskConverter = {
+  toFirestore: (task) => {
+    return {
+      ...task,
+    };
+  },
+  fromFirestore: (doc) => {
+    const {
+      title,
+      description,
+      dueDate,
+      priority,
+      notes,
+      checklist,
+      identifier,
+      complete,
+    } = doc.data();
+    return new Task(
+      title,
+      description,
+      dueDate,
+      priority,
+      notes,
+      checklist,
+      identifier,
+      complete
+    );
+  },
+};
+const addToDatabase = async (obj, collectionName, converter) => {
   const result = await addDoc(
-    collection(db, `userData/${auth.currentUser.uid}/projects`),
-    projectConverter.toFirestore(obj)
+    collection(db, `userData/${auth.currentUser.uid}/${collectionName}`),
+    converter.toFirestore(obj)
   );
   console.log(result.id);
   return result.id;
 };
-const getProjectCollection = async () => {
-  const ref = getDocs(db, `userData/${uid}/projects`);
-};
 
-// getDocs(colRef)
-//   .then((snapshot) => {
-//     const books = [];
-//     snapshot.docs.forEach((doc) => {
-//       books.push({ ...doc.data(), id: doc.id });
-//     });
-//     console.log(books);
-//   })
-//   .catch((err) => {
-//     console.error(err);
-//   });
+const getCollection = async (collectionName, converter) => {
+  try {
+    const map = {};
+    const snap = await getDocs(
+      collection(db, `userData/${auth.currentUser.uid}/${collectionName}`)
+    );
+    snap.forEach((doc) => {
+      map[doc.id] = converter.fromFirestore(doc);
+      // console.log(doc.id, " => ", doc.data());
+    });
+    return map;
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 const addNewUser = async (obj) => {
   const { uid } = await auth.currentUser;
@@ -149,5 +181,8 @@ export {
   getUser,
   addNewUser,
   fetchUserDocs,
-  addProjectToDatabase,
+  addToDatabase,
+  getCollection,
+  projectConverter,
+  taskConverter,
 };
