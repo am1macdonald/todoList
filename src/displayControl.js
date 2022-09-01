@@ -281,12 +281,11 @@ const dynamicFormParts = (() => {
     submitButton.classList.add("form-button");
     submitButton.addEventListener("click", () => {
       if (parent.id === "task-buttons") {
-        addNewTask();
-        if (stateManager.getAdded()) {
+        addNewTask(() => {
           renderListToNav(taskLibrary.show(), "task");
           clearContent();
           stateManager.setAdded(false);
-        }
+        });
       } else if (parent.id === "project-buttons") {
         addNewProject(() => {
           renderListToNav(projectLibrary.show(), "project");
