@@ -2,21 +2,24 @@ const LibraryFactory = () => {
   const library = {};
 
   const show = () => {
-    console.log(library);
-    return library;
+    const items = [];
+    for (const item in library) {
+      items.push(library[item]);
+    }
+    return items;
   };
 
-  const addToLibrary = (itemId, item) => {
-    library[itemId] = item;
+  const add = (key, item) => {
+    library[key] = item;
   };
 
-  const removeFromLibrary = (itemId) => {
-    delete library[itemId];
+  const remove = (key) => {
+    delete library[key];
   };
 
   return {
-    addToLibrary,
-    removeFromLibrary,
+    add,
+    remove,
     show,
   };
 };

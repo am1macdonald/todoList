@@ -9,9 +9,9 @@ import {
   renderListToNav,
 } from "./displayControl.js";
 import {
-  taskLibrary,
-  projectLibrary,
   populateAll,
+  TaskLibrary,
+  ProjectLibrary,
 } from "./libraryManagement.js";
 import {
   userSignIn,
@@ -40,14 +40,13 @@ const disableButtons = (bool) => {
 disableButtons(true);
 
 const callListRenderers = () => {
-  renderListToNav(taskLibrary.show(), "task");
-  renderListToNav(projectLibrary.show(), "project");
+  renderListToNav(TaskLibrary.show(), "task");
+  renderListToNav(ProjectLibrary.show(), "project");
 };
 
 const wrapUpSignIn = (target) => {
   target.remove();
   disableButtons(false);
-  populateAll();
 };
 
 const signInCallback = async (target) => {
@@ -58,6 +57,7 @@ const signInCallback = async (target) => {
     const projectSnap = await getCollection("projects", projectConverter);
     const taskSnap = await getCollection("tasks", taskConverter);
     populateAll(taskSnap, projectSnap);
+    callListRenderers();
     wrapUpSignIn(target);
   } catch (err) {
     console.error(err);

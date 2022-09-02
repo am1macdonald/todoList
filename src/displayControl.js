@@ -3,8 +3,8 @@ import {
   addNewProject,
   addNewTask,
   stateManager,
-  taskLibrary,
-  projectLibrary,
+  TaskLibrary,
+  ProjectLibrary,
   sortAlg,
   editTask,
   editProject,
@@ -236,7 +236,7 @@ const dynamicFormParts = (() => {
     checkBox.type = "checkbox";
     const checkboxLabel = document.createElement("label");
 
-    const items = [...taskLibrary.show()];
+    const items = [...TaskLibrary.show()];
 
     sortAlg.timeAsc(items).forEach((item) => {
       const listItem = document.createElement("li");
@@ -282,13 +282,13 @@ const dynamicFormParts = (() => {
     submitButton.addEventListener("click", () => {
       if (parent.id === "task-buttons") {
         addNewTask(() => {
-          renderListToNav(taskLibrary.show(), "task");
+          renderListToNav(TaskLibrary.show(), "task");
           clearContent();
           stateManager.setAdded(false);
         });
       } else if (parent.id === "project-buttons") {
         addNewProject(() => {
-          renderListToNav(projectLibrary.show(), "project");
+          renderListToNav(ProjectLibrary.show(), "project");
           clearContent();
           stateManager.setAdded(false);
         });
@@ -517,7 +517,7 @@ const dynamicExplorerParts = (() => {
               const hiddenTaskList = document.createElement("ul");
               item[prop].forEach((task) => {
                 // gets the task from the task-library based on the task-ID
-                taskLibrary.show().forEach((obj) => {
+                TaskLibrary.show().forEach((obj) => {
                   if (obj.identifier.toString() === task) {
                     const listItem = document.createElement("li");
                     listItem.classList.add("hidden-list-item");
@@ -586,19 +586,19 @@ const dynamicExplorerParts = (() => {
       });
       completeButton.addEventListener("click", () => {
         item.markComplete();
-        taskLibrary.updateLocalStorage();
-        projectLibrary.updateLocalStorage();
+        // TaskLibrary.updateLocalStorage();
+        // ProjectLibrary.updateLocalStorage();
         hiddenDiv.classList.toggle("completed");
         completeButton.classList.toggle("complete-button-active");
       });
       removeButton.addEventListener("click", () => {
         if (confirm("Are you sure you want to remove?") === true) {
           if (item.constructor === Task) {
-            taskLibrary.removeFromLibrary(item);
-            renderListToNav(taskLibrary.show(), "task");
+            TaskLibrary.remove(item);
+            renderListToNav(TaskLibrary.show(), "task");
           } else if (item.constructor === Project) {
-            projectLibrary.removeFromLibrary(item);
-            renderListToNav(projectLibrary.show(), "project");
+            ProjectLibrary.removeFromLibrary(item);
+            renderListToNav(ProjectLibrary.show(), "project");
           }
           listItem.remove();
         }
@@ -620,10 +620,10 @@ const dynamicExplorerParts = (() => {
     const listContainer = document.getElementById("list-container");
     if (str === "task") {
       listContainer.removeChild(listContainer.childNodes[0]);
-      itemList(listContainer, taskLibrary.show());
+      itemList(listContainer, TaskLibrary.show());
     } else if (str === "project") {
       listContainer.removeChild(listContainer.childNodes[0]);
-      itemList(listContainer, projectLibrary.show());
+      itemList(listContainer, ProjectLibrary.show());
     }
   };
   const buttons = (parent) => {
@@ -724,7 +724,7 @@ const taskExplorer = () => {
   const listContainer = document.createElement("div");
   listContainer.id = "list-container";
   explorer.appendChild(listContainer);
-  dynamicExplorerParts.itemList(listContainer, taskLibrary.show());
+  dynamicExplorerParts.itemList(listContainer, TaskLibrary.show());
   dynamicExplorerParts.buttons(explorer);
 };
 // creating a form to make a new task
@@ -873,6 +873,7 @@ const clearContent = () => {
 
 // renders the five tasks or projects, that are due the soonest, to the navbar
 const renderListToNav = (library, target) => {
+  console.log(library);
   if (typeof target !== "string") {
     return;
   }
