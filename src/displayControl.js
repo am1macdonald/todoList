@@ -13,7 +13,7 @@ import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
 import Task from "./classes/taskClass.js";
 import Project from "./classes/projectClass.js";
-import { userSignOut } from "./firebase_files/firebase";
+import { removeDocument, userSignOut } from "./firebase_files/firebase";
 
 const content = document.getElementById("content");
 
@@ -562,6 +562,8 @@ const dynamicExplorerParts = (() => {
             break;
           case prop === "identifier":
             break;
+          case prop === "key":
+            break;
           default:
             console.error("unknown property");
         }
@@ -594,10 +596,12 @@ const dynamicExplorerParts = (() => {
       removeButton.addEventListener("click", () => {
         if (confirm("Are you sure you want to remove?") === true) {
           if (item.constructor === Task) {
-            TaskLibrary.remove(item);
+            removeDocument(item.key, "tasks");
+            TaskLibrary.remove(item.key);
             renderListToNav(TaskLibrary.show(), "task");
           } else if (item.constructor === Project) {
-            ProjectLibrary.removeFromLibrary(item);
+            removeDocument(item.key, "projects");
+            ProjectLibrary.remove(item);
             renderListToNav(ProjectLibrary.show(), "project");
           }
           listItem.remove();

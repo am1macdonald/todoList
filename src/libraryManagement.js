@@ -102,6 +102,8 @@ export const editTask = (obj) => {
   obj.edit(description, dueDate, priority, notes, checklistObj);
   // taskLibrary.updateLocalStorage();
 };
+
+
 export const addNewProject = async (callback) => {
   let projectForm = "";
 

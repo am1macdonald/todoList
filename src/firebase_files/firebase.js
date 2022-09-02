@@ -7,6 +7,7 @@ import {
   getDoc,
   addDoc,
   getDocs,
+  deleteDoc,
 } from "firebase/firestore";
 import getFirebaseConfig from "./firebase-config";
 import {
@@ -36,10 +37,6 @@ const getUser = async () => {
   const user = await auth.currentUser;
   console.log("Hello", user.displayName);
   return auth.currentUser.uid;
-};
-
-const userIsSignedIn = () => {
-  return !!auth.currentUser;
 };
 
 const userSignIn = async () => {
@@ -80,18 +77,6 @@ const userSignOut = async () => {
 /* ----- Database Manipulation ------ */
 
 const db = getFirestore(app);
-
-const fetchUserDocs = async () => {
-  const { uid } = await auth.currentUser;
-
-  const docRef = doc(db, "userData", uid);
-
-  const docSnap = await getDoc(docRef);
-
-  console.log(docSnap.data());
-
-  return docSnap.data();
-};
 
 const projectConverter = {
   toFirestore: (project) => {
@@ -143,6 +128,7 @@ const taskConverter = {
     );
   },
 };
+
 const addToDatabase = async (obj, collectionName, converter) => {
   const result = await addDoc(
     collection(db, `userData/${auth.currentUser.uid}/${collectionName}`),
@@ -168,6 +154,17 @@ const getCollection = async (collectionName, converter) => {
   }
 };
 
+const removeDocument = async (id, collection) => {
+  const itemRef = doc(db, `userData/${auth.currentUser.uid}/${collection}`, id);
+  console.log(getDoc(itemRef));
+  try {
+    const result = await deleteDoc(itemRef);
+    return result;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 const addNewUser = async (obj) => {
   const { uid } = await auth.currentUser;
 
@@ -177,12 +174,11 @@ const addNewUser = async (obj) => {
 export {
   userSignIn,
   userSignOut,
-  userIsSignedIn,
   getUser,
   addNewUser,
-  fetchUserDocs,
   addToDatabase,
   getCollection,
+  removeDocument,
   projectConverter,
   taskConverter,
 };

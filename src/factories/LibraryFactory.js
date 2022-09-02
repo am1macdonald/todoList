@@ -4,6 +4,7 @@ const LibraryFactory = () => {
   const show = () => {
     const items = [];
     for (const item in library) {
+      library[item].key = item;
       items.push(library[item]);
     }
     return items;
