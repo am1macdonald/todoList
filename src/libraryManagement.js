@@ -9,120 +9,41 @@ import {
   taskConverter,
 } from "./firebase_files/firebase.js";
 
-const protoTaskLibrary = LibraryFactory();
-const protoProjectLibrary = LibraryFactory();
+const TaskLibrary = LibraryFactory();
+const ProjectLibrary = LibraryFactory();
 
 const populateLibrary = (libraryName, data) => {
   for (const key in data) {
-    console.log(data[key]);
+    libraryName.add(key, data[key]);
   }
 };
 
 const populateAll = (taskData, projectData) => {
-  populateLibrary(protoTaskLibrary, taskData);
-  populateLibrary(protoProjectLibrary, projectData);
+  populateLibrary(TaskLibrary, taskData);
+  populateLibrary(ProjectLibrary, projectData);
 };
 
-const populateFromLocalStorage = (arr, libType) => {
-  if (window.localStorage.getItem(`${libType}-library`)) {
-    arr = JSON.parse(window.localStorage.getItem(`${libType}-library`)).map(
-      (item) => {
-        if (libType === "Task") {
-          console.log("task");
-          return new Task({ ...item });
-        } else if (libType === "Project") {
-          console.log("project");
-          return new Task({ ...item });
-        } else return null;
-      }
-    );
-  }
-};
+// const populateFromLocalStorage = (arr, libType) => {
+//   if (window.localStorage.getItem(`${libType}-library`)) {
+//     arr = JSON.parse(window.localStorage.getItem(`${libType}-library`)).map(
+//       (item) => {
+//         if (libType === "Task") {
+//           console.log("task");
+//           return new Task({ ...item });
+//         } else if (libType === "Project") {
+//           console.log("project");
+//           return new Task({ ...item });
+//         } else return null;
+//       }
+//     );
+//   }
+// };
 
-const updateLocalStorage = (arr) => {
-  window.localStorage.setItem("task-library", JSON.stringify(arr));
-};
+// const updateLocalStorage = (arr) => {
+//   window.localStorage.setItem("task-library", JSON.stringify(arr));
+// };
 
-export const taskLibrary = (() => {
-  let arr = [];
-  if (window.localStorage.getItem("task-library")) {
-    arr = JSON.parse(window.localStorage.getItem("task-library")).map(
-      (task) => {
-        return new Task(
-          task.title,
-          task.description,
-          task.dueDate,
-          task.priority,
-          task.notes,
-          task.checklist,
-          task.identifier,
-          task.complete
-        );
-      }
-    );
-  }
-  const show = () => arr;
 
-  const addToLibrary = (task) => {
-    arr.push(task);
-    arr[arr.length - 1].summary();
-    updateLocalStorage(arr);
-  };
-  const removeFromLibrary = (task) => {
-    arr = arr.filter((storedTask) => {
-      if (storedTask.identifier !== task.identifier) {
-        return task;
-      } else return false;
-    });
-    updateLocalStorage(arr);
-  };
-
-  return {
-    addToLibrary,
-    removeFromLibrary,
-    show,
-    updateLocalStorage,
-  };
-})();
-
-export const projectLibrary = (() => {
-  let arr = [];
-  // if (window.localStorage.getItem("project-library")) {
-  //   arr = JSON.parse(window.localStorage.getItem("project-library")).map(
-  //     (project) => {
-  //       return new Project(
-  //         project.title,
-  //         project.description,
-  //         project.dueDate,
-  //         project.notes,
-  //         project.tasks,
-  //         project.identifier,
-  //         project.complete
-  //       );
-  //     }
-  //   );
-  // }
-  const show = () => arr;
-  const addToLibrary = (project) => {
-    arr.push(project);
-    arr[arr.length - 1].summary();
-    updateLocalStorage(arr);
-  };
-  const removeFromLibrary = (project) => {
-    arr = arr.filter((storedProject) => {
-      if (storedProject.identifier !== project.identifier) {
-        return project;
-      } else return false;
-    });
-    updateLocalStorage(arr);
-  };
-  return {
-    addToLibrary,
-    removeFromLibrary,
-    show,
-    updateLocalStorage,
-  };
-})();
 export const addNewTask = async (callback) => {
   let taskForm = "";
 
@@ -162,16 +83,11 @@ export const addNewTask = async (callback) => {
 
   const taskID = await addToDatabase(newTask, "tasks", taskConverter);
 
-  protoTaskLibrary.addToLibrary(taskID, newTask);
-  protoTaskLibrary.show();
+  TaskLibrary.add(taskID, newTask);
+  TaskLibrary.show();
   callback();
-
-  // old code
-
-  taskLibrary.addToLibrary(newTask);
-  taskLibrary.show();
-  stateManager.setAdded(true);
 };
+
 export const editTask = (obj) => {
   const description = document.getElementById("description").value;
   const dueDate = document.getElementById("due-date").value;
@@ -184,7 +100,7 @@ export const editTask = (obj) => {
   }
 
   obj.edit(description, dueDate, priority, notes, checklistObj);
-  taskLibrary.updateLocalStorage();
+  // taskLibrary.updateLocalStorage();
 };
 export const addNewProject = async (callback) => {
   let projectForm = "";
@@ -231,16 +147,11 @@ export const addNewProject = async (callback) => {
     projectConverter
   );
 
-  protoProjectLibrary.addToLibrary(projectID, newProject);
-  protoProjectLibrary.show();
+  ProjectLibrary.add(projectID, newProject);
+  ProjectLibrary.show();
   callback();
-
-  // old code
-
-  projectLibrary.addToLibrary(newProject);
-  projectLibrary.show();
-  stateManager.setAdded(true);
 };
+
 export const editProject = (obj) => {
   const description = document.getElementById("description").value;
   const dueDate = document.getElementById("due-date").value;
@@ -253,7 +164,7 @@ export const editProject = (obj) => {
       return item.firstChild.id;
     });
   obj.edit(description, dueDate, notes, tasks);
-  projectLibrary.updateLocalStorage();
+  // projectLibrary.updateLocalStorage();
 };
 export const stateManager = (() => {
   // state for adding things to the libraries
@@ -300,4 +211,4 @@ export const sortAlg = (() => {
   };
 })();
 
-export { populateAll };
+export { populateAll, ProjectLibrary, TaskLibrary };
