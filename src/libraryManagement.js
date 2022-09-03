@@ -1,10 +1,12 @@
 /* eslint-disable curly */
 import { compareAsc, parseISO } from "date-fns";
+import uniqid from "uniqid";
 import Project from "./classes/projectClass.js";
 import Task from "./classes/taskClass.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
 import {
   addToDatabase,
+  getUser,
   projectConverter,
   taskConverter,
   updateDocument,
@@ -81,9 +83,13 @@ export const addNewTask = async (callback) => {
 
   // new code
 
-  const taskID = await addToDatabase(newTask, "tasks", taskConverter);
+  if (getUser()) {
+    const taskID = await addToDatabase(newTask, "tasks", taskConverter);
 
-  TaskLibrary.add(taskID, newTask);
+    TaskLibrary.add(taskID, newTask);
+  } else {
+    TaskLibrary.add(uniqid(), newTask);
+  }
   TaskLibrary.show();
   callback();
 };
@@ -143,13 +149,17 @@ export const addNewProject = async (callback) => {
 
   // new code
 
-  const projectID = await addToDatabase(
-    newProject,
-    "projects",
-    projectConverter
-  );
+  if (getUser()) {
+    const projectID = await addToDatabase(
+      newProject,
+      "projects",
+      projectConverter
+    );
 
-  ProjectLibrary.add(projectID, newProject);
+    ProjectLibrary.add(projectID, newProject);
+  } else {
+    ProjectLibrary.add(uniqid(), newProject);
+  }
   ProjectLibrary.show();
   callback();
 };
