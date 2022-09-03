@@ -7,6 +7,7 @@ import {
   addToDatabase,
   projectConverter,
   taskConverter,
+  updateDocument,
 } from "./firebase_files/firebase.js";
 
 const TaskLibrary = LibraryFactory();
@@ -42,7 +43,6 @@ const populateAll = (taskData, projectData) => {
 // const updateLocalStorage = (arr) => {
 //   window.localStorage.setItem("task-library", JSON.stringify(arr));
 // };
-
 
 export const addNewTask = async (callback) => {
   let taskForm = "";
@@ -100,9 +100,9 @@ export const editTask = (obj) => {
   }
 
   obj.edit(description, dueDate, priority, notes, checklistObj);
+  updateDocument(obj, "tasks", taskConverter);
   // taskLibrary.updateLocalStorage();
 };
-
 
 export const addNewProject = async (callback) => {
   let projectForm = "";
@@ -167,7 +167,9 @@ export const editProject = (obj) => {
     });
   obj.edit(description, dueDate, notes, tasks);
   // projectLibrary.updateLocalStorage();
+  updateDocument(obj, "projects", projectConverter);
 };
+
 export const stateManager = (() => {
   // state for adding things to the libraries
   let _added = false;

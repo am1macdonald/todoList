@@ -191,6 +191,7 @@ export {
   addToDatabase,
   getCollection,
   removeDocument,
+  updateDocument,
   projectConverter,
   taskConverter,
 };
