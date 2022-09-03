@@ -138,6 +138,18 @@ const addToDatabase = async (obj, collectionName, converter) => {
   return result.id;
 };
 
+const updateDocument = async (obj, collection, converter) => {
+  const itemRef = doc(
+    db,
+    `userData/${auth.currentUser.uid}/${collection}`,
+    obj.key
+  );
+
+  const result = await setDoc(itemRef, converter.toFirestore(obj));
+
+  return result;
+};
+
 const getCollection = async (collectionName, converter) => {
   try {
     const map = {};
