@@ -48,6 +48,7 @@
   "dependencies": {
     "date-fns": "^2.29.2",
     "firebase": "^9.9.4",
-    "simplebar": "^5.3.8"
+    "simplebar": "^5.3.8",
+    "uniqid": "^5.4.0"
   }
 }
