@@ -13,7 +13,13 @@ import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
 import Task from "./classes/taskClass.js";
 import Project from "./classes/projectClass.js";
-import { removeDocument, userSignOut } from "./firebase_files/firebase";
+import {
+  projectConverter,
+  removeDocument,
+  taskConverter,
+  updateDocument,
+  userSignOut,
+} from "./firebase_files/firebase";
 
 const content = document.getElementById("content");
 
@@ -588,6 +594,12 @@ const dynamicExplorerParts = (() => {
       });
       completeButton.addEventListener("click", () => {
         item.markComplete();
+        // eslint-disable-next-line no-unused-expressions
+        item.constructor === Task
+          ? updateDocument(item, "tasks", taskConverter)
+          : item.constructor === Project
+          ? updateDocument(item, "projects", projectConverter)
+          : null;
         // TaskLibrary.updateLocalStorage();
         // ProjectLibrary.updateLocalStorage();
         hiddenDiv.classList.toggle("completed");
