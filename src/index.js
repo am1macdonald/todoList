@@ -12,6 +12,9 @@ import {
   populateAll,
   TaskLibrary,
   ProjectLibrary,
+  populateFromLocalStorage,
+  taskFromJSON,
+  projectFromJSON,
 } from "./libraryManagement.js";
 import {
   userSignIn,
@@ -66,6 +69,8 @@ const signInCallback = async (target) => {
 
 const localSessionCallback = (target) => {
   wrapUpSignIn(target);
+  populateFromLocalStorage(TaskLibrary, "task", taskFromJSON);
+  populateFromLocalStorage(ProjectLibrary, "project", projectFromJSON);
   callListRenderers();
 };
 
