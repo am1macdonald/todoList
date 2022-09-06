@@ -8,12 +8,14 @@ import {
   sortAlg,
   editTask,
   editProject,
+  updateLocalStorage,
 } from "./libraryManagement.js";
 import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
 import Task from "./classes/taskClass.js";
 import Project from "./classes/projectClass.js";
 import {
+  getUser,
   projectConverter,
   removeDocument,
   taskConverter,
@@ -85,8 +87,6 @@ const renderStaticElements = () => {
     nav.appendChild(signOutButton);
 
     page.prepend(nav);
-    // renderlisttonav(tasklibrary.show(), "task");
-    // renderlisttonav(projectlibrary.show(), "project");
   })();
 };
 
@@ -494,7 +494,7 @@ const dynamicExplorerParts = (() => {
             break;
           case prop === "notes":
             if (item[prop].length > 0) {
-              propListItem.innerHTML = `<u>Notes:</u> <br> <br> s${item[prop]}`;
+              propListItem.innerHTML = `<u>Notes:</u> <br> <br> ${item[prop]}`;
               hiddenContentList.appendChild(propListItem);
             } else {
               propListItem = undefined;
@@ -594,26 +594,33 @@ const dynamicExplorerParts = (() => {
       });
       completeButton.addEventListener("click", () => {
         item.markComplete();
-        // eslint-disable-next-line no-unused-expressions
-        item.constructor === Task
-          ? updateDocument(item, "tasks", taskConverter)
-          : item.constructor === Project
-          ? updateDocument(item, "projects", projectConverter)
-          : null;
-        // TaskLibrary.updateLocalStorage();
-        // ProjectLibrary.updateLocalStorage();
+        if (getUser()) {
+          // eslint-disable-next-line no-unused-expressions
+          item.constructor === Task
+            ? updateDocument(item, "tasks", taskConverter)
+            : item.constructor === Project
+            ? updateDocument(item, "projects", projectConverter)
+            : null;
+        } else {
+          updateLocalStorage(TaskLibrary.get(), "task");
+          updateLocalStorage(ProjectLibrary.get(), "project");
+        }
         hiddenDiv.classList.toggle("completed");
         completeButton.classList.toggle("complete-button-active");
       });
       removeButton.addEventListener("click", () => {
         if (confirm("Are you sure you want to remove?") === true) {
           if (item.constructor === Task) {
-            removeDocument(item.key, "tasks");
             TaskLibrary.remove(item.key);
+            getUser()
+              ? removeDocument(item.key, "tasks")
+              : updateLocalStorage(TaskLibrary.get(), "task");
             renderListToNav(TaskLibrary.show(), "task");
           } else if (item.constructor === Project) {
-            removeDocument(item.key, "projects");
-            ProjectLibrary.remove(item);
+            ProjectLibrary.remove(item.key);
+            getUser()
+              ? removeDocument(item.key, "projects")
+              : updateLocalStorage(ProjectLibrary.get(), "project");
             renderListToNav(ProjectLibrary.show(), "project");
           }
           listItem.remove();
