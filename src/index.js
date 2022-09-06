@@ -74,9 +74,11 @@ const localSessionCallback = (target) => {
   callListRenderers();
 };
 
-signInPopup(page, signInCallback, localSessionCallback, () =>
-  disableButtons(false)
-);
+if (!getUser()) {
+  signInPopup(page, signInCallback, localSessionCallback, () =>
+    disableButtons(false)
+  );
+}
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
