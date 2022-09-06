@@ -26,25 +26,57 @@ const populateAll = (taskData, projectData) => {
   populateLibrary(ProjectLibrary, projectData);
 };
 
-// const populateFromLocalStorage = (arr, libType) => {
-//   if (window.localStorage.getItem(`${libType}-library`)) {
-//     arr = JSON.parse(window.localStorage.getItem(`${libType}-library`)).map(
-//       (item) => {
-//         if (libType === "Task") {
-//           console.log("task");
-//           return new Task({ ...item });
-//         } else if (libType === "Project") {
-//           console.log("project");
-//           return new Task({ ...item });
-//         } else return null;
-//       }
-//     );
-//   }
-// };
+const projectFromJSON = (item) => {
+  const { title, description, dueDate, notes, tasks, identifier, complete } =
+    item;
+  return new Project(
+    title,
+    description,
+    dueDate,
+    notes,
+    tasks,
+    identifier,
+    complete
+  );
+};
 
-// const updateLocalStorage = (arr) => {
-//   window.localStorage.setItem("task-library", JSON.stringify(arr));
-// };
+const taskFromJSON = (item) => {
+  const {
+    title,
+    description,
+    dueDate,
+    priority,
+    notes,
+    checklist,
+    identifier,
+    complete,
+  } = item;
+  return new Task(
+    title,
+    description,
+    dueDate,
+    priority,
+    notes,
+    checklist,
+    identifier,
+    complete
+  );
+};
+
+const populateFromLocalStorage = (library, libraryType, converter) => {
+  if (window.localStorage.getItem(`${libraryType}-library`)) {
+    const storageMap = JSON.parse(
+      window.localStorage.getItem(`${libraryType}-library`)
+    );
+
+    for (const item in storageMap) {
+      library.add(item, converter(storageMap[item]));
+    }
+  }
+};
+const updateLocalStorage = (map, libraryType) => {
+  window.localStorage.setItem(`${libraryType}-library`, JSON.stringify(map));
+};
 
 export const addNewTask = async (callback) => {
   let taskForm = "";
@@ -83,12 +115,12 @@ export const addNewTask = async (callback) => {
 
   // new code
 
-  if (getUser()) {
+  if (await getUser()) {
     const taskID = await addToDatabase(newTask, "tasks", taskConverter);
-
     TaskLibrary.add(taskID, newTask);
   } else {
     TaskLibrary.add(uniqid(), newTask);
+    updateLocalStorage(TaskLibrary.get(), "task");
   }
   TaskLibrary.show();
   callback();
@@ -107,7 +139,7 @@ export const editTask = (obj) => {
 
   obj.edit(description, dueDate, priority, notes, checklistObj);
   updateDocument(obj, "tasks", taskConverter);
-  // taskLibrary.updateLocalStorage();
+  updateLocalStorage(TaskLibrary.get(), "task");
 };
 
 export const addNewProject = async (callback) => {
@@ -147,9 +179,7 @@ export const addNewProject = async (callback) => {
   }
   const newProject = new Project(...nodeArr, tasks);
 
-  // new code
-
-  if (getUser()) {
+  if (await getUser()) {
     const projectID = await addToDatabase(
       newProject,
       "projects",
@@ -159,12 +189,13 @@ export const addNewProject = async (callback) => {
     ProjectLibrary.add(projectID, newProject);
   } else {
     ProjectLibrary.add(uniqid(), newProject);
+    updateLocalStorage(ProjectLibrary.get(), "project");
   }
-  ProjectLibrary.show();
+  ProjectLibrary.show(ProjectLibrary.show(), "project");
   callback();
 };
 
-export const editProject = (obj) => {
+export const editProject = async (obj) => {
   const description = document.getElementById("description").value;
   const dueDate = document.getElementById("due-date").value;
   const notes = document.getElementById("notes").value;
@@ -176,8 +207,11 @@ export const editProject = (obj) => {
       return item.firstChild.id;
     });
   obj.edit(description, dueDate, notes, tasks);
-  // projectLibrary.updateLocalStorage();
-  updateDocument(obj, "projects", projectConverter);
+  if (await getUser) {
+    updateDocument(obj, "projects", projectConverter);
+  } else {
+    updateLocalStorage(ProjectLibrary.get(), "project");
+  }
 };
 
 export const stateManager = (() => {
@@ -225,4 +259,11 @@ export const sortAlg = (() => {
   };
 })();
 
-export { populateAll, ProjectLibrary, TaskLibrary };
+export {
+  populateAll,
+  ProjectLibrary,
+  TaskLibrary,
+  populateFromLocalStorage,
+  taskFromJSON,
+  projectFromJSON,
+};
