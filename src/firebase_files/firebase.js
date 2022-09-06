@@ -33,15 +33,8 @@ auth.onAuthStateChanged((user) => {
 
 const provider = new GoogleAuthProvider();
 
-const getUser = async () => {
-  try {
-    await auth.currentUser;
-    console.log(`Hello, ${auth.currentUser.uid}`);
-    return auth.currentUser.uid;
-  } catch (error) {
-    // console.error(error);
-    return null;
-  }
+const getUser = () => {
+  return auth.currentUser;
 };
 
 const userSignIn = async () => {

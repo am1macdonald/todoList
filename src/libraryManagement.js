@@ -115,7 +115,7 @@ export const addNewTask = async (callback) => {
 
   // new code
 
-  if (await getUser()) {
+  if (getUser()) {
     const taskID = await addToDatabase(newTask, "tasks", taskConverter);
     TaskLibrary.add(taskID, newTask);
   } else {
@@ -179,7 +179,7 @@ export const addNewProject = async (callback) => {
   }
   const newProject = new Project(...nodeArr, tasks);
 
-  if (await getUser()) {
+  if (getUser()) {
     const projectID = await addToDatabase(
       newProject,
       "projects",
@@ -207,7 +207,7 @@ export const editProject = async (obj) => {
       return item.firstChild.id;
     });
   obj.edit(description, dueDate, notes, tasks);
-  if (await getUser) {
+  if (getUser()) {
     updateDocument(obj, "projects", projectConverter);
   } else {
     updateLocalStorage(ProjectLibrary.get(), "project");
@@ -266,4 +266,5 @@ export {
   populateFromLocalStorage,
   taskFromJSON,
   projectFromJSON,
+  updateLocalStorage,
 };
