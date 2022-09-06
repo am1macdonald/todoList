@@ -10,6 +10,8 @@ const LibraryFactory = () => {
     return items;
   };
 
+  const get = () => library;
+
   const add = (key, item) => {
     library[key] = item;
   };
@@ -22,6 +24,7 @@ const LibraryFactory = () => {
     add,
     remove,
     show,
+    get,
   };
 };
 
