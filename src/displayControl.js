@@ -539,6 +539,11 @@ const dynamicExplorerParts = (() => {
                     // updates the tasks 'complete' property when the box is checked
                     taskItem.addEventListener("click", () => {
                       obj.markComplete();
+                      if (getUser()) {
+                        updateDocument(obj, "tasks", taskConverter);
+                      } else {
+                        updateLocalStorage(TaskLibrary.get(), "task");
+                      }
                     });
                     const taskLabel = document.createElement("label");
                     taskLabel.setAttribute("for", obj.title);
