@@ -8,7 +8,7 @@ My to-do list, simply-named "Do.", is a lightweight way to keep track of project
 ## Technologies
 "Do." was built with nothing but Vanilla JavaScript, some HTML, CSS, and some quality of life tools. As a new developer, deepening my understanding of the fundamentals is my greatest focus.
 ### Tools
-This project relies on Webpack for bundling. Webpack allows me to break my code down into more concise modules and have my dependencies managed for me.  This being my second time using Webpack; I made a departure from the Webpack tutorials and utilized the command line tools for setup.
+This project relies on Webpack for bundling. Webpack allows me to break my code down into more concise modules. The Webpack-cli tools were utilized for setup.
 ### Packages / Dependencies
 I did include a couple of Node packages in this project for quality of life. These are:
 * [date-fns](https://www.npmjs.com/package/date-fns)
@@ -16,7 +16,7 @@ I did include a couple of Node packages in this project for quality of life. The
 ## Design Patterns and Techniques
 Some of the new strategies used to complete this project are:
 **Object Oriented Programming Principles**  
-Used to create project & task Classes. Modifications to each item were handled by methods withing their respective classes.
+Used to create project & task Classes. Modifications to each item were handled by methods within their respective classes.
 
 ## Challenges
 This project met me with some challenges I had not faced before. These include:
