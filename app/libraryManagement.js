@@ -4,13 +4,6 @@ import uniqid from "uniqid";
 import Project from "./classes/projectClass.js";
 import Task from "./classes/taskClass.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
-import {
-  addToDatabase,
-  getUser,
-  projectConverter,
-  taskConverter,
-  updateDocument,
-} from "./firebase_files/firebase.js";
 
 const TaskLibrary = LibraryFactory();
 const ProjectLibrary = LibraryFactory();
