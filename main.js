@@ -1,5 +1,5 @@
-import "./stylesheets/reset.css";
-import "./stylesheets/style.css";
+import "./app/stylesheets/reset.css";
+import "./app/stylesheets/style.css";
 import {
   projectCreationMenu,
   renderBigDate,
@@ -7,7 +7,7 @@ import {
   taskCreationMenu,
   signInPopup,
   renderListToNav,
-} from "./displayControl.js";
+} from "./app/displayControl.js";
 import {
   populateAll,
   TaskLibrary,
@@ -15,15 +15,7 @@ import {
   populateFromLocalStorage,
   taskFromJSON,
   projectFromJSON,
-} from "./libraryManagement.js";
-import {
-  userSignIn,
-  getUser,
-  addNewUser,
-  getCollection,
-  projectConverter,
-  taskConverter,
-} from "./firebase_files/firebase";
+} from "./app/libraryManagement.js";
 
 renderStaticElements();
 
@@ -74,11 +66,9 @@ const localSessionCallback = (target) => {
   callListRenderers();
 };
 
-if (!getUser()) {
-  signInPopup(page, signInCallback, localSessionCallback, () =>
+  signInPopup(page, () => undefined, localSessionCallback, () =>
     disableButtons(false)
   );
-}
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {

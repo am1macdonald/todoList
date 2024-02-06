@@ -14,14 +14,6 @@ import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
 import Task from "./classes/taskClass.js";
 import Project from "./classes/projectClass.js";
-import {
-  getUser,
-  projectConverter,
-  removeDocument,
-  taskConverter,
-  updateDocument,
-  userSignOut,
-} from "./firebase_files/firebase";
 
 const content = document.getElementById("content");
 
@@ -962,6 +954,7 @@ const signInPopup = (parent, signIn, localSession, enableButtons) => {
   signInButton.insertAdjacentText("afterbegin", "sign in");
   signInButton.id = "sign-in-button";
   signInButton.classList.add("styled-button");
+  signInButton.disabled = true;
 
   signInButton.addEventListener("click", () => signIn(pageSplash));
 
