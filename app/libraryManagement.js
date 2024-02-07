@@ -4,13 +4,6 @@ import uniqid from "uniqid";
 import Project from "./classes/projectClass.js";
 import Task from "./classes/taskClass.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
-import {
-  addToDatabase,
-  getUser,
-  projectConverter,
-  taskConverter,
-  updateDocument,
-} from "./firebase_files/firebase.js";
 
 const TaskLibrary = LibraryFactory();
 const ProjectLibrary = LibraryFactory();
@@ -113,15 +106,13 @@ export const addNewTask = async (callback) => {
   }
   const newTask = new Task(...nodeArr, checklistObj, Date.now());
 
-  // new code
-
-  if (getUser()) {
-    const taskID = await addToDatabase(newTask, "tasks", taskConverter);
-    TaskLibrary.add(taskID, newTask);
-  } else {
+  // if (getUser()) {
+  //   const taskID = await addToDatabase(newTask, "tasks", taskConverter);
+  //   TaskLibrary.add(taskID, newTask);
+  // } else {
     TaskLibrary.add(uniqid(), newTask);
     updateLocalStorage(TaskLibrary.get(), "task");
-  }
+  // }
   TaskLibrary.show();
   callback();
 };
@@ -179,18 +170,18 @@ export const addNewProject = async (callback) => {
   }
   const newProject = new Project(...nodeArr, tasks);
 
-  if (getUser()) {
-    const projectID = await addToDatabase(
-      newProject,
-      "projects",
-      projectConverter
-    );
-
-    ProjectLibrary.add(projectID, newProject);
-  } else {
+  // if (getUser()) {
+  //   const projectID = await addToDatabase(
+  //     newProject,
+  //     "projects",
+  //     projectConverter
+  //   );
+  //
+  //   ProjectLibrary.add(projectID, newProject);
+  // } else {
     ProjectLibrary.add(uniqid(), newProject);
     updateLocalStorage(ProjectLibrary.get(), "project");
-  }
+  // }
   ProjectLibrary.show(ProjectLibrary.show(), "project");
   callback();
 };
@@ -207,11 +198,12 @@ export const editProject = async (obj) => {
       return item.firstChild.id;
     });
   obj.edit(description, dueDate, notes, tasks);
-  if (getUser()) {
-    updateDocument(obj, "projects", projectConverter);
-  } else {
+  // TODO: Fix
+  // if (getUser()) {
+  //   updateDocument(obj, "projects", projectConverter);
+  // } else {
     updateLocalStorage(ProjectLibrary.get(), "project");
-  }
+  // }
 };
 
 export const stateManager = (() => {

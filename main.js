@@ -1,5 +1,5 @@
-import "./stylesheets/reset.css";
-import "./stylesheets/style.css";
+import "./app/stylesheets/reset.css";
+import "./app/stylesheets/style.css";
 import {
   projectCreationMenu,
   renderBigDate,
@@ -7,7 +7,7 @@ import {
   taskCreationMenu,
   signInPopup,
   renderListToNav,
-} from "./displayControl.js";
+} from "./app/displayControl.js";
 import {
   populateAll,
   TaskLibrary,
@@ -15,15 +15,7 @@ import {
   populateFromLocalStorage,
   taskFromJSON,
   projectFromJSON,
-} from "./libraryManagement.js";
-import {
-  userSignIn,
-  getUser,
-  addNewUser,
-  getCollection,
-  projectConverter,
-  taskConverter,
-} from "./firebase_files/firebase";
+} from "./app/libraryManagement.js";
 
 renderStaticElements();
 
@@ -33,6 +25,7 @@ const content = document.getElementById("content");
 const page = document.getElementById("page");
 const clock = document.getElementById("date-hero");
 const allButtons = document.querySelectorAll("button");
+const authEnabled = false;
 
 const disableButtons = (bool) => {
   allButtons.forEach((button) => {
@@ -67,17 +60,25 @@ const signInCallback = async (target) => {
   }
 };
 
+/**
+ *  @param {HTMLElement} target
+ */
 const localSessionCallback = (target) => {
-  wrapUpSignIn(target);
+  if (target) {
+    wrapUpSignIn(target);
+  }
   populateFromLocalStorage(TaskLibrary, "task", taskFromJSON);
   populateFromLocalStorage(ProjectLibrary, "project", projectFromJSON);
   callListRenderers();
 };
 
-if (!getUser()) {
-  signInPopup(page, signInCallback, localSessionCallback, () =>
+if (authEnabled) {
+  signInPopup(page, () => undefined, localSessionCallback, () =>
     disableButtons(false)
   );
+} else {
+  localSessionCallback(undefined);
+  disableButtons(false);
 }
 
 // Observer puts the clock back up when the content is empty && setsState to false.
