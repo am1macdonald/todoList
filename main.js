@@ -25,6 +25,7 @@ const content = document.getElementById("content");
 const page = document.getElementById("page");
 const clock = document.getElementById("date-hero");
 const allButtons = document.querySelectorAll("button");
+const authEnabled = false;
 
 const disableButtons = (bool) => {
   allButtons.forEach((button) => {
@@ -59,16 +60,26 @@ const signInCallback = async (target) => {
   }
 };
 
+/**
+ *  @param {HTMLElement} target
+ */
 const localSessionCallback = (target) => {
-  wrapUpSignIn(target);
+  if (target) {
+    wrapUpSignIn(target);
+  }
   populateFromLocalStorage(TaskLibrary, "task", taskFromJSON);
   populateFromLocalStorage(ProjectLibrary, "project", projectFromJSON);
   callListRenderers();
 };
 
+if (authEnabled) {
   signInPopup(page, () => undefined, localSessionCallback, () =>
     disableButtons(false)
   );
+} else {
+  localSessionCallback(undefined);
+  disableButtons(false);
+}
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {

@@ -8,7 +8,7 @@ import {
   sortAlg,
   editTask,
   editProject,
-  updateLocalStorage,
+  updateLocalStorage
 } from "./libraryManagement.js";
 import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
@@ -58,7 +58,7 @@ const renderStaticElements = () => {
     signOutButton.classList.add("styled-button");
 
     signOutButton.addEventListener("click", async () => {
-      await userSignOut();
+      // await userSignOut();
       location.reload();
     });
 
@@ -180,7 +180,7 @@ const dynamicFormParts = (() => {
     removeItem.innerHTML = "remove";
     removeItem.classList.add("styled-button");
     removeItem.classList.add("form-button");
-    addItem.addEventListener("click", function (e) {
+    addItem.addEventListener("click", function(e) {
       e.preventDefault();
       if (textInput.value.length > 0) {
         const listItem = document.createElement("li");
@@ -191,7 +191,7 @@ const dynamicFormParts = (() => {
         listItem.scrollIntoView();
       }
     });
-    removeItem.addEventListener("click", function (e) {
+    removeItem.addEventListener("click", function(e) {
       e.preventDefault();
       if (simpleBar.getContentElement().childElementCount > 0) {
         simpleBar
@@ -341,7 +341,7 @@ const dynamicFormParts = (() => {
     newTasklist,
     submitButton,
     saveButton,
-    cancelButton,
+    cancelButton
   };
 })();
 
@@ -424,7 +424,7 @@ const dynamicExplorerParts = (() => {
 
       collapsible.innerHTML = title;
 
-      collapsible.addEventListener("click", function () {
+      collapsible.addEventListener("click", function() {
         this.classList.toggle("active");
         const hiddenDiv = this.nextElementSibling;
         if (hiddenDiv.style.display === "grid") {
@@ -531,11 +531,12 @@ const dynamicExplorerParts = (() => {
                     // updates the tasks 'complete' property when the box is checked
                     taskItem.addEventListener("click", () => {
                       obj.markComplete();
-                      if (getUser()) {
-                        updateDocument(obj, "tasks", taskConverter);
-                      } else {
-                        updateLocalStorage(TaskLibrary.get(), "task");
-                      }
+                      // TODO: Fix
+                      // if (getUser()) {
+                      //   updateDocument(obj, "tasks", taskConverter);
+                      // } else {
+                      updateLocalStorage(TaskLibrary.get(), "task");
+                      // }
                     });
                     const taskLabel = document.createElement("label");
                     taskLabel.setAttribute("for", obj.title);
@@ -568,7 +569,7 @@ const dynamicExplorerParts = (() => {
           case prop === "key":
             break;
           default:
-            console.error("unknown property");
+            console.error("unknown property", prop);
         }
       }
 
@@ -591,17 +592,18 @@ const dynamicExplorerParts = (() => {
       });
       completeButton.addEventListener("click", () => {
         item.markComplete();
-        if (getUser()) {
-          // eslint-disable-next-line no-unused-expressions
-          item.constructor === Task
-            ? updateDocument(item, "tasks", taskConverter)
-            : item.constructor === Project
-            ? updateDocument(item, "projects", projectConverter)
-            : null;
-        } else {
-          updateLocalStorage(TaskLibrary.get(), "task");
-          updateLocalStorage(ProjectLibrary.get(), "project");
-        }
+        // TODO: Fix
+        // if (getUser()) {
+        //   // eslint-disable-next-line no-unused-expressions
+        //   item.constructor === Task
+        //     ? updateDocument(item, "tasks", taskConverter)
+        //     : item.constructor === Project
+        //     ? updateDocument(item, "projects", projectConverter)
+        //     : null;
+        // } else {
+        updateLocalStorage(TaskLibrary.get(), "task");
+        updateLocalStorage(ProjectLibrary.get(), "project");
+        // }
         hiddenDiv.classList.toggle("completed");
         completeButton.classList.toggle("complete-button-active");
       });
@@ -609,15 +611,19 @@ const dynamicExplorerParts = (() => {
         if (confirm("Are you sure you want to remove?") === true) {
           if (item.constructor === Task) {
             TaskLibrary.remove(item.key);
-            getUser()
-              ? removeDocument(item.key, "tasks")
-              : updateLocalStorage(TaskLibrary.get(), "task");
+            // TODO: Fix
+            // getUser()
+            //   ? removeDocument(item.key, "tasks")
+            //   :
+            updateLocalStorage(TaskLibrary.get(), "task");
             renderListToNav(TaskLibrary.show(), "task");
           } else if (item.constructor === Project) {
             ProjectLibrary.remove(item.key);
-            getUser()
-              ? removeDocument(item.key, "projects")
-              : updateLocalStorage(ProjectLibrary.get(), "project");
+            // TODO: Fix
+            // getUser()
+            //   ? removeDocument(item.key, "projects")
+            //   :
+            updateLocalStorage(ProjectLibrary.get(), "project");
             renderListToNav(ProjectLibrary.show(), "project");
           }
           listItem.remove();
@@ -694,7 +700,7 @@ const dynamicExplorerParts = (() => {
     explorerTabs,
     itemList,
     refreshItemList,
-    buttons,
+    buttons
   };
 })();
 
@@ -713,6 +719,7 @@ const renderBigDate = (() => {
   dateHero.appendChild(startButton);
   content.appendChild(dateHero);
   let timer;
+
   function updateTime() {
     dateToday.innerHTML = `${format(
       new Date(),
@@ -721,10 +728,12 @@ const renderBigDate = (() => {
                             ${format(new Date(), "p")}`;
     timer = setTimeout(updateTime, 60000);
   }
+
   function stop() {
     clearTimeout(timer);
     timer = 0;
   }
+
   startButton.addEventListener("click", () => {
     stop();
     taskExplorer();
@@ -732,7 +741,7 @@ const renderBigDate = (() => {
   });
   return {
     updateTime,
-    stop,
+    stop
   };
 })();
 
@@ -893,7 +902,6 @@ const clearContent = () => {
 
 // renders the five tasks or projects, that are due the soonest, to the navbar
 const renderListToNav = (library, target) => {
-  console.log(library);
   if (typeof target !== "string") {
     return;
   }
@@ -988,5 +996,5 @@ export {
   taskCreationMenu,
   projectCreationMenu,
   signInPopup,
-  renderListToNav,
+  renderListToNav
 };
