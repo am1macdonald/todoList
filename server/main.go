@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"github.com/joho/godotenv"
 )
 
 type apiConfig struct {
@@ -21,6 +22,11 @@ func middlewareCors(next http.Handler) http.Handler {
 		}
       next.ServeHTTP(w, r)
   })
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 }
 
 func main() {
