@@ -1,18 +1,23 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/am1macdonald/to-do-list/server/internal/database"
 	"github.com/joho/godotenv"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
 type apiConfig struct {
-
+	db *database.Queries
 }
 
 func middlewareCors(next http.Handler) http.Handler {
-  return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {  
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "*")
@@ -20,8 +25,10 @@ func middlewareCors(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusOK)
 			return
 		}
-      next.ServeHTTP(w, r)
-  })
+		next.ServeHTTP(w, r)
+	})
+}
+
 func init() {
 	err := godotenv.Load()
 	if err != nil {
@@ -30,20 +37,28 @@ func init() {
 }
 
 func main() {
+	url := os.Getenv("DB_CONN") + "?authToken=" + os.Getenv("DB_TOKEN")
+	db, err := sql.Open("libsql", url)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to open db %s: %s", url, err)
+		os.Exit(1)
+	}
+	fmt.Println("Connected to database")
 
-  mux := http.NewServeMux()
-  
-  mux.HandleFunc("POST /api/v1/users", func(w http.ResponseWriter, r *http.Request) {
-    fmt.Println("Adding new user")
-    w.WriteHeader(200)
+	defer db.Close()
 
-  })
+	queries := database.New(db)
+	cfg := apiConfig{
+		db: queries,
+	}
 
-  corsMux := middlewareCors(mux)
-  server := http.Server{
-    Addr: ":8080",
-    Handler: corsMux,
-  }
-  log.Fatal(server.ListenAndServe())
+	mux := http.NewServeMux()
+
+
+	corsMux := middlewareCors(mux)
+	server := http.Server{
+		Addr:    ":" + os.Getenv("PORT"),
+		Handler: corsMux,
+	}
+	log.Fatal(server.ListenAndServe())
 }
-
