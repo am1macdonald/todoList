@@ -54,6 +54,8 @@ func main() {
 
 	mux := http.NewServeMux()
 
+	// users
+	mux.HandleFunc("POST /api/v1/users", cfg.HandleAddUser)
 
 	corsMux := middlewareCors(mux)
 	server := http.Server{
