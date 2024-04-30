@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -27,6 +28,23 @@ func middlewareCors(next http.Handler) http.Handler {
 		}
 		next.ServeHTTP(w, r)
 	})
+}
+
+func jsonResponse(w http.ResponseWriter, status int, payload interface{}) {
+	val, err := json.Marshal(payload)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(500)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(status)
+	w.Write(val)
+}
+
+func errorResponse(w http.ResponseWriter, status int, err error) {
+	log.Println(err.Error())
+	jsonResponse(w, status, err)
 }
 
 func init() {
