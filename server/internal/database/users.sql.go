@@ -9,19 +9,19 @@ import (
 	"context"
 )
 
-const createAuthor = `-- name: CreateAuthor :one
+const createUser = `-- name: CreateUser :one
 INSERT INTO users (name, email)
 VALUES (?, ?)
 RETURNING id, name, email, created_at, updated_at, last_login
 `
 
-type CreateAuthorParams struct {
+type CreateUserParams struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
 
-func (q *Queries) CreateAuthor(ctx context.Context, arg CreateAuthorParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createAuthor, arg.Name, arg.Email)
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, createUser, arg.Name, arg.Email)
 	var i User
 	err := row.Scan(
 		&i.ID,
