@@ -12,3 +12,5 @@ todo.txt
 styleRefs.css
 !/archive/
 server/.env
+server/tmp
+server/.air.toml
