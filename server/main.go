@@ -55,7 +55,7 @@ func init() {
 }
 
 func main() {
-	url := os.Getenv("DB_CONN") + "?authToken=" + os.Getenv("DB_TOKEN")
+	url := os.Getenv("DB_CONN")
 	db, err := sql.Open("libsql", url)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to open db %s: %s", url, err)
