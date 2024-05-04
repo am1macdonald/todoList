@@ -32,7 +32,7 @@ func (u *User) GetRefreshToken() (string, error) {
 }
 
 func (u *User) GetLoginToken() (string, error) {
-	return u.genToken("passporter_login", time.Now().Add(time.Duration(time.Minute*5)))
+	return u.genToken("passporter_login", time.Now().Add(time.Duration(time.Second*60)))
 }
 
 func (u *User) genToken(issuer string, expiry time.Time) (string, error) {
