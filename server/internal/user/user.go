@@ -4,7 +4,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/am1macdonald/to-do-list/server/internal/database"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -23,22 +22,30 @@ type UserClaims struct {
 	jwt.RegisteredClaims
 }
 
-func dbUserToUser(u *database.User) *User {
-	return &User{
-		ID:        int(u.ID),
-		Name:      u.Name,
-		Email:     u.Email,
-		Created:   u.CreatedAt,
-		Updated:   u.UpdatedAt,
-		LastLogin: u.LastLogin,
-	}
-}
-
-func (u *User) GetUserToken() (string, error) {
+func (u *User) GetAccessToken(expiresIn time.Duration) (string, error) {
 	claims := UserClaims{
 		u,
 		jwt.RegisteredClaims{
-			Issuer:    "passporter",
+			Issuer:    "passporter_access",
+			Subject:   u.Email,
+			ID:        uuid.New().String(),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiresIn)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			NotBefore: jwt.NewNumericDate(time.Now()),
+		}}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	ss, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	if err != nil {
+		return "", err
+	}
+	return ss, nil
+}
+
+func (u *User) GetRefreshToken() (string, error) {
+	claims := UserClaims{
+		u,
+		jwt.RegisteredClaims{
+			Issuer:    "passporter_refresh",
 			Subject:   u.Email,
 			ID:        uuid.New().String(),
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(time.Hour * 24))),
@@ -46,7 +53,7 @@ func (u *User) GetUserToken() (string, error) {
 			NotBefore: jwt.NewNumericDate(time.Now()),
 		}}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString(os.Getenv("JWT_SECRET"))
+	ss, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		return "", err
 	}
