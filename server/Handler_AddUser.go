@@ -5,15 +5,11 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"net/mail"
+	"os"
+	"strings"
 
 	"github.com/am1macdonald/to-do-list/server/internal/database"
 )
-
-func valid(email string) bool {
-	_, err := mail.ParseAddress(email)
-	return err == nil
-}
 
 func (cfg *apiConfig) HandleAddUser(w http.ResponseWriter, r *http.Request) {
 	var req struct {
@@ -38,15 +34,27 @@ func (cfg *apiConfig) HandleAddUser(w http.ResponseWriter, r *http.Request) {
 		errorResponse(w, 400, errors.New("email is invalid"))
 		return
 	}
-	_, err = cfg.db.CreateUser(r.Context(), database.CreateUserParams{
+	dbUser, err := cfg.db.CreateUser(r.Context(), database.CreateUserParams{
 		Name:  req.Name,
 		Email: req.Email,
 	})
 	if err != nil {
+		if strings.Contains(err.Error(), "UNIQUE constraint failed") {
+			jsonResponse(w, 400, "user already exists")
+			return
+		}
 		log.Println(err)
 		errorResponse(w, 500, errors.New("failed to create user"))
 		return
 	}
-	w.WriteHeader(200)
+	u := DbUserToUser(&dbUser)
+	ss, err := u.GetLoginToken()
+	if err != nil {
+		log.Println(err)
+		errorResponse(w, 500, errors.New("can't get user token"))
+		return
+	}
+	cfg.mailer.SendMessage("MagicLink for 'DO.'", os.Getenv("HOSTNAME")+r.URL.Path+"?token="+ss, u.Email)
+	jsonResponse(w, 200, "success")
 	return
 }
