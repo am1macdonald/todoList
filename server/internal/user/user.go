@@ -1,6 +1,7 @@
 package user
 
 import (
+	"errors"
 	"os"
 	"time"
 
@@ -44,8 +45,24 @@ func (u *User) genToken(issuer string, expiry time.Time) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(expiry),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
-		}}
+		},
+	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }
 
+func UserFromToken(tokenString string) (*User, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
+		s := os.Getenv("JWT_SECRET")
+		if s == "" {
+			return nil, errors.New("JWT_SECRET is unavailable")
+		}
+		return []byte(s), nil
+	})
+	if err != nil {
+		return nil, err
+	} else if _, ok := token.Claims.(*UserClaims); !ok {
+		return nil, errors.New("unknown claims type, cannot proceed")
+	}
+	return token.Claims.(*UserClaims).User, nil
+}
