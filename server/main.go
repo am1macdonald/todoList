@@ -9,12 +9,14 @@ import (
 	"os"
 
 	"github.com/am1macdonald/to-do-list/server/internal/database"
+	"github.com/am1macdonald/to-do-list/server/internal/mailer"
 	"github.com/joho/godotenv"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
 type apiConfig struct {
-	db *database.Queries
+	db     *database.Queries
+	mailer *mailer.Mailer
 }
 
 func middlewareCors(next http.Handler) http.Handler {
@@ -65,15 +67,22 @@ func main() {
 
 	defer db.Close()
 
+	mailer := mailer.New()
 	queries := database.New(db)
+
 	cfg := apiConfig{
-		db: queries,
+		db:     queries,
+		mailer: mailer,
 	}
 
 	mux := http.NewServeMux()
 
 	// users
 	mux.HandleFunc("POST /api/v1/users", cfg.HandleAddUser)
+
+	// sign in
+	mux.HandleFunc("GET /api/v1/sign_in", cfg.HandleMagicLink)
+	mux.HandleFunc("POST /api/v1/sign_in", cfg.HandleSignIn)
 
 	corsMux := middlewareCors(mux)
 	server := http.Server{
