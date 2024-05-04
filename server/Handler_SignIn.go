@@ -33,16 +33,16 @@ func (cfg *apiConfig) HandleSignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if req.Email == "" {
-		errorResponse(w, 400, errors.New("email is required"))
+		jsonResponse(w, 400, errors.New("email is required"))
 		return
 	}
 	if !valid(req.Email) {
-		errorResponse(w, 400, errors.New("email is invalid"))
+		jsonResponse(w, 400, errors.New("email is invalid"))
 		return
 	}
 	dbUser, err := cfg.db.GetUserFromEmail(r.Context(), req.Email)
 	if err != nil {
-		errorResponse(w, 400, errors.New("user does not exist"))
+		jsonResponse(w, 400, "user does not exist")
 		return
 	}
 	u := DbUserToUser(&dbUser)
@@ -52,6 +52,7 @@ func (cfg *apiConfig) HandleSignIn(w http.ResponseWriter, r *http.Request) {
 		errorResponse(w, 500, errors.New("can't get user token"))
 		return
 	}
-	jsonResponse(w, 200, os.Getenv("HOSTNAME")+r.URL.Path+"?token="+ss)
+	cfg.mailer.SendMessage("MagicLink for 'DO.'", os.Getenv("HOSTNAME")+r.URL.Path+"?token="+ss, u.Email)
+	jsonResponse(w, 200, "success")
 	return
 }
