@@ -14,3 +14,5 @@ styleRefs.css
 server/.env
 server/tmp
 server/.air.toml
+.idea
+.vscode
