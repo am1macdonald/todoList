@@ -1,0 +1,30 @@
+services:
+  frontend:
+    build:
+      context: ./todo-web
+      dockerfile: Dockerfile
+    ports:
+      - 5173:5173
+    develop:
+      watch:
+        - action: sync
+          path: ./todo-web
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./todo-web/package.json
+              
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    develop:
+      watch:
+        - action: rebuild
+          path: ./server
+          ignore:
+            - out/
+            - tmp/
