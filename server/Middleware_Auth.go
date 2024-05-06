@@ -8,7 +8,14 @@ import (
 
 type authenticatedHandler func(w http.ResponseWriter, r *http.Request, u *database.User)
 
-func MiddlewareAuth(next authenticatedHandler) http.Handler {
+func MiddlewareAuthenticate(next authenticatedHandler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		u := &database.User{}
+		next(w, r, u)
+	})
+}
+
+func MiddlewareAuthorize(next authenticatedHandler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		u := &database.User{}
 		next(w, r, u)
