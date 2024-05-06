@@ -2,7 +2,7 @@ services:
   frontend:
     build:
       context: ./todo-web
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
     ports:
       - 5173:5173
     develop:
@@ -18,13 +18,13 @@ services:
   backend:
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
     ports:
       - 8080:8080
     develop:
       watch:
-        - action: rebuild
+        - action: sync
           path: ./server
+          target: /usr/src/app
           ignore:
             - out/
-            - tmp/
