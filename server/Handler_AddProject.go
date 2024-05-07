@@ -9,7 +9,11 @@ import (
 
 func (cfg *apiConfig) HandleAddProject(w http.ResponseWriter, r *http.Request) {
 	var req struct {
-		Email string
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		Notes       string `json:"notes"`
+		Deadline    int64  `json:"deadline"`
+		Complete    bool   `json:"complete"`
 	}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -17,5 +21,5 @@ func (cfg *apiConfig) HandleAddProject(w http.ResponseWriter, r *http.Request) {
 		errorResponse(w, 500, errors.New("failed to parse body"))
 		return
 	}
-	jsonResponse(w, 200, "success")
+	jsonResponse(w, 200, req)
 }
