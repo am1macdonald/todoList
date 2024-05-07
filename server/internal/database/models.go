@@ -9,15 +9,15 @@ import (
 )
 
 type Project struct {
-	ID          int64       `json:"id"`
-	UserID      int64       `json:"user_id"`
-	Title       string      `json:"title"`
-	Description interface{} `json:"description"`
-	Notes       interface{} `json:"notes"`
-	Deadline    interface{} `json:"deadline"`
-	Complete    bool        `json:"complete"`
-	CreatedAt   time.Time   `json:"created_at"`
-	UpdatedAt   time.Time   `json:"updated_at"`
+	ID          int64     `json:"id"`
+	UserID      int64     `json:"user_id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Notes       string    `json:"notes"`
+	Deadline    time.Time `json:"deadline"`
+	Complete    bool      `json:"complete"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type User struct {

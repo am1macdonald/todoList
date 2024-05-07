@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"time"
 )
 
 const addProject = `-- name: AddProject :one
@@ -16,12 +17,12 @@ RETURNING id, user_id, title, description, notes, deadline, complete, created_at
 `
 
 type AddProjectParams struct {
-	UserID      int64       `json:"user_id"`
-	Title       string      `json:"title"`
-	Description interface{} `json:"description"`
-	Notes       interface{} `json:"notes"`
-	Deadline    interface{} `json:"deadline"`
-	Complete    bool        `json:"complete"`
+	UserID      int64     `json:"user_id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Notes       string    `json:"notes"`
+	Deadline    time.Time `json:"deadline"`
+	Complete    bool      `json:"complete"`
 }
 
 func (q *Queries) AddProject(ctx context.Context, arg AddProjectParams) (Project, error) {
@@ -108,12 +109,12 @@ RETURNING id, user_id, title, description, notes, deadline, complete, created_at
 `
 
 type UpdateProjectParams struct {
-	Title       string      `json:"title"`
-	Description interface{} `json:"description"`
-	Notes       interface{} `json:"notes"`
-	Deadline    interface{} `json:"deadline"`
-	Complete    bool        `json:"complete"`
-	ID          int64       `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Notes       string    `json:"notes"`
+	Deadline    time.Time `json:"deadline"`
+	Complete    bool      `json:"complete"`
+	ID          int64     `json:"id"`
 }
 
 func (q *Queries) UpdateProject(ctx context.Context, arg UpdateProjectParams) (Project, error) {
