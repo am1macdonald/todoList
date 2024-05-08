@@ -81,8 +81,13 @@ func main() {
 	mux.HandleFunc("POST /api/v1/users", cfg.HandleAddUser)
 
 	// sign in
-	mux.HandleFunc("GET /api/v1/sign_in", cfg.HandleMagicLink)
 	mux.HandleFunc("POST /api/v1/sign_in", cfg.HandleSignIn)
+	mux.HandleFunc("GET /api/v1/sign_in", cfg.HandleMagicLink)
+
+	// projects
+	mux.HandleFunc("POST /api/v1/users/{user_id}/projects", MiddlewareAuthenticate(cfg.HandleAddProject))
+	mux.HandleFunc("GET /api/v1/projects", func(w http.ResponseWriter, r *http.Request) {})
+	mux.HandleFunc("PUT /api/v1/projects", func(w http.ResponseWriter, r *http.Request) {})
 
 	corsMux := middlewareCors(mux)
 	server := http.Server{
