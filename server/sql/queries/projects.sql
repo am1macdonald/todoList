@@ -1,5 +1,5 @@
 -- name: AddProject :one
-INSERT INTO projects (user_id , title, description, notes, deadline, complete)
+INSERT INTO projects (user_id, title, description, notes, deadline, complete)
 VALUES (?, ?, ?, ?, ?, ?)
 RETURNING *;
 

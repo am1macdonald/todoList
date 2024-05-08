@@ -5,10 +5,10 @@ CREATE TABLE projects (
   title       VARCHAR(120) NOT NULL,
   description TEXT         NOT NULL,
   notes       TEXT         NOT NULL,
-  deadline    DATETIME     NOT NULL,
+  deadline    INTEGER      NOT NULL,
   complete    BOOLEAN      NOT NULL DEFAULT FALSE,
-  created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at  INTEGER      NOT NULL,
+  updated_at  INTEGER      NOT NULL,
   FOREIGN KEY(user_id) REFERENCES users(id)
 );
 

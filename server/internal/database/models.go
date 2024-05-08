@@ -16,8 +16,8 @@ type Project struct {
 	Notes       string    `json:"notes"`
 	Deadline    time.Time `json:"deadline"`
 	Complete    bool      `json:"complete"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	CreatedAt   int64     `json:"created_at"`
+	UpdatedAt   int64     `json:"updated_at"`
 }
 
 type User struct {

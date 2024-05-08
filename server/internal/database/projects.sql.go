@@ -11,7 +11,7 @@ import (
 )
 
 const addProject = `-- name: AddProject :one
-INSERT INTO projects (user_id , title, description, notes, deadline, complete)
+INSERT INTO projects (user_id, title, description, notes, deadline, complete)
 VALUES (?, ?, ?, ?, ?, ?)
 RETURNING id, user_id, title, description, notes, deadline, complete, created_at, updated_at
 `
