@@ -51,7 +51,7 @@ func (u *User) genToken(issuer string, expiry time.Time) (string, error) {
 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }
 
-func UserFromToken(tokenString string) (*User, error) {
+func UserFromToken(tokenString string) (*User, string, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 		s := os.Getenv("JWT_SECRET")
 		if s == "" {
@@ -60,9 +60,13 @@ func UserFromToken(tokenString string) (*User, error) {
 		return []byte(s), nil
 	})
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	} else if _, ok := token.Claims.(*UserClaims); !ok {
-		return nil, errors.New("unknown claims type, cannot proceed")
+		return nil, "", errors.New("unknown claims type, cannot proceed")
 	}
-	return token.Claims.(*UserClaims).User, nil
+	issuer, err := token.Claims.GetIssuer()
+	if err != nil {
+		return nil, "", errors.New("cannot get issuer")
+	}
+	return token.Claims.(*UserClaims).User, issuer, nil
 }
