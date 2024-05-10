@@ -14,10 +14,10 @@ type Project struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Notes       string    `json:"notes"`
-	Deadline    time.Time `json:"deadline"`
+	Deadline    int64     `json:"deadline"`
 	Complete    bool      `json:"complete"`
-	CreatedAt   int64     `json:"created_at"`
-	UpdatedAt   int64     `json:"updated_at"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type User struct {
