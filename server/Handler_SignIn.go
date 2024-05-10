@@ -42,6 +42,7 @@ func (cfg *apiConfig) HandleSignIn(w http.ResponseWriter, r *http.Request) {
 	}
 	dbUser, err := cfg.db.GetUserFromEmail(r.Context(), req.Email)
 	if err != nil {
+		log.Println(err)
 		jsonResponse(w, 400, "user does not exist")
 		return
 	}
@@ -52,6 +53,7 @@ func (cfg *apiConfig) HandleSignIn(w http.ResponseWriter, r *http.Request) {
 		errorResponse(w, 500, errors.New("can't get user token"))
 		return
 	}
+	log.Println(ss)
 	cfg.mailer.SendMessage("MagicLink for 'DO.'", os.Getenv("HOSTNAME")+r.URL.Path+"?token="+ss, u.Email)
 	jsonResponse(w, 200, "success")
 	return

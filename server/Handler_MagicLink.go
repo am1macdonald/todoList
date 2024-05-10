@@ -13,6 +13,7 @@ func (cfg *apiConfig) HandleMagicLink(w http.ResponseWriter, r *http.Request) {
 	ss := r.URL.Query().Get("token")
 	u, issuer, err := user.UserFromToken(ss)
 	if err != nil || strings.ToLower(issuer) != "passporter_login" {
+		log.Println(err)
 		errorResponse(w, 400, errors.New("token is invalid"))
 		return
 	}
