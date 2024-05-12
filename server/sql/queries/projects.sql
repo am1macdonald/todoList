@@ -1,7 +1,7 @@
 -- name: AddProject :one
 INSERT INTO projects (user_id, title, description, notes, deadline, complete)
 VALUES (?, ?, ?, ?, ?, ?)
-RETURNING *;
+RETURNING id, title, description, notes, deadline, complete;
 
 -- name: GetUserProjects :many
 SELECT * from projects
@@ -16,7 +16,7 @@ set title = ?,
   complete = ?,
   updated_at = CURRENT_TIMESTAMP
 where id = ?
-RETURNING *;
+RETURNING id, title, description, notes, deadline, complete;
 
 -- name: DeleteProject :exec
 DELETE FROM projects where id = ?;

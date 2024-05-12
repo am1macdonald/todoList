@@ -12,7 +12,7 @@ import (
 const addProject = `-- name: AddProject :one
 INSERT INTO projects (user_id, title, description, notes, deadline, complete)
 VALUES (?, ?, ?, ?, ?, ?)
-RETURNING id, user_id, title, description, notes, deadline, complete, created_at, updated_at
+RETURNING id, title, description, notes, deadline, complete
 `
 
 type AddProjectParams struct {
@@ -24,7 +24,16 @@ type AddProjectParams struct {
 	Complete    bool   `json:"complete"`
 }
 
-func (q *Queries) AddProject(ctx context.Context, arg AddProjectParams) (Project, error) {
+type AddProjectRow struct {
+	ID          int64  `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Notes       string `json:"notes"`
+	Deadline    int64  `json:"deadline"`
+	Complete    bool   `json:"complete"`
+}
+
+func (q *Queries) AddProject(ctx context.Context, arg AddProjectParams) (AddProjectRow, error) {
 	row := q.db.QueryRowContext(ctx, addProject,
 		arg.UserID,
 		arg.Title,
@@ -33,17 +42,14 @@ func (q *Queries) AddProject(ctx context.Context, arg AddProjectParams) (Project
 		arg.Deadline,
 		arg.Complete,
 	)
-	var i Project
+	var i AddProjectRow
 	err := row.Scan(
 		&i.ID,
-		&i.UserID,
 		&i.Title,
 		&i.Description,
 		&i.Notes,
 		&i.Deadline,
 		&i.Complete,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 	)
 	return i, err
 }
@@ -104,7 +110,7 @@ set title = ?,
   complete = ?,
   updated_at = CURRENT_TIMESTAMP
 where id = ?
-RETURNING id, user_id, title, description, notes, deadline, complete, created_at, updated_at
+RETURNING id, title, description, notes, deadline, complete
 `
 
 type UpdateProjectParams struct {
@@ -116,7 +122,16 @@ type UpdateProjectParams struct {
 	ID          int64  `json:"id"`
 }
 
-func (q *Queries) UpdateProject(ctx context.Context, arg UpdateProjectParams) (Project, error) {
+type UpdateProjectRow struct {
+	ID          int64  `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Notes       string `json:"notes"`
+	Deadline    int64  `json:"deadline"`
+	Complete    bool   `json:"complete"`
+}
+
+func (q *Queries) UpdateProject(ctx context.Context, arg UpdateProjectParams) (UpdateProjectRow, error) {
 	row := q.db.QueryRowContext(ctx, updateProject,
 		arg.Title,
 		arg.Description,
@@ -125,17 +140,14 @@ func (q *Queries) UpdateProject(ctx context.Context, arg UpdateProjectParams) (P
 		arg.Complete,
 		arg.ID,
 	)
-	var i Project
+	var i UpdateProjectRow
 	err := row.Scan(
 		&i.ID,
-		&i.UserID,
 		&i.Title,
 		&i.Description,
 		&i.Notes,
 		&i.Deadline,
 		&i.Complete,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 	)
 	return i, err
 }
