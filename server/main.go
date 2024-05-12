@@ -86,7 +86,7 @@ func main() {
 
 	// projects
 	mux.HandleFunc("POST /api/v1/{user_id}/projects", MiddlewareAuthenticate(cfg.HandleAddProject))
-	mux.HandleFunc("GET /api/v1/{user_id}/projects", func(w http.ResponseWriter, r *http.Request) {})
+	mux.HandleFunc("GET /api/v1/{user_id}/projects", MiddlewareAuthenticate(cfg.HandleGetProjects))
 	mux.HandleFunc("PUT /api/v1/{user_id}/projects/{project_id}", func(w http.ResponseWriter, r *http.Request) {})
 
 	corsMux := middlewareCors(mux)

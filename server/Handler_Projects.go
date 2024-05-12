@@ -48,8 +48,9 @@ func (cfg *apiConfig) HandleGetProjects(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 	projects := make([]project.Project, len(dbProj))
-	for _, p := range dbProj {
-		projects = append(projects, *DbProjectToProject(&p))
+	log.Println(projects)
+	for i, p := range dbProj {
+		projects[i] = *DbProjectToProject(&p)
 	}
 	jsonResponse(w, 200, projects)
 }
