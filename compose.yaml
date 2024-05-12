@@ -28,3 +28,6 @@ services:
           target: /usr/src/app
           ignore:
             - out/
+  valkey:
+    image: valkey/valkey:7.2.5-alpine
+    restart: unless-stopped
