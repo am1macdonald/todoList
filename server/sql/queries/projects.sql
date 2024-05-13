@@ -15,8 +15,8 @@ set title = ?,
   deadline = ?, 
   complete = ?,
   updated_at = CURRENT_TIMESTAMP
-where id = ?
-RETURNING id, title, description, notes, deadline, complete;
+WHERE id = ?
+RETURNING id;
 
 -- name: DeleteProject :exec
 DELETE FROM projects where id = ?;
