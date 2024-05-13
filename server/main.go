@@ -89,6 +89,11 @@ func main() {
 	mux.HandleFunc("GET /api/v1/{user_id}/projects", MiddlewareAuthenticate(cfg.HandleGetProjects))
 	mux.HandleFunc("PUT /api/v1/{user_id}/projects/{project_id}", MiddlewareAuthenticate(cfg.HandleUpdateProject))
 
+	// tasks
+	mux.HandleFunc("POST /api/v1/{user_id}/tasks", MiddlewareAuthenticate(cfg.HandleAddTask))
+	mux.HandleFunc("GET /api/v1/{user_id}/tasks", MiddlewareAuthenticate(cfg.HandleGetTasks))
+	mux.HandleFunc("PUT /api/v1/{user_id}/tasks/{task_id}", MiddlewareAuthenticate(cfg.HandleUpdateTask))
+
 	corsMux := middlewareCors(mux)
 	server := http.Server{
 		Addr:    ":" + os.Getenv("PORT"),
