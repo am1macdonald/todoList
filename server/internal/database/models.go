@@ -20,6 +20,22 @@ type Project struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
+type Task struct {
+	ID          int64       `json:"id"`
+	UserID      int64       `json:"user_id"`
+	ProjectID   int64       `json:"project_id"`
+	Title       string      `json:"title"`
+	Description string      `json:"description"`
+	Notes       string      `json:"notes"`
+	Deadline    int64       `json:"deadline"`
+	Priority    int64       `json:"priority"`
+	Checklist   string      `json:"checklist"`
+	Complete    bool        `json:"complete"`
+	CreatedAt   time.Time   `json:"created_at"`
+	UpdatedAt   time.Time   `json:"updated_at"`
+	Foreign     interface{} `json:"foreign"`
+}
+
 type User struct {
 	ID        int64     `json:"id"`
 	Name      string    `json:"name"`

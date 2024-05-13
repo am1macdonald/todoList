@@ -109,8 +109,8 @@ set title = ?,
   deadline = ?, 
   complete = ?,
   updated_at = CURRENT_TIMESTAMP
-where id = ?
-RETURNING id, title, description, notes, deadline, complete
+WHERE id = ?
+RETURNING id
 `
 
 type UpdateProjectParams struct {
@@ -122,16 +122,7 @@ type UpdateProjectParams struct {
 	ID          int64  `json:"id"`
 }
 
-type UpdateProjectRow struct {
-	ID          int64  `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Notes       string `json:"notes"`
-	Deadline    int64  `json:"deadline"`
-	Complete    bool   `json:"complete"`
-}
-
-func (q *Queries) UpdateProject(ctx context.Context, arg UpdateProjectParams) (UpdateProjectRow, error) {
+func (q *Queries) UpdateProject(ctx context.Context, arg UpdateProjectParams) (int64, error) {
 	row := q.db.QueryRowContext(ctx, updateProject,
 		arg.Title,
 		arg.Description,
@@ -140,14 +131,7 @@ func (q *Queries) UpdateProject(ctx context.Context, arg UpdateProjectParams) (U
 		arg.Complete,
 		arg.ID,
 	)
-	var i UpdateProjectRow
-	err := row.Scan(
-		&i.ID,
-		&i.Title,
-		&i.Description,
-		&i.Notes,
-		&i.Deadline,
-		&i.Complete,
-	)
-	return i, err
+	var id int64
+	err := row.Scan(&id)
+	return id, err
 }
