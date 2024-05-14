@@ -12,9 +12,11 @@ import (
 	"github.com/am1macdonald/to-do-list/server/internal/mailer"
 	"github.com/joho/godotenv"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
+	"github.com/valkey-io/valkey-go"
 )
 
 type apiConfig struct {
+	cache  *valkey.Client
 	db     *database.Queries
 	mailer *mailer.Mailer
 }
@@ -57,6 +59,16 @@ func init() {
 }
 
 func main() {
+	// init cache
+	client, err := valkey.NewClient(valkey.ClientOption{
+		InitAddress: []string{os.Getenv("CACHE_CONN")},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected to session cache")
+
+	// init db
 	url := os.Getenv("DB_CONN")
 	db, err := sql.Open("libsql", url)
 	if err != nil {
@@ -72,6 +84,7 @@ func main() {
 
 	cfg := apiConfig{
 		db:     queries,
+		cache:  &client,
 		mailer: mailer,
 	}
 
