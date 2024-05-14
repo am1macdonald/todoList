@@ -4,8 +4,10 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
+	"github.com/am1macdonald/to-do-list/server/internal/session"
 	"github.com/am1macdonald/to-do-list/server/internal/user"
 )
 
@@ -18,21 +20,20 @@ func (cfg *apiConfig) HandleMagicLink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(u)
-	at, err := u.GetAccessToken()
+	s, err := session.New(u.ID)
 	if err != nil {
-		errorResponse(w, 500, errors.New("failed to create access token"))
+		log.Println(err)
+		errorResponse(w, 500, errors.New("failed to init session"))
 		return
 	}
-	rt, err := u.GetRefreshToken()
-	if err != nil {
-		errorResponse(w, 500, errors.New("failed to create refresh token"))
-		return
+	cookie := http.Cookie{
+		Name:     "session",
+		Value:    s.Key,
+		Domain:   os.Getenv("HOSTNAME"),
+		MaxAge:   24 * 60 * 60,
+		HttpOnly: true,
 	}
-	jsonResponse(w, 200, struct {
-		AccessToken  string `json:"access_token"`
-		RefreshToken string `json:"refresh_token"`
-	}{
-		at,
-		rt,
-	})
+	http.SetCookie(w, &cookie)
+	w.WriteHeader(200)
+	return
 }
