@@ -8,8 +8,8 @@ import (
 	"strconv"
 
 	"github.com/am1macdonald/to-do-list/server/internal/database"
+	"github.com/am1macdonald/to-do-list/server/internal/project"
 	"github.com/am1macdonald/to-do-list/server/internal/user"
-	"github.com/am1macdonald/to-do-list/server/internal/user/project"
 )
 
 func DbProjectToProject(p *database.Project) *project.Project {
