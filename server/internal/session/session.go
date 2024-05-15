@@ -1,8 +1,8 @@
 package session
 
-import "sync"
 import (
 	"time"
+	"github.com/google/uuid"
 )
 
 type SessionData struct {
@@ -11,9 +11,8 @@ type SessionData struct {
 }
 
 type Session struct {
-	mu   sync.Mutex
 	Key  string
-	Data map[string]any
+	Data *SessionData
 }
 
 func New() (*Session, error) {
