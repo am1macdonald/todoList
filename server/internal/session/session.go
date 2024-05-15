@@ -6,7 +6,7 @@ import (
 )
 
 type SessionData struct {
-	Exprires time.Time
+	Exprires int64
 	UserID   int64
 }
 
