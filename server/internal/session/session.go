@@ -1,6 +1,14 @@
 package session
 
 import "sync"
+import (
+	"time"
+)
+
+type SessionData struct {
+	Exprires time.Time
+	UserID   int64
+}
 
 type Session struct {
 	mu   sync.Mutex
