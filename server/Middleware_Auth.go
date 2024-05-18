@@ -9,7 +9,7 @@ import (
 
 type authenticatedHandler func(w http.ResponseWriter, r *http.Request, u *user.User)
 
-func MiddlewareAuthenticate(next authenticatedHandler) http.HandlerFunc {
+func (cfg *apiConfig) MiddlewareAuthenticate(next authenticatedHandler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		t := r.Header.Get("Authorization")
 		if t == "" {

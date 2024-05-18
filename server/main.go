@@ -98,14 +98,14 @@ func main() {
 	mux.HandleFunc("GET /api/v1/sign_in", cfg.HandleMagicLink)
 
 	// projects
-	mux.HandleFunc("POST /api/v1/{user_id}/projects", MiddlewareAuthenticate(cfg.HandleAddProject))
-	mux.HandleFunc("GET /api/v1/{user_id}/projects", MiddlewareAuthenticate(cfg.HandleGetProjects))
-	mux.HandleFunc("PUT /api/v1/{user_id}/projects/{project_id}", MiddlewareAuthenticate(cfg.HandleUpdateProject))
+	mux.HandleFunc("POST /api/v1/{user_id}/projects", cfg.MiddlewareAuthenticate(cfg.HandleAddProject))
+	mux.HandleFunc("GET /api/v1/{user_id}/projects", cfg.MiddlewareAuthenticate(cfg.HandleGetProjects))
+	mux.HandleFunc("PUT /api/v1/{user_id}/projects/{project_id}", cfg.MiddlewareAuthenticate(cfg.HandleUpdateProject))
 
 	// tasks
-	mux.HandleFunc("POST /api/v1/{user_id}/tasks", MiddlewareAuthenticate(cfg.HandleAddTask))
-	mux.HandleFunc("GET /api/v1/{user_id}/tasks", MiddlewareAuthenticate(cfg.HandleGetTasks))
-	mux.HandleFunc("PUT /api/v1/{user_id}/tasks/{task_id}", MiddlewareAuthenticate(cfg.HandleUpdateTask))
+	mux.HandleFunc("POST /api/v1/{user_id}/tasks", cfg.MiddlewareAuthenticate(cfg.HandleAddTask))
+	mux.HandleFunc("GET /api/v1/{user_id}/tasks", cfg.MiddlewareAuthenticate(cfg.HandleGetTasks))
+	mux.HandleFunc("PUT /api/v1/{user_id}/tasks/{task_id}", cfg.MiddlewareAuthenticate(cfg.HandleUpdateTask))
 
 	corsMux := middlewareCors(mux)
 	server := http.Server{
