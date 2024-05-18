@@ -26,12 +26,11 @@ func (cfg *apiConfig) HandleMagicLink(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		errorResponse(w, 500, errors.New("failed to create session"))
 	}
-	res, err := (*cfg.cache).Do(r.Context(), (*cfg.cache).B().Set().Key(s.Key).Value(string(json)).Build()).ToString()
+	err = (*cfg.cache).Do(r.Context(), (*cfg.cache).B().Set().Key(s.Key).Value(string(json)).Build()).Error()
 	if err != nil {
 		log.Println(err)
 		errorResponse(w, 500, errors.New("failed to set session"))
 	}
-	log.Println(res)
 	session_cookie := http.Cookie{
 		Name:     "session",
 		Value:    s.Key,
