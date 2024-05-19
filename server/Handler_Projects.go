@@ -9,7 +9,7 @@ import (
 
 	"github.com/am1macdonald/to-do-list/server/internal/database"
 	"github.com/am1macdonald/to-do-list/server/internal/project"
-	"github.com/am1macdonald/to-do-list/server/internal/user"
+	"github.com/am1macdonald/to-do-list/server/internal/session"
 )
 
 func DbProjectToProject(p *database.Project) *project.Project {
@@ -24,13 +24,13 @@ func DbProjectToProject(p *database.Project) *project.Project {
 	}
 }
 
-func (cfg *apiConfig) HandleGetProjects(w http.ResponseWriter, r *http.Request, u *user.User) {
+func (cfg *apiConfig) HandleGetProjects(w http.ResponseWriter, r *http.Request, s *session.Session) {
 	userID, err := strconv.ParseInt(r.PathValue("user_id"), 10, 64)
 	if err != nil {
 		jsonResponse(w, 500, errors.New("failed to parse userID"))
 		return
 	}
-	if u.ID != int(userID) {
+	if int(s.Data.UserID) != int(userID) {
 		jsonResponse(w, 401, "unauthorized")
 		return
 	}
@@ -46,7 +46,7 @@ func (cfg *apiConfig) HandleGetProjects(w http.ResponseWriter, r *http.Request, 
 	jsonResponse(w, 200, projects)
 }
 
-func (cfg *apiConfig) HandleAddProject(w http.ResponseWriter, r *http.Request, u *user.User) {
+func (cfg *apiConfig) HandleAddProject(w http.ResponseWriter, r *http.Request, s *session.Session) {
 	type projectRequestBody struct {
 		Title       string `json:"title"`
 		Description string `json:"description"`
@@ -59,7 +59,10 @@ func (cfg *apiConfig) HandleAddProject(w http.ResponseWriter, r *http.Request, u
 		jsonResponse(w, 500, errors.New("failed to parse userID"))
 		return
 	}
-
+	if int(s.Data.UserID) != int(userID) {
+		jsonResponse(w, 401, "unauthorized")
+		return
+	}
 	var req projectRequestBody
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -86,7 +89,7 @@ func (cfg *apiConfig) HandleAddProject(w http.ResponseWriter, r *http.Request, u
 	jsonResponse(w, 200, project)
 }
 
-func (cfg *apiConfig) HandleUpdateProject(w http.ResponseWriter, r *http.Request, u *user.User) {
+func (cfg *apiConfig) HandleUpdateProject(w http.ResponseWriter, r *http.Request, s *session.Session) {
 	type projectRequestBody struct {
 		Title       string `json:"title"`
 		Description string `json:"description"`
@@ -100,7 +103,7 @@ func (cfg *apiConfig) HandleUpdateProject(w http.ResponseWriter, r *http.Request
 		jsonResponse(w, 500, errors.New("failed to parse userID"))
 		return
 	}
-	if u.ID != int(userID) {
+	if int(s.Data.UserID) != int(userID) {
 		jsonResponse(w, 401, "unauthorized")
 		return
 	}
