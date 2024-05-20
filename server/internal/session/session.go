@@ -35,3 +35,7 @@ func FromToken(token string) (*Session, error) {
 func (s *Session) Destroy() error {
 	return nil
 }
+
+func (s *Session) IsExpired() bool {
+	return time.Now().After(time.Unix(s.Data.Exprires, 0))
+}
