@@ -8,8 +8,8 @@ import (
 	"strconv"
 
 	"github.com/am1macdonald/to-do-list/server/internal/database"
+	"github.com/am1macdonald/to-do-list/server/internal/session"
 	"github.com/am1macdonald/to-do-list/server/internal/task"
-	"github.com/am1macdonald/to-do-list/server/internal/user"
 )
 
 func DbTaskToTask(p *database.Task) *task.Task {
@@ -26,13 +26,13 @@ func DbTaskToTask(p *database.Task) *task.Task {
 	}
 }
 
-func (cfg *apiConfig) HandleGetTasks(w http.ResponseWriter, r *http.Request, u *user.User) {
+func (cfg *apiConfig) HandleGetTasks(w http.ResponseWriter, r *http.Request, s *session.Session) {
 	userID, err := strconv.ParseInt(r.PathValue("user_id"), 10, 64)
 	if err != nil {
 		jsonResponse(w, 500, errors.New("failed to parse userID"))
 		return
 	}
-	if u.ID != int(userID) {
+	if int(s.Data.UserID) != int(userID) {
 		jsonResponse(w, 401, "unauthorized")
 		return
 	}
@@ -48,7 +48,7 @@ func (cfg *apiConfig) HandleGetTasks(w http.ResponseWriter, r *http.Request, u *
 	jsonResponse(w, 200, tasks)
 }
 
-func (cfg *apiConfig) HandleAddTask(w http.ResponseWriter, r *http.Request, u *user.User) {
+func (cfg *apiConfig) HandleAddTask(w http.ResponseWriter, r *http.Request, s *session.Session) {
 	type projectRequestBody struct {
 		Title       string `json:"title"`
 		Description string `json:"description"`
@@ -59,6 +59,11 @@ func (cfg *apiConfig) HandleAddTask(w http.ResponseWriter, r *http.Request, u *u
 	userID, err := strconv.ParseInt(r.PathValue("user_id"), 10, 64)
 	if err != nil {
 		jsonResponse(w, 500, errors.New("failed to parse userID"))
+		return
+	}
+
+	if int(s.Data.UserID) != int(userID) {
+		jsonResponse(w, 401, "unauthorized")
 		return
 	}
 
@@ -88,7 +93,7 @@ func (cfg *apiConfig) HandleAddTask(w http.ResponseWriter, r *http.Request, u *u
 	jsonResponse(w, 200, project)
 }
 
-func (cfg *apiConfig) HandleUpdateTask(w http.ResponseWriter, r *http.Request, u *user.User) {
+func (cfg *apiConfig) HandleUpdateTask(w http.ResponseWriter, r *http.Request, s *session.Session) {
 	type taskRequestBody struct {
 		Title       string `json:"title"`
 		Description string `json:"description"`
@@ -104,7 +109,7 @@ func (cfg *apiConfig) HandleUpdateTask(w http.ResponseWriter, r *http.Request, u
 		jsonResponse(w, 500, errors.New("failed to parse userID"))
 		return
 	}
-	if u.ID != int(userID) {
+	if int(s.Data.UserID) != int(userID) {
 		jsonResponse(w, 401, "unauthorized")
 		return
 	}
