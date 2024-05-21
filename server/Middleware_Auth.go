@@ -1,31 +1,49 @@
 package main
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
-	"strings"
 
-	"github.com/am1macdonald/to-do-list/server/internal/user"
+	"github.com/am1macdonald/to-do-list/server/internal/session"
 )
 
-type authenticatedHandler func(w http.ResponseWriter, r *http.Request, u *user.User)
+type authenticatedHandler func(w http.ResponseWriter, r *http.Request, s *session.Session)
 
 func (cfg *apiConfig) MiddlewareAuthenticate(next authenticatedHandler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		t := r.Header.Get("Authorization")
-		if t == "" {
-			jsonResponse(w, 400, "authorization header is required")
+		sessionCookie, err := r.Cookie("session")
+		if err != nil {
+			jsonResponse(w, 400, "not signed in")
 			return
 		}
-		token := strings.Split(t, " ")
-		if len(token) < 2 || strings.ToLower(token[0]) != "bearer" {
-			jsonResponse(w, 400, "authorization is invalid")
+
+		str, err := (*cfg.cache).Do(r.Context(), (*cfg.cache).B().Get().Key(sessionCookie.Value).Build()).ToString()
+		if err != nil {
+			log.Println(err)
+			errorResponse(w, 500, err)
 			return
 		}
-		u, issuer, err := user.UserFromToken(token[1])
-		if err != nil || strings.ToLower(issuer) != "passporter_access" {
-			jsonResponse(w, 400, "token is invalid")
+
+		sd := &session.SessionData{}
+		s := &session.Session{
+			Key:  sessionCookie.Value,
+			Data: sd,
+		}
+
+		err = json.Unmarshal([]byte(str), sd)
+
+		if err != nil {
+			log.Println(err)
+			errorResponse(w, 500, err)
 			return
 		}
-		next(w, r, u)
+
+		if s.IsExpired() {
+			jsonResponse(w, 400, "session is expired")
+			return
+		}
+
+		next(w, r, s)
 	})
 }
