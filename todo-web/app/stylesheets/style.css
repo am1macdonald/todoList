@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: "Oswald";
   src: url(http://127.0.0.1:5500/dist/7aae63364e12a102a22a.ttf);
@@ -229,7 +233,7 @@ select {
   align-items: center;
   flex-direction: column;
   gap: 4vh;
-  padding: 5vh 0 1vh 0;
+  padding: 1rem;
 }
 
 .flex-row {
