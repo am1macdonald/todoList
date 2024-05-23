@@ -58,7 +58,7 @@ const renderStaticElements = () => {
     signOutButton.classList.add("styled-button");
 
     signOutButton.addEventListener("click", async () => {
-      // await userSignOut();
+      await userSignOut();
       location.reload();
     });
 

@@ -1,5 +1,5 @@
-import "./app/stylesheets/reset.css";
-import "./app/stylesheets/style.css";
+import "./src/stylesheets/reset.css";
+import "./src/stylesheets/style.css";
 import {
   projectCreationMenu,
   renderBigDate,
@@ -7,7 +7,7 @@ import {
   taskCreationMenu,
   signInPopup,
   renderListToNav,
-} from "./app/displayControl.js";
+} from "./src/displayControl.js";
 import {
   populateAll,
   TaskLibrary,
@@ -15,7 +15,7 @@ import {
   populateFromLocalStorage,
   taskFromJSON,
   projectFromJSON,
-} from "./app/libraryManagement.js";
+} from "./src/libraryManagement.js";
 
 renderStaticElements();
 
