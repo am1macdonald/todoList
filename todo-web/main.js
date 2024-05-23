@@ -25,7 +25,7 @@ const content = document.getElementById("content");
 const page = document.getElementById("page");
 const clock = document.getElementById("date-hero");
 const allButtons = document.querySelectorAll("button");
-const authEnabled = false;
+const authEnabled = true;
 
 const disableButtons = (bool) => {
   allButtons.forEach((button) => {
