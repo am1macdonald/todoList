@@ -3,8 +3,6 @@ services:
     build:
       context: ./todo-web
       dockerfile: dev.Dockerfile
-    ports:
-      - 5173:5173
     develop:
       watch:
         - action: sync
@@ -19,8 +17,6 @@ services:
     build:
       context: ./server
       dockerfile: dev.Dockerfile
-    ports:
-      - 8080:8080
     develop:
       watch:
         - action: sync
@@ -31,3 +27,15 @@ services:
   valkey:
     image: valkey/valkey:7.2.5-alpine
     restart: unless-stopped
+
+  caddy:
+    image: caddy/caddy:2.8-alpine
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
