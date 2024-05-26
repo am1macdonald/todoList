@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Oswald";
-  src: url(http://127.0.0.1:5500/dist/7aae63364e12a102a22a.ttf);
-}
 body {
   width: 100vw;
   height: 100vh;
@@ -223,7 +219,7 @@ select {
   height: 100vh;
 
   z-index: 999;
-  background-color: hsla(0, 1%, 18%, 0.838);
+  @apply bg-black/75;
 }
 
 #sign-in-page-splash .data-entry {
