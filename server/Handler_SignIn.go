@@ -54,7 +54,7 @@ func (cfg *apiConfig) HandleSignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(ss)
-	cfg.mailer.SendMessage("MagicLink for 'DO.'", os.Getenv("HOSTNAME")+r.URL.Path+"?token="+ss, u.Email)
+	cfg.mailer.SendMessage("MagicLink for 'DO.'", os.Getenv("MAGICLINK_BASE")+"/api/v1/sign_in"+"?token="+ss, u.Email)
 	jsonResponse(w, 200, "success")
 	return
 }
