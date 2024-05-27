@@ -53,7 +53,6 @@ func (cfg *apiConfig) HandleSignIn(w http.ResponseWriter, r *http.Request) {
 		errorResponse(w, 500, errors.New("can't get user token"))
 		return
 	}
-	log.Println(ss)
 	cfg.mailer.SendMessage("MagicLink for 'DO.'", os.Getenv("MAGICLINK_BASE")+"/api/v1/sign_in"+"?token="+ss, u.Email)
 	jsonResponse(w, 200, "success")
 	return

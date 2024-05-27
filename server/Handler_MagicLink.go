@@ -41,5 +41,5 @@ func (cfg *apiConfig) HandleMagicLink(w http.ResponseWriter, r *http.Request) {
 	log.Println(os.Getenv("SERVICE_HOSTNAME"))
 	log.Println(s.Key)
 	http.SetCookie(w, &session_cookie)
-	w.WriteHeader(200)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
