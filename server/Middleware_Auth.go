@@ -30,7 +30,6 @@ func (cfg *apiConfig) MiddlewareAuthenticate(next authenticatedHandler) http.Han
 			Key:  sessionCookie.Value,
 			Data: sd,
 		}
-
 		err = json.Unmarshal([]byte(str), sd)
 
 		if err != nil {

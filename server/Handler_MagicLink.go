@@ -19,8 +19,7 @@ func (cfg *apiConfig) HandleMagicLink(w http.ResponseWriter, r *http.Request) {
 		errorResponse(w, 400, errors.New("token is invalid"))
 		return
 	}
-	log.Println(u)
-	s := session.New(u.ID)
+	s := session.New(u.ID, u.Name)
 	json, err := json.Marshal(s.Data)
 	if err != nil {
 		log.Println(err)

@@ -70,3 +70,7 @@ func UserFromToken(tokenString string) (*User, string, error) {
 	}
 	return token.Claims.(*UserClaims).User, issuer, nil
 }
+
+func UserFromID(userID int) (*User, error) {
+	return nil, nil
+}

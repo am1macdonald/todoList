@@ -7,8 +7,9 @@ import (
 )
 
 type SessionData struct {
-	Exprires int64 `json:"exprires"`
-	UserID   int64 `json:"user_id"`
+	Exprires int64  `json:"exprires"`
+	UserID   int64  `json:"user_id"`
+	Username string `json:"username"`
 }
 
 type Session struct {
@@ -16,10 +17,11 @@ type Session struct {
 	Data *SessionData
 }
 
-func New(userID int) *Session {
+func New(userID int, username string) *Session {
 	sd := SessionData{
 		Exprires: time.Now().Add(time.Hour * 24).Unix(),
 		UserID:   int64(userID),
+		Username: username,
 	}
 	s := Session{
 		Key:  uuid.New().String(),
