@@ -97,6 +97,9 @@ func main() {
 	mux.HandleFunc("POST /api/v1/sign_in", cfg.HandleSignIn)
 	mux.HandleFunc("GET /api/v1/sign_in", cfg.HandleMagicLink)
 
+	// session
+	mux.HandleFunc("GET /api/v1/session", cfg.MiddlewareAuthenticate(cfg.HandleGetSession))
+
 	// projects
 	mux.HandleFunc("POST /api/v1/{user_id}/projects", cfg.MiddlewareAuthenticate(cfg.HandleAddProject))
 	mux.HandleFunc("GET /api/v1/{user_id}/projects", cfg.MiddlewareAuthenticate(cfg.HandleGetProjects))
