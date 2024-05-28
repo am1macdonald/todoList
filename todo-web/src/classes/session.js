@@ -6,9 +6,6 @@ export default class Session {
   /** @private {Promise} */
   initialized;
 
-  /** @private {Array<Project>} projects*/
-  projects;
-
   constructor() {
     this.initialized = this.init();
   }
