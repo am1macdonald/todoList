@@ -7,7 +7,7 @@ import {
   renderStaticElements,
   taskCreationMenu,
   signInPopup,
-  renderListToNav,
+  renderListToNav
 } from "./src/displayControl.js";
 import {
   populateAll,
@@ -15,8 +15,9 @@ import {
   ProjectLibrary,
   populateFromLocalStorage,
   taskFromJSON,
-  projectFromJSON,
+  projectFromJSON
 } from "./src/libraryManagement.js";
+import Session from "./src/classes/session.js";
 
 renderStaticElements();
 
@@ -27,6 +28,7 @@ const page = document.getElementById("page");
 const clock = document.getElementById("date-hero");
 const allButtons = document.querySelectorAll("button");
 const authEnabled = true;
+const session = new Session();
 
 const disableButtons = (bool) => {
   allButtons.forEach((button) => {
@@ -46,21 +48,6 @@ const wrapUpSignIn = (target) => {
   disableButtons(false);
 };
 
-const signInCallback = async (target) => {
-  try {
-    await userSignIn();
-    getUser();
-    addNewUser();
-    const projectSnap = await getCollection("projects", projectConverter);
-    const taskSnap = await getCollection("tasks", taskConverter);
-    populateAll(taskSnap, projectSnap);
-    callListRenderers();
-    wrapUpSignIn(target);
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 /**
  *  @param {HTMLElement} target
  */
@@ -73,10 +60,22 @@ const localSessionCallback = (target) => {
   callListRenderers();
 };
 
-if (authEnabled) {
+const promptForSignIn = () => {
   signInPopup(page, () => undefined, localSessionCallback, () =>
     disableButtons(false)
   );
+};
+
+if (authEnabled) {
+  session.isValid().then((signedIn) => {
+    if (!signedIn) {
+      promptForSignIn();
+    }
+  }, () => {
+    promptForSignIn();
+  }).catch(() => {
+    promptForSignIn();
+  });
 } else {
   localSessionCallback(undefined);
   disableButtons(false);
@@ -85,7 +84,7 @@ if (authEnabled) {
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
   const config = { childList: true };
-  const callback = function (mutationsList) {
+  const callback = function(mutationsList) {
     for (const mutation of mutationsList) {
       if (mutation.type === "childList") {
         if (content.childNodes.length === 0) {
@@ -136,6 +135,6 @@ const contentState = (() => {
 
   return {
     getState,
-    setState,
+    setState
   };
 })();
