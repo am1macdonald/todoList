@@ -5,7 +5,6 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/am1macdonald/to-do-list/server/internal/session"
@@ -37,8 +36,6 @@ func (cfg *apiConfig) HandleMagicLink(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   24 * 60 * 60,
 		HttpOnly: true,
 	}
-	log.Println(os.Getenv("SERVICE_HOSTNAME"))
-	log.Println(s.Key)
 	http.SetCookie(w, &session_cookie)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

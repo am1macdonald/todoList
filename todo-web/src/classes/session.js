@@ -6,6 +6,9 @@ export default class Session {
   /** @private {Promise} */
   initialized;
 
+  /** @private {Array<Project>} projects*/
+  projects;
+
   constructor() {
     this.initialized = this.init();
   }
@@ -15,18 +18,35 @@ export default class Session {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await fetch("/api/v1/session", {
-          cache: "no-cache"
+          cache: "no-cache",
         });
         if (!response.ok && response.status !== 200) {
           resolve(false);
-          return
+          return;
         }
         const { userID, username } = await response.json();
         this.userID = userID;
         this.username = username;
         resolve(true);
       } catch (e) {
-        reject(e)
+        reject(e);
+      }
+    });
+  }
+
+  end() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch("/api/v1/sign_out", {
+          cache: "no-cache",
+        });
+        if (!response.ok && response.status !== 200) {
+          resolve(false);
+          return;
+        }
+        resolve(true);
+      } catch (e) {
+        reject(e);
       }
     });
   }

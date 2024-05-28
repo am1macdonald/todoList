@@ -17,7 +17,11 @@ import Project from "./classes/projectClass.js";
 
 const content = document.getElementById("content");
 
-const renderStaticElements = () => {
+/**
+ *
+ * @param {AppConfig} appConfig
+ */
+const renderStaticElements = (appConfig) => {
   // ref for static elements to append to
   const page = document.getElementById("page");
 
@@ -58,7 +62,7 @@ const renderStaticElements = () => {
     signOutButton.classList.add("styled-button");
 
     signOutButton.addEventListener("click", async () => {
-      await userSignOut();
+      await appConfig.session.end();
       location.reload();
     });
 
