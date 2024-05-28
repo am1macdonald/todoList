@@ -1,4 +1,4 @@
-import "./src/component_imports.js";
+import "./src/lib/component_imports.js";
 import "./src/stylesheets/reset.css";
 import "./src/stylesheets/style.css";
 import {
