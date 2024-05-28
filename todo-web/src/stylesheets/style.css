@@ -223,13 +223,13 @@ select {
 }
 
 #sign-in-page-splash .data-entry {
-  width: max(400px, 40%);
+  width: auto;
   height: auto;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 4vh;
-  padding: 1rem;
+  @apply px-4 px-8;
 }
 
 .flex-row {
