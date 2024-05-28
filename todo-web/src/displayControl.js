@@ -71,7 +71,7 @@ const renderStaticElements = (appConfig) => {
       button.id = `new-${name.toLowerCase()}-button`;
       button.classList.add("nav-button");
       button.classList.add("styled-button");
-      button.innerHTML = `new ${name} >>`;
+      button.innerHTML = `new ${name}`;
       nav.appendChild(button);
     };
 
@@ -329,7 +329,7 @@ const dynamicFormParts = (() => {
   const cancelButton = (parent, callback) => {
     const cancelButton = document.createElement("button");
     cancelButton.type = "button";
-    cancelButton.innerHTML = "cancel >>";
+    cancelButton.innerHTML = "cancel";
     cancelButton.classList.add("styled-button");
     cancelButton.classList.add("form-button");
     cancelButton.addEventListener("click", callback);
@@ -716,8 +716,8 @@ const renderBigDate = (() => {
   dateToday.id = "date-today";
   const startButton = document.createElement("button");
   startButton.id = "start-button";
-  startButton.innerHTML = "get to work >>";
-  startButton.classList.add("styled-button");
+  startButton.innerHTML = "get to work";
+  startButton.classList.add("styled-button", "py-3", "px-6");
 
   dateHero.appendChild(dateToday);
   dateHero.appendChild(startButton);
