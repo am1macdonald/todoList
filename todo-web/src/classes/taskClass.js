@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+
 export default class Task {
   constructor(
     title,
@@ -7,7 +8,7 @@ export default class Task {
     priority = 1,
     notes,
     checklist = {},
-    identifier,
+    id,
     complete = false
   ) {
     this.title = title;
@@ -16,11 +17,7 @@ export default class Task {
     this.priority = priority;
     this.notes = notes;
     this.checklist = checklist;
-    if (typeof identifier === "number") {
-      this.identifier = identifier;
-    } else {
-      this.identifier = Date.now();
-    }
+    this.id = id;
     this.complete = complete;
   }
 
@@ -45,7 +42,7 @@ export default class Task {
       `I am task, ${this.title}, due on ${format(
         new Date(),
         "yyyy-MM-dd"
-      )} with level ${this.priority} priority & id:${this.identifier}`
+      )} with level ${this.priority} priority & id:${this.id}`
     );
   }
 }

@@ -6,7 +6,7 @@ export default class Project {
     dueDate,
     notes,
     tasks = [],
-    identifier,
+    id,
     complete = false
   ) {
     this.title = title;
@@ -14,11 +14,7 @@ export default class Project {
     this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
     this.notes = notes;
     this.tasks = tasks;
-    if (typeof identifier === "number") {
-      this.identifier = identifier;
-    } else {
-      this.identifier = Date.now();
-    }
+    this.id = id;
     this.complete = complete;
   }
 
