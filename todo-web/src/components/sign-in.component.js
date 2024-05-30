@@ -12,6 +12,41 @@ form.innerHTML = `
 </div>
 `
 
+const pending = document.createElement('template');
+
+pending.innerHTML = `
+<style>
+.loading {
+  font-size: 30px;
+}
+
+.loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4,end) 900ms infinite;      
+  animation: ellipsis steps(4,end) 900ms infinite;
+  content: "\\2026"; /* ascii code for the ellipsis character */
+  width: 2px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 1.25em;    
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 1.25em;    
+  }
+}
+</style>
+<div class="flex flex-col justify-start items-start container py-4 px-8 bg-[hsl(45,29%,97%)] border-solid border-2 border-[hsla(302,16%,45%,1)] shadow-[9px_10px_0_hsla(302,16%,45%,1)]">
+    <p class="loading w-[170px]">Sending link</p>
+</div>
+`
+
 const result = document.createElement('template');
 result.innerHTML = `
 <div class="flex flex-col justify-start items-start container py-4 px-8 bg-[hsl(45,29%,97%)] border-solid border-2 border-[hsla(302,16%,45%,1)] shadow-[9px_10px_0_hsla(302,16%,45%,1)]">
@@ -26,8 +61,6 @@ class SignInModal extends HTMLElement {
 
     constructor() {
         super();
-        // const shadow = this.attachShadow({mode: 'open'})
-        // shadow.append(
     }
 
     connectedCallback() {
@@ -43,6 +76,8 @@ class SignInModal extends HTMLElement {
      * @param {string} email
      */
     submit(email) {
+        this.innerHTML = '';
+        this.append(pending.content.cloneNode(true))
         fetch("/api/v1/sign_in", {
             method: "POST",
             body: JSON.stringify({
