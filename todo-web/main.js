@@ -7,7 +7,7 @@ import {
   renderStaticElements,
   taskCreationMenu,
   signInPopup,
-  renderListToNav,
+  renderListToNav
 } from "./src/displayControl.js";
 import {
   populateAll,
@@ -15,7 +15,7 @@ import {
   ProjectLibrary,
   populateFromLocalStorage,
   taskFromJSON,
-  projectFromJSON,
+  projectFromJSON, populateFromApi
 } from "./src/libraryManagement.js";
 import Session from "./src/classes/session.js";
 import AppConfig from "./src/classes/appConfig.js";
@@ -46,8 +46,11 @@ const callListRenderers = () => {
   renderListToNav(ProjectLibrary.show(), "project");
 };
 
-const wrapUpSignIn = (target) => {
-  target.remove();
+/**
+ * @param {HTMLElement} target
+ */
+const wrapUpSignIn = (target = undefined) => {
+  target?.remove();
   disableButtons(false);
 };
 
@@ -63,12 +66,26 @@ const localSessionCallback = (target) => {
   callListRenderers();
 };
 
+const setupConnectedSession = () => {
+  wrapUpSignIn(undefined);
+  Promise.all([
+    populateFromApi(appConfig, TaskLibrary, "tasks", taskFromJSON),
+    populateFromApi(appConfig, ProjectLibrary, "projects", projectFromJSON)
+  ]).then((res) => {
+    console.log(res);
+    callListRenderers();
+  }).catch((e) => {
+    console.log(e);
+  });
+};
+
 const promptForSignIn = () => {
   signInPopup(
     page,
-    () => {},
+    () => {
+    },
     localSessionCallback,
-    () => disableButtons(false),
+    () => disableButtons(false)
   );
 };
 
@@ -82,11 +99,11 @@ if (authEnabled) {
           return;
         }
         appConfig.session = session;
-        disableButtons(false);
+        setupConnectedSession();
       },
       () => {
         promptForSignIn();
-      },
+      }
     )
     .catch(() => {
       promptForSignIn();
@@ -99,7 +116,7 @@ if (authEnabled) {
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {
   const config = { childList: true };
-  const callback = function (mutationsList) {
+  const callback = function(mutationsList) {
     for (const mutation of mutationsList) {
       if (mutation.type === "childList") {
         if (content.childNodes.length === 0) {
@@ -150,6 +167,6 @@ const contentState = (() => {
 
   return {
     getState,
-    setState,
+    setState
   };
 })();
