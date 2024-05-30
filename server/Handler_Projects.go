@@ -139,3 +139,18 @@ func (cfg *apiConfig) HandleUpdateProject(w http.ResponseWriter, r *http.Request
 
 	jsonResponse(w, 200, project)
 }
+
+func (cfg *apiConfig) HandleDeleteProject(w http.ResponseWriter, r *http.Request, s *session.Session) {
+	id, err := strconv.ParseInt(r.PathValue("task_id"), 10, 64)
+	if err != nil {
+		errorResponse(w, 500, err)
+	}
+	err = cfg.db.DeleteProject(r.Context(), database.DeleteProjectParams{
+		ID:     id,
+		UserID: s.Data.UserID,
+	})
+	if err != nil {
+		errorResponse(w, 500, err)
+	}
+	jsonResponse(w, 200, struct{ Message string }{Message: "success"})
+}

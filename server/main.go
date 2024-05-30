@@ -48,7 +48,7 @@ func jsonResponse(w http.ResponseWriter, status int, payload interface{}) {
 
 func errorResponse(w http.ResponseWriter, status int, err error) {
 	log.Println(err.Error())
-	jsonResponse(w, status, err)
+	jsonResponse(w, status, struct{ Message string }{Message: "internal error"})
 }
 
 func init() {
@@ -107,11 +107,13 @@ func main() {
 	mux.HandleFunc("POST /api/v1/{user_id}/projects", cfg.MiddlewareAuthenticate(cfg.HandleAddProject))
 	mux.HandleFunc("GET /api/v1/{user_id}/projects", cfg.MiddlewareAuthenticate(cfg.HandleGetProjects))
 	mux.HandleFunc("PUT /api/v1/{user_id}/projects/{project_id}", cfg.MiddlewareAuthenticate(cfg.HandleUpdateProject))
+	mux.HandleFunc("DELETE /api/v1/{user_id}/projects/{task_id}", cfg.MiddlewareAuthenticate(cfg.HandleDeleteProject))
 
 	// tasks
 	mux.HandleFunc("POST /api/v1/{user_id}/tasks", cfg.MiddlewareAuthenticate(cfg.HandleAddTask))
 	mux.HandleFunc("GET /api/v1/{user_id}/tasks", cfg.MiddlewareAuthenticate(cfg.HandleGetTasks))
 	mux.HandleFunc("PUT /api/v1/{user_id}/tasks/{task_id}", cfg.MiddlewareAuthenticate(cfg.HandleUpdateTask))
+	mux.HandleFunc("DELETE /api/v1/{user_id}/tasks/{task_id}", cfg.MiddlewareAuthenticate(cfg.HandleDeleteTask))
 
 	corsMux := middlewareCors(mux)
 	server := http.Server{

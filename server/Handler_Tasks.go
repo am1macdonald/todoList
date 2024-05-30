@@ -140,10 +140,24 @@ func (cfg *apiConfig) HandleUpdateTask(w http.ResponseWriter, r *http.Request, s
 	})
 
 	if err != nil {
-		log.Println(err)
 		errorResponse(w, 500, errors.New("failed to update project"))
 		return
 	}
 
 	jsonResponse(w, 200, task)
+}
+
+func (cfg *apiConfig) HandleDeleteTask(w http.ResponseWriter, r *http.Request, s *session.Session) {
+	id, err := strconv.ParseInt(r.PathValue("task_id"), 10, 64)
+	if err != nil {
+		errorResponse(w, 500, err)
+	}
+	err = cfg.db.DeleteTask(r.Context(), database.DeleteTaskParams{
+		ID:     id,
+		UserID: s.Data.UserID,
+	})
+	if err != nil {
+		errorResponse(w, 500, err)
+	}
+	jsonResponse(w, 200, struct{ Message string }{Message: "success"})
 }
