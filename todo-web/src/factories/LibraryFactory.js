@@ -12,16 +12,24 @@ const LibraryFactory = () => {
 
   const get = () => library;
 
-  const add = (key, item) => {
+  const addItem = (key, item) => {
     library[key] = item;
   };
+
+  const addItems = (key, arr) => {
+    arr.forEach((item) => {
+      library[item[key]] = item;
+    })
+
+  }
 
   const remove = (key) => {
     delete library[key];
   };
 
   return {
-    add,
+    add: addItem,
+    addItems,
     remove,
     show,
     get,
