@@ -56,15 +56,16 @@ const renderStaticElements = (appConfig) => {
     projectList.id = "project-list";
     projectContainer.appendChild(projectList);
 
-    const signOutButton = document.createElement("button");
-    signOutButton.id = "sign-out-button";
-    signOutButton.insertAdjacentText("afterbegin", "sign out");
-    signOutButton.classList.add("styled-button");
-
-    signOutButton.addEventListener("click", async () => {
-      await appConfig.session.end();
-      location.reload();
-    });
+    const headerOverlay = document.createElement("template");
+    headerOverlay.innerHTML = `
+    <div class="fixed top-0 left-0 w-screen flex justify-end items-center p-2.5 pointer-events-none">
+      <button id="sign-out-button" class="pointer-events-auto box-border w-28 h-8 shadow-none flex justify-center items-center border-solid border-2 border-[hsla(302,16%,45%,1)] font-medium text-lg hover:bg-[hsla(302,16%,45%,1)] hover:text-[hsl(36,33%,97%)] transition-all ease-in-out">
+        <span>
+          sign out
+        </span>
+      </button>
+    </div> 
+    `
 
     const newNavButton = (name) => {
       const button = document.createElement("button");
@@ -80,9 +81,13 @@ const renderStaticElements = (appConfig) => {
     newNavButton("task");
     nav.appendChild(projectContainer);
     newNavButton("project");
-    nav.appendChild(signOutButton);
-
     page.prepend(nav);
+    page.append(headerOverlay.content.cloneNode(true));
+
+    document.getElementById("sign-out-button").addEventListener("click", async () => {
+      await appConfig.session.end();
+      location.reload();
+    });
   })();
 };
 
