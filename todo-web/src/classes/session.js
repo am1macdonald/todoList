@@ -5,6 +5,8 @@ export default class Session {
   username;
   /** @private {Promise} */
   initialized;
+  /**@private {boolean} */
+  isLocal;
 
   constructor() {
     this.initialized = this.init();
@@ -61,5 +63,9 @@ export default class Session {
 
   get username() {
     return this.username;
+  }
+
+  get isLocal() {
+    return this.isLocal
   }
 }
