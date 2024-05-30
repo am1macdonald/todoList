@@ -55,11 +55,16 @@ func (q *Queries) AddProject(ctx context.Context, arg AddProjectParams) (AddProj
 }
 
 const deleteProject = `-- name: DeleteProject :exec
-DELETE FROM projects where id = ?
+DELETE FROM projects where id = ? and user_id = ?
 `
 
-func (q *Queries) DeleteProject(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteProject, id)
+type DeleteProjectParams struct {
+	ID     int64 `json:"id"`
+	UserID int64 `json:"user_id"`
+}
+
+func (q *Queries) DeleteProject(ctx context.Context, arg DeleteProjectParams) error {
+	_, err := q.db.ExecContext(ctx, deleteProject, arg.ID, arg.UserID)
 	return err
 }
 

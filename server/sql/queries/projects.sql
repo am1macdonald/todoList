@@ -19,4 +19,4 @@ WHERE id = ?
 RETURNING id;
 
 -- name: DeleteProject :exec
-DELETE FROM projects where id = ?;
+DELETE FROM projects where id = ? and user_id = ?;

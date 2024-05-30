@@ -65,11 +65,16 @@ func (q *Queries) AddTask(ctx context.Context, arg AddTaskParams) (AddTaskRow, e
 }
 
 const deleteTask = `-- name: DeleteTask :exec
-DELETE FROM tasks where id = ?
+DELETE FROM tasks where id = ? and user_id = ?
 `
 
-func (q *Queries) DeleteTask(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteTask, id)
+type DeleteTaskParams struct {
+	ID     int64 `json:"id"`
+	UserID int64 `json:"user_id"`
+}
+
+func (q *Queries) DeleteTask(ctx context.Context, arg DeleteTaskParams) error {
+	_, err := q.db.ExecContext(ctx, deleteTask, arg.ID, arg.UserID)
 	return err
 }
 

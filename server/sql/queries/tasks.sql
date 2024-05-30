@@ -21,4 +21,4 @@ where id = ?
 RETURNING id;
 
 -- name: DeleteTask :exec
-DELETE FROM tasks where id = ?;
+DELETE FROM tasks where id = ? and user_id = ?;
