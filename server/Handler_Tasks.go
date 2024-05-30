@@ -29,7 +29,7 @@ func DbTaskToTask(p *database.Task) *task.Task {
 func (cfg *apiConfig) HandleGetTasks(w http.ResponseWriter, r *http.Request, s *session.Session) {
 	userID, err := strconv.ParseInt(r.PathValue("user_id"), 10, 64)
 	if err != nil {
-		jsonResponse(w, 500, errors.New("failed to parse userID"))
+		errorResponse(w, 500, err)
 		return
 	}
 	if int(s.Data.UserID) != int(userID) {
@@ -38,7 +38,7 @@ func (cfg *apiConfig) HandleGetTasks(w http.ResponseWriter, r *http.Request, s *
 	}
 	dbTasks, err := cfg.db.GetUserTasks(r.Context(), userID)
 	if err != nil {
-		jsonResponse(w, 500, errors.New("failed to gather projects"))
+		errorResponse(w, 500, err)
 		return
 	}
 	tasks := make([]task.Task, len(dbTasks))
