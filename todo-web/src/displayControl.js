@@ -245,12 +245,12 @@ const dynamicFormParts = (() => {
       listItem.classList.add("task-list-item");
 
       const cloneCheckbox = checkBox.cloneNode();
-      cloneCheckbox.id = `${item.identifier}`;
-      cloneCheckbox.value = `${item.identifier}`;
+      cloneCheckbox.id = `${item.id}`;
+      cloneCheckbox.value = `${item.id}`;
 
       const cloneCheckboxLabel = checkboxLabel.cloneNode();
 
-      cloneCheckboxLabel.setAttribute("for", `${item.identifier}`);
+      cloneCheckboxLabel.setAttribute("for", `${item.id}`);
       let title = item.title;
       if (item.title.length > 30) {
         title = `${item.title.split(" ").slice(0, 7).join(" ")}...`;
@@ -258,7 +258,7 @@ const dynamicFormParts = (() => {
       cloneCheckboxLabel.innerHTML = title;
 
       if (obj) {
-        if (obj.tasks.includes(item.identifier.toString())) {
+        if (obj.tasks.includes(item.id)) {
           cloneCheckbox.checked = true;
         }
       }
@@ -414,7 +414,7 @@ const dynamicExplorerParts = (() => {
       const listItem = document.createElement("li");
       listItem.classList.add("explorer-list-item");
       if (item.constructor.name === "Task") {
-        listItem.id = item.identifier;
+        listItem.id = item.id;
       }
 
       const collapsible = document.createElement("button");
@@ -520,14 +520,14 @@ const dynamicExplorerParts = (() => {
               item[prop].forEach((task) => {
                 // gets the task from the task-library based on the task-ID
                 TaskLibrary.show().forEach((obj) => {
-                  if (obj.identifier.toString() === task) {
+                  if (obj.id === task) {
                     const listItem = document.createElement("li");
                     listItem.classList.add("hidden-list-item");
                     const taskItem = document.createElement("input");
                     taskItem.type = "checkbox";
                     taskItem.id = obj.title;
                     taskItem.name = obj.title;
-                    taskItem.value = obj.identifier;
+                    taskItem.value = obj.id;
                     // checks the box if the task is complete
                     if (obj.complete === true) {
                       taskItem.checked = true;
@@ -568,7 +568,7 @@ const dynamicExplorerParts = (() => {
               hiddenDiv.classList.add("completed");
             }
             break;
-          case prop === "identifier":
+          case prop === "id":
             break;
           case prop === "key":
             break;
