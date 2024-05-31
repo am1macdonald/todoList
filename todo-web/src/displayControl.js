@@ -130,18 +130,20 @@ const dynamicFormParts = (() => {
 
   // creates a date input when called
   const newDateInput = (parent) => {
-    const label = document.createElement("label");
-    label.for = "due-date";
-    label.innerHTML = "Deadline.";
-    const input = document.createElement("input");
-    input.id = "due-date";
-    input.type = "date";
-    input.min = `${format(new Date(), "yyyy-MM-dd")}`;
-    input.value = `${format(new Date(), "yyyy-MM-dd")}`;
-    input.required = true;
-
-    parent.appendChild(label);
-    parent.appendChild(input);
+    const template = document.createElement("template");
+    template.innerHTML = `
+    <div class="flex flex-row justify-start items-center py-4">
+      <label class="flex flex-row justify-start items-center gap-6" for="due-date">
+        <span class="leading-tight w-20">
+          Deadline.
+        </span>
+        <input class="m-0 pl-2.5 pr-1.5" name="due-date" id="due-date" type="date" 
+          min="${format(new Date(), "yyyy-MM-dd")}" 
+          value="${format(new Date(), "yyyy-MM-dd")}">
+      </label>
+    </div>
+    `;
+    parent.appendChild(template.content.cloneNode(true));
   };
 
   // dropdown menu for selecting the priority
