@@ -148,19 +148,26 @@ const dynamicFormParts = (() => {
 
   // dropdown menu for selecting the priority
   const newPriorityDropdown = (parent, maxScale) => {
-    const label = document.createElement("label");
-    label.for = "priority";
-    label.innerHTML = "Priority.";
-    const input = document.createElement("select");
-    input.id = "priority";
+    const template = document.createElement("template");
+    template.innerHTML = `
+    <div class="flex flex-row justify-start items-center py-4">
+      <label class="flex flex-row justify-start items-center gap-6" for="priority">
+        <span class="leading-tight w-20">
+          Priority.
+        </span>
+        <select class="m-0 pl-2.5 pr-1.5" name="priority" id="priority">
+        </select>
+      </label>
+    </div>
+    `;
+    parent.appendChild(template.content.cloneNode(true));
+    const input = parent.querySelector("select");
     for (let i = 1; i <= maxScale; i++) {
       const newOption = document.createElement("option");
       newOption.value = i.toString();
       newOption.innerHTML = i.toString();
       input.appendChild(newOption);
     }
-    parent.appendChild(label);
-    parent.appendChild(input);
   };
 
   // input for a task checklist
