@@ -18,7 +18,7 @@ export default class Project {
     this.complete = complete;
   }
 
-  markComplete() {
+  toggleComplete() {
     if (this.complete === false) {
       this.complete = true;
     } else if (this.complete === true) {
