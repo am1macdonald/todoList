@@ -8,12 +8,12 @@ import {
   sortAlg,
   editTask,
   editProject,
-  updateLocalStorage,
+  updateLocalStorage
 } from "./libraryManagement.js";
 import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
 import Task from "./classes/taskClass.js";
-import Project from "./classes/projectClass.js";
+import Project from "./classes/Project.js";
 
 const content = document.getElementById("content");
 
@@ -65,7 +65,7 @@ const renderStaticElements = (appConfig) => {
         </span>
       </button>
     </div> 
-    `
+    `;
 
     const newNavButton = (name) => {
       const button = document.createElement("button");
@@ -109,14 +109,21 @@ const dynamicFormParts = (() => {
     content.appendChild(container);
   };
 
-  // creates a text input when called
-  const newTextInput = (parent, name, labelText, placeholder, required) => {
+  /**
+   * @param {HTMLElement} parent
+   * @param name
+   * @param labelText
+   * @param placeholder
+   * @param required
+   * @param {Array<string>} classList
+   */
+  const newTextInput = (parent = undefined, name, labelText, placeholder, required, classList) => {
     const label = document.createElement("label");
     label.for = name;
     label.innerHTML = labelText;
     const input = document.createElement("input");
     input.id = name;
-    input.classList.add("text-input");
+    input.classList.add("text-input", ...classList);
     input.type = "text";
     input.placeholder = placeholder;
 
@@ -124,12 +131,19 @@ const dynamicFormParts = (() => {
       input.required = true;
     }
 
-    parent.appendChild(label);
-    parent.appendChild(input);
+    if (parent !== undefined) {
+      parent.appendChild(label);
+      parent.appendChild(input);
+    }
+    return input
   };
 
-  // creates a date input when called
-  const newDateInput = (parent) => {
+  /** creates a date input when called
+   * @param {HTMLElement} parent
+   * @param {string[]} classList
+   * @return {HTMLDivElement}
+   */
+  const newDateInput = (parent = undefined, classList) => {
     const template = document.createElement("template");
     template.innerHTML = `
     <div class="flex flex-row justify-start items-center py-4">
@@ -137,13 +151,16 @@ const dynamicFormParts = (() => {
         <span class="leading-tight w-20">
           Deadline.
         </span>
-        <input class="m-0 pl-2.5 pr-1.5" name="due-date" id="due-date" type="date" 
+        <input class="m-0 pl-2.5 pr-1.5 ${classList.join(" ")}" name="due-date" id="due-date" type="date" 
           min="${format(new Date(), "yyyy-MM-dd")}" 
           value="${format(new Date(), "yyyy-MM-dd")}">
       </label>
     </div>
     `;
-    parent.appendChild(template.content.cloneNode(true));
+    if (parent !== undefined) {
+      parent.appendChild(template.content.cloneNode(true));
+    }
+    return template.content.cloneNode(true);
   };
 
   // dropdown menu for selecting the priority
@@ -198,7 +215,7 @@ const dynamicFormParts = (() => {
     removeItem.innerHTML = "remove";
     removeItem.classList.add("styled-button");
     removeItem.classList.add("form-button");
-    addItem.addEventListener("click", function (e) {
+    addItem.addEventListener("click", function(e) {
       e.preventDefault();
       if (textInput.value.length > 0) {
         const listItem = document.createElement("li");
@@ -209,7 +226,7 @@ const dynamicFormParts = (() => {
         listItem.scrollIntoView();
       }
     });
-    removeItem.addEventListener("click", function (e) {
+    removeItem.addEventListener("click", function(e) {
       e.preventDefault();
       if (simpleBar.getContentElement().childElementCount > 0) {
         simpleBar
@@ -238,8 +255,13 @@ const dynamicFormParts = (() => {
     parent.appendChild(label);
     parent.appendChild(listDiv);
   };
-  // compiles tasks for the project creation menu
-  const newTasklist = (parent, obj) => {
+
+  /** compiles tasks for the project creation menu
+   * @param parent
+   * @param obj
+   * @param {string[]} classList
+   */
+  const newTaskList = (parent = undefined, obj, classList) => {
     const label = document.createElement("label");
     label.setAttribute("for", "checkboxes");
     label.innerHTML = "Tasks.";
@@ -288,8 +310,11 @@ const dynamicFormParts = (() => {
     parent.appendChild(listDiv);
   };
 
-  // form submit button
-  const submitButton = (parent) => {
+  /**
+   * @param {AppConfig} appConfig
+   * @param parent
+   */
+  const submitButton = (appConfig, parent) => {
     const submitButton = document.createElement("button");
     submitButton.type = "button";
     submitButton.innerHTML = "create";
@@ -297,13 +322,13 @@ const dynamicFormParts = (() => {
     submitButton.classList.add("form-button");
     submitButton.addEventListener("click", () => {
       if (parent.id === "task-buttons") {
-        addNewTask(() => {
+        addNewTask(appConfig).then(() => {
           renderListToNav(TaskLibrary.show(), "task");
           clearContent();
           stateManager.setAdded(false);
         });
       } else if (parent.id === "project-buttons") {
-        addNewProject(() => {
+        addNewProject(appConfig).then(() => {
           renderListToNav(ProjectLibrary.show(), "project");
           clearContent();
           stateManager.setAdded(false);
@@ -356,10 +381,10 @@ const dynamicFormParts = (() => {
     newDateInput,
     newPriorityDropdown,
     newChecklist,
-    newTasklist,
+    newTasklist: newTaskList,
     submitButton,
     saveButton,
-    cancelButton,
+    cancelButton
   };
 })();
 
@@ -442,7 +467,7 @@ const dynamicExplorerParts = (() => {
 
       collapsible.innerHTML = title;
 
-      collapsible.addEventListener("click", function () {
+      collapsible.addEventListener("click", function() {
         this.classList.toggle("active");
         const hiddenDiv = this.nextElementSibling;
         if (hiddenDiv.style.display === "grid") {
@@ -681,7 +706,7 @@ const dynamicExplorerParts = (() => {
 
     expand.addEventListener("click", () => {
       Array.from(
-        document.getElementsByClassName("collapsible-content"),
+        document.getElementsByClassName("collapsible-content")
       ).forEach((item) => {
         item.style.display = "grid";
         if (!item.previousSibling.classList.contains("active")) {
@@ -697,7 +722,7 @@ const dynamicExplorerParts = (() => {
 
     retract.addEventListener("click", () => {
       Array.from(
-        document.getElementsByClassName("collapsible-content"),
+        document.getElementsByClassName("collapsible-content")
       ).forEach((item) => {
         item.style.display = "none";
         if (item.previousSibling.classList.contains("active")) {
@@ -718,7 +743,7 @@ const dynamicExplorerParts = (() => {
     explorerTabs,
     itemList,
     refreshItemList,
-    buttons,
+    buttons
   };
 })();
 
@@ -741,7 +766,7 @@ const renderBigDate = (() => {
   function updateTime() {
     dateToday.innerHTML = `${format(
       new Date(),
-      "EEEE', the 'do'<br />of 'MMMM",
+      "EEEE', the 'do'<br />of 'MMMM"
     )} <br />
                             ${format(new Date(), "p")}`;
     timer = setTimeout(updateTime, 60000);
@@ -759,7 +784,7 @@ const renderBigDate = (() => {
   });
   return {
     updateTime,
-    stop,
+    stop
   };
 })();
 
@@ -774,8 +799,10 @@ const taskExplorer = () => {
   dynamicExplorerParts.itemList(listContainer, TaskLibrary.show());
   dynamicExplorerParts.buttons(explorer);
 };
-// creating a form to make a new task
-const taskCreationMenu = () => {
+/** creating a form to make a new task
+ *  @param {AppConfig} appConfig
+ */
+const taskCreationMenu = (appConfig) => {
   dynamicFormParts.newFormWindow("Task", "New Task");
   const form = document.getElementById("task-form");
   form.classList.add("data-entry");
@@ -785,6 +812,7 @@ const taskCreationMenu = () => {
     "Title.",
     "Enter task name...",
     true,
+    []
   );
   dynamicFormParts.newTextInput(
     form,
@@ -792,8 +820,9 @@ const taskCreationMenu = () => {
     "Details.",
     "Details...",
     true,
+    []
   );
-  dynamicFormParts.newDateInput(form);
+  dynamicFormParts.newDateInput(form, []);
   dynamicFormParts.newPriorityDropdown(form, 5);
   dynamicFormParts.newChecklist(form);
   dynamicFormParts.newTextInput(
@@ -802,11 +831,12 @@ const taskCreationMenu = () => {
     "Notes.",
     "Additional notes...",
     false,
+    []
   );
   const div = document.createElement("div");
   div.classList.add("form-buttons");
   div.id = "task-buttons";
-  dynamicFormParts.submitButton(div);
+  dynamicFormParts.submitButton(appConfig, div);
   dynamicFormParts.cancelButton(div, clearContent);
   form.appendChild(div);
 };
@@ -821,7 +851,7 @@ const editTaskMenu = (obj) => {
   const form = document.getElementById("task-edit-form");
   form.classList.add("data-entry");
   dynamicFormParts.newTextInput(form, "description", "Details.", "", true);
-  dynamicFormParts.newDateInput(form);
+  dynamicFormParts.newDateInput(form, []);
   dynamicFormParts.newPriorityDropdown(form, 5);
   dynamicFormParts.newChecklist(form, obj);
   dynamicFormParts.newTextInput(form, "notes", "Notes.", "", false);
@@ -840,8 +870,12 @@ const editTaskMenu = (obj) => {
   document.getElementById("notes").value = obj.notes;
 };
 
-// creating a form to make a new project
-const projectCreationMenu = () => {
+/**
+ * creating a form to make a new project
+ * @param {AppConfig} appConfig
+ */
+const projectCreationMenu = (appConfig) => {
+  const inputClassName = "project-creation-input"
   dynamicFormParts.newFormWindow("Project", "New Project");
   const form = document.getElementById("project-form");
   form.classList.add("data-entry");
@@ -851,6 +885,7 @@ const projectCreationMenu = () => {
     "Title.",
     "Enter project name...",
     true,
+    [inputClassName]
   );
   dynamicFormParts.newTextInput(
     form,
@@ -858,22 +893,24 @@ const projectCreationMenu = () => {
     "Details.",
     "Details...",
     true,
+    [inputClassName]
   );
-  dynamicFormParts.newDateInput(form);
+  dynamicFormParts.newDateInput(form, [inputClassName]);
   dynamicFormParts.newTextInput(
     form,
     "notes",
     "Notes.",
     "Additional notes...",
     false,
+    [inputClassName]
   );
-  dynamicFormParts.newTasklist(form);
+  dynamicFormParts.newTasklist(form, undefined, []);
   // eslint-disable-next-line no-new
   new SimpleBar(document.getElementById("checkboxes"), { autoHide: false });
   const div = document.createElement("div");
   div.classList.add("form-buttons");
   div.id = "project-buttons";
-  dynamicFormParts.submitButton(div);
+  dynamicFormParts.submitButton(appConfig, div);
   dynamicFormParts.cancelButton(div, clearContent);
   const footNote = document.createElement("p");
   footNote.id = "project-form-footnote";
@@ -893,7 +930,7 @@ const editProjectMenu = (obj) => {
   const form = document.getElementById("project-edit-form");
   form.classList.add("data-entry");
   dynamicFormParts.newTextInput(form, "description", "Details.", "", true);
-  dynamicFormParts.newDateInput(form);
+  dynamicFormParts.newDateInput(form, []);
   dynamicFormParts.newTasklist(form, obj);
   // eslint-disable-next-line no-new
   new SimpleBar(document.getElementById("checkboxes"), { autoHide: false });
@@ -936,7 +973,7 @@ const renderListToNav = (library, target) => {
       for (let i = topFive.length - 1; i >= 0; i--) {
         const test = compareAsc(
           parseISO(item.dueDate),
-          parseISO(topFive[i].dueDate),
+          parseISO(topFive[i].dueDate)
         );
         if (test === 1 || test === 0) {
           if (i >= 4) {
@@ -973,7 +1010,7 @@ function openSignIn() {
   document.body.appendChild(overlay);
 }
 
-const signInPopup = (parent, signIn, localSession, enableButtons) => {
+const signInPopup = (parent, signIn, localSession) => {
   const pageSplash = document.createElement("div");
   pageSplash.id = "sign-in-page-splash";
   parent.appendChild(pageSplash);
@@ -1001,5 +1038,5 @@ export {
   taskCreationMenu,
   projectCreationMenu,
   signInPopup,
-  renderListToNav,
+  renderListToNav
 };

@@ -1,5 +1,7 @@
 import { format } from "date-fns";
 export default class Project {
+  /** @public {Date}*/
+  date;
   constructor(
     title,
     description,
@@ -11,6 +13,7 @@ export default class Project {
   ) {
     this.title = title;
     this.description = description;
+    this.date = new Date(dueDate);
     this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
     this.notes = notes;
     this.tasks = tasks;

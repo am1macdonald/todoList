@@ -1,9 +1,9 @@
 /* eslint-disable curly */
 import { compareAsc, parseISO } from "date-fns";
-import uniqid from "uniqid";
-import Project from "./classes/projectClass.js";
+import Project from "./classes/Project.js";
 import Task from "./classes/taskClass.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
+import { sendProjectToDatabase } from "./database/DBProject.js";
 
 const TaskLibrary = LibraryFactory();
 const ProjectLibrary = LibraryFactory();
@@ -20,7 +20,7 @@ const populateAll = (taskData, projectData) => {
 };
 
 const projectFromJSON = (item) => {
-  const { title, description, dueDate, notes, tasks, identifier, complete } =
+  const { title, description, deadline: dueDate, notes, tasks, id, complete } =
     item;
   return new Project(
     title,
@@ -28,7 +28,7 @@ const projectFromJSON = (item) => {
     dueDate,
     notes,
     tasks,
-    identifier,
+    id,
     complete
   );
 };
@@ -37,12 +37,12 @@ const taskFromJSON = (item) => {
   const {
     title,
     description,
-    dueDate,
+    deadline: dueDate,
     priority,
     notes,
     checklist,
-    identifier,
-    complete,
+    id,
+    complete
   } = item;
   return new Task(
     title,
@@ -51,7 +51,7 @@ const taskFromJSON = (item) => {
     priority,
     notes,
     checklist,
-    identifier,
+    id,
     complete
   );
 };
@@ -67,17 +67,38 @@ const populateFromLocalStorage = (library, libraryType, converter) => {
     }
   }
 };
+
+/**
+ * @param {AppConfig} appConfig
+ * @param library
+ * @param {string} libraryType
+ * @param {function} converter
+ * @returns {Promise<any>}
+ */
+const populateFromApi = async (appConfig, library, libraryType, converter) => {
+  const response = await fetch(`/api/v1/${appConfig.session.userID}/${libraryType}`);
+  if (!response.ok && response.status !== 200) {
+    throw new Error("failed to fetch: " + libraryType);
+  }
+  const responseJson = await response.json();
+  library.addItems("id", responseJson.map(converter));
+};
+
 const updateLocalStorage = (map, libraryType) => {
   window.localStorage.setItem(`${libraryType}-library`, JSON.stringify(map));
 };
 
-export const addNewTask = async (callback) => {
+/**
+ * @param {AppConfig} appConfig
+ * @returns {Promise<void|boolean>}
+ */
+export const addNewTask = async (appConfig) => {
   let taskForm = "";
 
   if (document.getElementById("task-form") !== null) {
     taskForm = document.getElementById("task-form");
   } else {
-    console.error("not a task");
+    console.error("cannot find task form");
     return false;
   }
 
@@ -110,8 +131,8 @@ export const addNewTask = async (callback) => {
   //   const taskID = await addToDatabase(newTask, "tasks", taskConverter);
   //   TaskLibrary.add(taskID, newTask);
   // } else {
-    TaskLibrary.add(uniqid(), newTask);
-    updateLocalStorage(TaskLibrary.get(), "task");
+  TaskLibrary.add(crypto.randomUUID(), newTask);
+  updateLocalStorage(TaskLibrary.get(), "task");
   // }
   TaskLibrary.show();
   callback();
@@ -133,18 +154,13 @@ export const editTask = (obj) => {
   updateLocalStorage(TaskLibrary.get(), "task");
 };
 
-export const addNewProject = async (callback) => {
-  let projectForm = "";
-
-  if (document.getElementById("project-form") !== null) {
-    projectForm = document.getElementById("project-form");
-  } else {
-    console.error("not a project");
-    return false;
-  }
-
+/**
+ * @param {AppConfig} appConfig
+ * @returns {Promise<void|boolean>}
+ */
+export const addNewProject = async (appConfig) => {
   // array from text-input nodes from the project form
-  const nodeArr = Array.from(projectForm.childNodes)
+  const nodeArr = Array.from(document.querySelectorAll(".project-creation-input"))
     .filter((node) => node.tagName === "INPUT" || node.tagName === "SELECT")
     .map((node) => {
       if (node.id === "due-date") {
@@ -170,20 +186,19 @@ export const addNewProject = async (callback) => {
   }
   const newProject = new Project(...nodeArr, tasks);
 
-  // if (getUser()) {
-  //   const projectID = await addToDatabase(
-  //     newProject,
-  //     "projects",
-  //     projectConverter
-  //   );
-  //
-  //   ProjectLibrary.add(projectID, newProject);
-  // } else {
-    ProjectLibrary.add(uniqid(), newProject);
+  if (appConfig.session.isLocal) {
+    ProjectLibrary.add(crypto.randomUUID(), newProject);
     updateLocalStorage(ProjectLibrary.get(), "project");
-  // }
-  ProjectLibrary.show(ProjectLibrary.show(), "project");
-  callback();
+    ProjectLibrary.show(ProjectLibrary.show(), "project");
+  } else {
+    sendProjectToDatabase(appConfig, newProject).then((res) => {
+      console.log(res)
+      newProject.id = res.id;
+      ProjectLibrary.show(ProjectLibrary.show(), "project");
+    }).catch((e) => {
+      console.log(e);
+    });
+  }
 };
 
 export const editProject = async (obj) => {
@@ -202,7 +217,7 @@ export const editProject = async (obj) => {
   // if (getUser()) {
   //   updateDocument(obj, "projects", projectConverter);
   // } else {
-    updateLocalStorage(ProjectLibrary.get(), "project");
+  updateLocalStorage(ProjectLibrary.get(), "project");
   // }
 };
 
@@ -217,9 +232,10 @@ export const stateManager = (() => {
   };
   return {
     getAdded,
-    setAdded,
+    setAdded
   };
 })();
+
 // module for sorting algorithms
 export const sortAlg = (() => {
   // sorts by time ascending
@@ -247,7 +263,7 @@ export const sortAlg = (() => {
     return tempArr;
   };
   return {
-    timeAsc,
+    timeAsc
   };
 })();
 
@@ -256,7 +272,8 @@ export {
   ProjectLibrary,
   TaskLibrary,
   populateFromLocalStorage,
+  populateFromApi,
   taskFromJSON,
   projectFromJSON,
-  updateLocalStorage,
+  updateLocalStorage
 };

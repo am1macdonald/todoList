@@ -135,7 +135,7 @@ const newTaskButton = document.getElementById("new-task-button");
 newTaskButton.addEventListener("click", () => {
   renderBigDate.stop();
   if (contentState.getState() === false) {
-    taskCreationMenu();
+    taskCreationMenu(appConfig);
     clock.remove();
   }
   contentState.setState(true);
@@ -145,7 +145,7 @@ const newProjectButton = document.getElementById("new-project-button");
 newProjectButton.addEventListener("click", () => {
   renderBigDate.stop();
   if (contentState.getState() === false) {
-    projectCreationMenu();
+    projectCreationMenu(appConfig);
     clock.remove();
   }
   contentState.setState(true);
