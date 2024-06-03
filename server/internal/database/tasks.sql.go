@@ -10,9 +10,9 @@ import (
 )
 
 const addTask = `-- name: AddTask :one
-INSERT INTO tasks (user_id, project_id, title, description, notes, priority, checklist, deadline, complete)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-RETURNING id, title, description, notes, priority, checklist, deadline, complete
+INSERT INTO tasks (user_id, project_id, title, description, notes, priority, deadline, complete)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+RETURNING id, title, description, notes, priority, deadline, complete
 `
 
 type AddTaskParams struct {
@@ -22,7 +22,6 @@ type AddTaskParams struct {
 	Description string `json:"description"`
 	Notes       string `json:"notes"`
 	Priority    int64  `json:"priority"`
-	Checklist   string `json:"checklist"`
 	Deadline    int64  `json:"deadline"`
 	Complete    bool   `json:"complete"`
 }
@@ -33,7 +32,6 @@ type AddTaskRow struct {
 	Description string `json:"description"`
 	Notes       string `json:"notes"`
 	Priority    int64  `json:"priority"`
-	Checklist   string `json:"checklist"`
 	Deadline    int64  `json:"deadline"`
 	Complete    bool   `json:"complete"`
 }
@@ -46,7 +44,6 @@ func (q *Queries) AddTask(ctx context.Context, arg AddTaskParams) (AddTaskRow, e
 		arg.Description,
 		arg.Notes,
 		arg.Priority,
-		arg.Checklist,
 		arg.Deadline,
 		arg.Complete,
 	)
@@ -57,7 +54,6 @@ func (q *Queries) AddTask(ctx context.Context, arg AddTaskParams) (AddTaskRow, e
 		&i.Description,
 		&i.Notes,
 		&i.Priority,
-		&i.Checklist,
 		&i.Deadline,
 		&i.Complete,
 	)
@@ -79,7 +75,7 @@ func (q *Queries) DeleteTask(ctx context.Context, arg DeleteTaskParams) error {
 }
 
 const getUserTasks = `-- name: GetUserTasks :many
-SELECT id, user_id, project_id, title, description, notes, deadline, priority, checklist, complete, created_at, updated_at, "foreign" from tasks
+SELECT id, user_id, project_id, title, description, notes, deadline, priority, complete, created_at, updated_at, "foreign" from tasks
 where user_id = ?
 `
 
@@ -101,7 +97,6 @@ func (q *Queries) GetUserTasks(ctx context.Context, userID int64) ([]Task, error
 			&i.Notes,
 			&i.Deadline,
 			&i.Priority,
-			&i.Checklist,
 			&i.Complete,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -126,7 +121,6 @@ set title = ?,
   description = ?, 
   notes = ?, 
   priority = ?,
-  checklist = ?,
   deadline = ?, 
   complete = ?,
   updated_at = CURRENT_TIMESTAMP
@@ -139,7 +133,6 @@ type UpdateTaskParams struct {
 	Description string `json:"description"`
 	Notes       string `json:"notes"`
 	Priority    int64  `json:"priority"`
-	Checklist   string `json:"checklist"`
 	Deadline    int64  `json:"deadline"`
 	Complete    bool   `json:"complete"`
 	ID          int64  `json:"id"`
@@ -151,7 +144,6 @@ func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) (int64, 
 		arg.Description,
 		arg.Notes,
 		arg.Priority,
-		arg.Checklist,
 		arg.Deadline,
 		arg.Complete,
 		arg.ID,

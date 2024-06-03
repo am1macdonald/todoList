@@ -29,7 +29,6 @@ type Task struct {
 	Notes       string      `json:"notes"`
 	Deadline    int64       `json:"deadline"`
 	Priority    int64       `json:"priority"`
-	Checklist   string      `json:"checklist"`
 	Complete    bool        `json:"complete"`
 	CreatedAt   time.Time   `json:"created_at"`
 	UpdatedAt   time.Time   `json:"updated_at"`
