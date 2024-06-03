@@ -1,7 +1,7 @@
 -- name: AddTask :one
-INSERT INTO tasks (user_id, project_id, title, description, notes, priority, checklist, deadline, complete)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-RETURNING id, title, description, notes, priority, checklist, deadline, complete;
+INSERT INTO tasks (user_id, project_id, title, description, notes, priority, deadline, complete)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+RETURNING id, title, description, notes, priority, deadline, complete;
 
 -- name: GetUserTasks :many
 SELECT * from tasks
@@ -13,7 +13,6 @@ set title = ?,
   description = ?, 
   notes = ?, 
   priority = ?,
-  checklist = ?,
   deadline = ?, 
   complete = ?,
   updated_at = CURRENT_TIMESTAMP
