@@ -20,7 +20,6 @@ func DbTaskToTask(p *database.Task) *task.Task {
 		Description: p.Description,
 		Notes:       p.Notes,
 		Priority:    p.Priority,
-		Checklist:   p.Checklist,
 		Deadline:    p.Deadline,
 		Complete:    p.Complete,
 	}
@@ -98,7 +97,6 @@ func (cfg *apiConfig) HandleUpdateTask(w http.ResponseWriter, r *http.Request, s
 		Title       string `json:"title"`
 		Description string `json:"description"`
 		Priority    int64  `json:"priority"`
-		Checklist   string `json:"checklist"`
 		Notes       string `json:"notes"`
 		Deadline    int64  `json:"deadline"`
 		Complete    bool   `json:"complete"`
@@ -134,7 +132,6 @@ func (cfg *apiConfig) HandleUpdateTask(w http.ResponseWriter, r *http.Request, s
 		Description: req.Description,
 		Notes:       req.Notes,
 		Priority:    req.Priority,
-		Checklist:   req.Checklist,
 		Deadline:    req.Deadline,
 		Complete:    req.Complete,
 	})
