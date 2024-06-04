@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 )
 
 const addTask = `-- name: AddTask :one
@@ -16,14 +17,14 @@ RETURNING id, title, description, notes, priority, deadline, complete
 `
 
 type AddTaskParams struct {
-	UserID      int64  `json:"user_id"`
-	ProjectID   int64  `json:"project_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Notes       string `json:"notes"`
-	Priority    int64  `json:"priority"`
-	Deadline    int64  `json:"deadline"`
-	Complete    bool   `json:"complete"`
+	UserID      int64         `json:"user_id"`
+	ProjectID   sql.NullInt64 `json:"project_id"`
+	Title       string        `json:"title"`
+	Description string        `json:"description"`
+	Notes       string        `json:"notes"`
+	Priority    int64         `json:"priority"`
+	Deadline    int64         `json:"deadline"`
+	Complete    bool          `json:"complete"`
 }
 
 type AddTaskRow struct {
@@ -75,7 +76,7 @@ func (q *Queries) DeleteTask(ctx context.Context, arg DeleteTaskParams) error {
 }
 
 const getUserTasks = `-- name: GetUserTasks :many
-SELECT id, user_id, project_id, title, description, notes, deadline, priority, complete, created_at, updated_at, "foreign" from tasks
+SELECT id, user_id, project_id, title, description, notes, deadline, priority, complete, created_at, updated_at from tasks
 where user_id = ?
 `
 
@@ -100,7 +101,6 @@ func (q *Queries) GetUserTasks(ctx context.Context, userID int64) ([]Task, error
 			&i.Complete,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.Foreign,
 		); err != nil {
 			return nil, err
 		}
