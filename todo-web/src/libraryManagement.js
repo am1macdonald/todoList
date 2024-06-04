@@ -1,9 +1,10 @@
 /* eslint-disable curly */
 import { compareAsc, parseISO } from "date-fns";
 import Project from "./classes/Project.js";
-import Task from "./classes/taskClass.js";
+import Task from "./classes/Task.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
-import { sendProjectToDatabase } from "./database/DBProject.js";
+import { sendProjectToDatabase } from "./database/Project.js";
+import { sendTaskToDatabase } from "./database/Task.js";
 
 const TaskLibrary = LibraryFactory();
 const ProjectLibrary = LibraryFactory();

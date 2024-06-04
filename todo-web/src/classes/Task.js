@@ -7,7 +7,6 @@ export default class Task {
     dueDate,
     priority = 1,
     notes,
-    checklist = {},
     id,
     complete = false
   ) {
@@ -16,7 +15,6 @@ export default class Task {
     this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
     this.priority = priority;
     this.notes = notes;
-    this.checklist = checklist;
     this.id = id;
     this.complete = complete;
   }
@@ -34,7 +32,6 @@ export default class Task {
     this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
     this.priority = priority;
     this.notes = notes;
-    this.checklist = checklist;
   }
 
   summary() {

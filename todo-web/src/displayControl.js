@@ -12,7 +12,7 @@ import {
 } from "./libraryManagement.js";
 import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
-import Task from "./classes/taskClass.js";
+import Task from "./classes/Task.js";
 import Project from "./classes/Project.js";
 
 const content = document.getElementById("content");
