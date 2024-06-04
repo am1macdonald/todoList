@@ -164,7 +164,7 @@ const dynamicFormParts = (() => {
   };
 
   // dropdown menu for selecting the priority
-  const newPriorityDropdown = (parent, maxScale) => {
+  const newPriorityDropdown = (parent, maxScale, classList) => {
     const template = document.createElement("template");
     template.innerHTML = `
     <div class="flex flex-row justify-start items-center py-4">
@@ -172,7 +172,7 @@ const dynamicFormParts = (() => {
         <span class="leading-tight w-20">
           Priority.
         </span>
-        <select class="m-0 pl-2.5 pr-1.5" name="priority" id="priority">
+        <select class="m-0 pl-2.5 pr-1.5 ${classList.join(' ')}" name="priority" id="priority">
         </select>
       </label>
     </div>
