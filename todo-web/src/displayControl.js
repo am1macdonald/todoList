@@ -803,6 +803,7 @@ const taskExplorer = () => {
  *  @param {AppConfig} appConfig
  */
 const taskCreationMenu = (appConfig) => {
+  const inputClassName = "task-creation-input"
   dynamicFormParts.newFormWindow("Task", "New Task");
   const form = document.getElementById("task-form");
   form.classList.add("data-entry");
@@ -812,7 +813,7 @@ const taskCreationMenu = (appConfig) => {
     "Title.",
     "Enter task name...",
     true,
-    []
+    [inputClassName]
   );
   dynamicFormParts.newTextInput(
     form,
@@ -820,18 +821,17 @@ const taskCreationMenu = (appConfig) => {
     "Details.",
     "Details...",
     true,
-    []
+    [inputClassName]
   );
-  dynamicFormParts.newDateInput(form, []);
-  dynamicFormParts.newPriorityDropdown(form, 5);
-  dynamicFormParts.newChecklist(form);
+  dynamicFormParts.newDateInput(form, [inputClassName]);
+  dynamicFormParts.newPriorityDropdown(form, 5, [inputClassName]);
   dynamicFormParts.newTextInput(
     form,
     "notes",
     "Notes.",
     "Additional notes...",
     false,
-    []
+    [inputClassName]
   );
   const div = document.createElement("div");
   div.classList.add("form-buttons");
