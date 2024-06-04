@@ -48,7 +48,7 @@ func (cfg *apiConfig) HandleGetTasks(w http.ResponseWriter, r *http.Request, s *
 }
 
 func (cfg *apiConfig) HandleAddTask(w http.ResponseWriter, r *http.Request, s *session.Session) {
-	type projectRequestBody struct {
+	type taskRequestBody struct {
 		Title       string `json:"title"`
 		Description string `json:"description"`
 		Notes       string `json:"notes"`
@@ -66,7 +66,7 @@ func (cfg *apiConfig) HandleAddTask(w http.ResponseWriter, r *http.Request, s *s
 		return
 	}
 
-	var req projectRequestBody
+	var req taskRequestBody
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		log.Println(err)
@@ -74,7 +74,7 @@ func (cfg *apiConfig) HandleAddTask(w http.ResponseWriter, r *http.Request, s *s
 		return
 	}
 
-	project, err := cfg.db.AddProject(r.Context(), database.AddProjectParams{
+	project, err := cfg.db.AddTask(r.Context(), database.AddTaskParams{
 		UserID:      userID,
 		Title:       req.Title,
 		Description: req.Description,
