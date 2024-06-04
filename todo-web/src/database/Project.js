@@ -13,13 +13,13 @@ export async function sendProjectToDatabase(appConfig, project) {
       complete: project.complete
     };
   }
-  projectToDbProject(project);
+
   const response = await fetch(`/api/v1/${appConfig.session.userID}/projects`, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(
-      project
+      projectToDbProject(project)
     )
-  })
+  });
   if (!response.ok && response.status !== 200) {
     throw new Error("failed to create project");
   }
