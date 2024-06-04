@@ -41,7 +41,6 @@ const taskFromJSON = (item) => {
     deadline: dueDate,
     priority,
     notes,
-    checklist,
     id,
     complete
   } = item;
@@ -51,7 +50,6 @@ const taskFromJSON = (item) => {
     dueDate,
     priority,
     notes,
-    checklist,
     id,
     complete
   );
@@ -94,17 +92,8 @@ const updateLocalStorage = (map, libraryType) => {
  * @returns {Promise<void|boolean>}
  */
 export const addNewTask = async (appConfig) => {
-  let taskForm = "";
-
-  if (document.getElementById("task-form") !== null) {
-    taskForm = document.getElementById("task-form");
-  } else {
-    console.error("cannot find task form");
-    return false;
-  }
-
   // array from text-input nodes from the task form
-  const nodeArr = Array.from(taskForm.childNodes)
+  const nodeArr = Array.from(document.querySelectorAll(".task-creation-input"))
     .filter((node) => node.tagName === "INPUT" || node.tagName === "SELECT")
     .map((node) => {
       if (node.id === "due-date") {
@@ -120,23 +109,20 @@ export const addNewTask = async (appConfig) => {
     }
   }
 
-  // gets contents of the checklist and stores them in an object
-  const listItems = document.getElementsByClassName("checklist-item");
-  const checklistObj = {};
-  for (const item of listItems) {
-    checklistObj[item.innerHTML.slice(2, item.innerHTML.length)] = false;
-  }
-  const newTask = new Task(...nodeArr, checklistObj, Date.now());
+  const newTask = new Task(...nodeArr, Date.now());
 
-  // if (getUser()) {
-  //   const taskID = await addToDatabase(newTask, "tasks", taskConverter);
-  //   TaskLibrary.add(taskID, newTask);
-  // } else {
-  TaskLibrary.add(crypto.randomUUID(), newTask);
-  updateLocalStorage(TaskLibrary.get(), "task");
-  // }
-  TaskLibrary.show();
-  callback();
+  if (appConfig.session.isLocal) {
+    TaskLibrary.add(crypto.randomUUID(), newTask);
+    updateLocalStorage(TaskLibrary.get(), "task");
+    TaskLibrary.show();
+  } else {
+    sendTaskToDatabase(appConfig, newTask).then((res) => {
+      newTask.id = res.id;
+      TaskLibrary.show(TaskLibrary.show(), "task");
+    }).catch((e) => {
+      console.log(e);
+    });
+  }
 };
 
 export const editTask = (obj) => {
@@ -193,7 +179,7 @@ export const addNewProject = async (appConfig) => {
     ProjectLibrary.show(ProjectLibrary.show(), "project");
   } else {
     sendProjectToDatabase(appConfig, newProject).then((res) => {
-      console.log(res)
+      console.log(res);
       newProject.id = res.id;
       ProjectLibrary.show(ProjectLibrary.show(), "project");
     }).catch((e) => {
