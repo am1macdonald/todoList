@@ -18,6 +18,7 @@ export async function sendTaskToDatabase(appConfig, task) {
       complete: task.complete
     };
   }
+
   const response = await fetch(`/api/v1/${appConfig.session.userID}/tasks`, {
     method: "POST",
     body: JSON.stringify(
@@ -26,6 +27,16 @@ export async function sendTaskToDatabase(appConfig, task) {
   });
   if (!response.ok && response.status !== 200) {
     throw new Error("failed to create project");
+  }
+  return response.json();
+}
+
+export async function deleteTask(appConfig, task) {
+  const response = await fetch(`/api/v1/${appConfig.session.userID}/tasks/${task.id}`, {
+    method: "DELETE"
+  });
+  if (!response.ok && response.status !== 200) {
+    throw new Error("failed to delete project");
   }
   return response.json();
 }
