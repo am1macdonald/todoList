@@ -10,7 +10,6 @@ import {
   renderListToNav
 } from "./src/displayControl.js";
 import {
-  populateAll,
   TaskLibrary,
   ProjectLibrary,
   populateFromLocalStorage,
@@ -23,9 +22,11 @@ import AppConfig from "./src/classes/appConfig.js";
 const appConfig = new AppConfig();
 const session = new Session();
 
+const {updateTime: updateClock, stop: stopClock} = renderBigDate()
+
 renderStaticElements(appConfig);
 
-renderBigDate.updateTime();
+updateClock()
 
 const content = document.getElementById("content");
 const page = document.getElementById("page");
@@ -120,7 +121,7 @@ if (authEnabled) {
     for (const mutation of mutationsList) {
       if (mutation.type === "childList") {
         if (content.childNodes.length === 0) {
-          renderBigDate.updateTime();
+          updateClock();
           content.appendChild(clock);
           contentState.setState(false);
         }
@@ -133,7 +134,7 @@ if (authEnabled) {
 
 const newTaskButton = document.getElementById("new-task-button");
 newTaskButton.addEventListener("click", () => {
-  renderBigDate.stop();
+  stopClock();
   if (contentState.getState() === false) {
     taskCreationMenu(appConfig);
     clock.remove();
@@ -143,7 +144,7 @@ newTaskButton.addEventListener("click", () => {
 
 const newProjectButton = document.getElementById("new-project-button");
 newProjectButton.addEventListener("click", () => {
-  renderBigDate.stop();
+  stopClock();
   if (contentState.getState() === false) {
     projectCreationMenu(appConfig);
     clock.remove();

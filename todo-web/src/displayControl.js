@@ -749,42 +749,49 @@ const dynamicExplorerParts = (() => {
 
 // renders date to body of page
 const renderBigDate = (() => {
-  const dateHero = document.createElement("div");
-  dateHero.id = "date-hero";
-  const dateToday = document.createElement("h2");
-  dateToday.id = "date-today";
-  const startButton = document.createElement("button");
-  startButton.id = "start-button";
-  startButton.innerHTML = "get to work";
-  startButton.classList.add("styled-button", "py-3", "px-6");
+  let initialized = false;
+  return () => {
+    if (initialized) {
+      throw new Error("already exists");
+    }
+    initialized = true;
+    const dateHero = document.createElement("div");
+    dateHero.id = "date-hero";
+    const dateToday = document.createElement("h2");
+    dateToday.id = "date-today";
+    const startButton = document.createElement("button");
+    startButton.id = "start-button";
+    startButton.innerHTML = "get to work";
+    startButton.classList.add("styled-button", "py-3", "px-6");
 
-  dateHero.appendChild(dateToday);
-  dateHero.appendChild(startButton);
-  content.appendChild(dateHero);
-  let timer;
+    dateHero.appendChild(dateToday);
+    dateHero.appendChild(startButton);
+    content.appendChild(dateHero);
+    let timer;
 
-  function updateTime() {
-    dateToday.innerHTML = `${format(
-      new Date(),
-      "EEEE', the 'do'<br />of 'MMMM"
-    )} <br />
+    function updateTime() {
+      dateToday.innerHTML = `${format(
+        new Date(),
+        "EEEE', the 'do'<br />of 'MMMM"
+      )} <br />
                             ${format(new Date(), "p")}`;
-    timer = setTimeout(updateTime, 60000);
-  }
+      timer = setTimeout(updateTime, 60000);
+    }
 
-  function stop() {
-    clearTimeout(timer);
-    timer = 0;
-  }
+    function stop() {
+      clearTimeout(timer);
+      timer = 0;
+    }
 
-  startButton.addEventListener("click", () => {
-    stop();
-    taskExplorer();
-    dateHero.remove();
-  });
-  return {
-    updateTime,
-    stop
+    startButton.addEventListener("click", () => {
+      stop();
+      taskExplorer();
+      dateHero.remove();
+    });
+    return {
+      updateTime,
+      stop
+    };
   };
 })();
 
