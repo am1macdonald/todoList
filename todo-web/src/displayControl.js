@@ -135,7 +135,7 @@ const dynamicFormParts = (() => {
       parent.appendChild(label);
       parent.appendChild(input);
     }
-    return input
+    return input;
   };
 
   /** creates a date input when called
@@ -172,7 +172,7 @@ const dynamicFormParts = (() => {
         <span class="leading-tight w-20">
           Priority.
         </span>
-        <select class="m-0 pl-2.5 pr-1.5 ${classList.join(' ')}" name="priority" id="priority">
+        <select class="m-0 pl-2.5 pr-1.5 ${classList.join(" ")}" name="priority" id="priority">
         </select>
       </label>
     </div>
@@ -655,13 +655,7 @@ const dynamicExplorerParts = (() => {
           if (item.constructor === Task) {
             deleteTask(appConfig, item, () => renderListToNav(TaskLibrary.show(), "task"))
           } else if (item.constructor === Project) {
-            ProjectLibrary.remove(item.key);
-            // TODO: Fix
-            // getUser()
-            //   ? removeDocument(item.key, "projects")
-            //   :
-            updateLocalStorage(ProjectLibrary.get(), "project");
-            renderListToNav(ProjectLibrary.show(), "project");
+            deleteProject(appConfig, item, () => renderListToNav(ProjectLibrary.show(), "project"))
           }
           listItem.remove();
         }

@@ -3,7 +3,7 @@ import { compareAsc, parseISO } from "date-fns";
 import Project from "./classes/Project.js";
 import Task from "./classes/Task.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
-import { sendProjectToDatabase } from "./database/Project.js";
+import { deleteProjectFromDatabase, sendProjectToDatabase } from "./database/Project.js";
 import { deleteTaskFromDatabase, sendTaskToDatabase } from "./database/Task.js";
 import { renderListToNav } from "./displayControl.js";
 
@@ -204,6 +204,20 @@ export const addNewProject = async (appConfig) => {
   }
 };
 
+export const deleteProject = (appConfig, obj, callback) => {
+  ProjectLibrary.remove(obj.key);
+  if (appConfig.session.isLocal) {
+    // TODO: fix delete from local
+    updateLocalStorage(ProjectLibrary.get(), "project");
+    ProjectLibrary.show(ProjectLibrary.show(), "project");
+  } else {
+    deleteProjectFromDatabase(appConfig, obj.id).then(() =>
+      ProjectLibrary.show(ProjectLibrary.show(), "project")
+    );
+  }
+  callback();
+};
+
 export const editProject = async (obj) => {
   const description = document.getElementById("description").value;
   const dueDate = document.getElementById("due-date").value;
@@ -278,5 +292,5 @@ export {
   populateFromApi,
   taskFromJSON,
   projectFromJSON,
-  updateLocalStorage
+  updateLocalStorage,
 };

@@ -25,3 +25,13 @@ export async function sendProjectToDatabase(appConfig, project) {
   }
   return response.json();
 }
+
+export async function deleteProjectFromDatabase(appConfig, taskID) {
+  const response = await fetch(`/api/v1/${appConfig.session.userID}/projects/${taskID}`, {
+    method: "DELETE"
+  });
+  if (!response.ok && response.status !== 200) {
+    throw new Error("failed to delete project");
+  }
+  return response.json();
+}
