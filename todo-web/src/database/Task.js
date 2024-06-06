@@ -36,7 +36,7 @@ export async function deleteTaskFromDatabase(appConfig, taskID) {
     method: "DELETE"
   });
   if (!response.ok && response.status !== 200) {
-    throw new Error("failed to delete project");
+    throw new Error("failed to delete task");
   }
   return response.json();
 }

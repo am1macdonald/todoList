@@ -145,22 +145,15 @@ export const editTask = (obj) => {
 export const deleteTask = (appConfig, obj, callback) => {
   console.log(obj);
   TaskLibrary.remove(obj.key);
-
-  // // getUser()
-  // //   ? removeDocument(item.key, "tasks")
-  // //   :
-  // updateLocalStorage(TaskLibrary.get(), "task");
   if (appConfig.session.isLocal) {
     // TODO: local removal
-    ProjectLibrary.add(crypto.randomUUID(), newProject);
-    updateLocalStorage(ProjectLibrary.get(), "project");
-    ProjectLibrary.show(ProjectLibrary.show(), "project");
+    // updateLocalStorage(TaskLibrary.get(), "task");
+    // TaskLibrary.show(TaskLibrary.show(), "task");
   } else {
     deleteTaskFromDatabase(appConfig, obj.id).then(() =>
-      ProjectLibrary.show(ProjectLibrary.show(), "project")
+      TaskLibrary.show(TaskLibrary.show(), "project")
     );
   }
-
   callback();
 };
 
