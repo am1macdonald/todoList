@@ -8,7 +8,7 @@ import {
   sortAlg,
   editTask,
   editProject,
-  updateLocalStorage
+  updateLocalStorage, deleteTask, deleteProject
 } from "./libraryManagement.js";
 import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
@@ -338,7 +338,7 @@ const dynamicFormParts = (() => {
     parent.appendChild(submitButton);
   };
   // save button for the edit menus
-  const saveButton = (parent, obj) => {
+  const saveButton = (appConfig, parent, obj) => {
     const button = document.createElement("button");
     const explorer = document.getElementById("explorer-frame");
     button.type = "button";
@@ -352,12 +352,12 @@ const dynamicFormParts = (() => {
           editTask(obj);
           form.remove();
           explorer.style.display = "flex";
-          dynamicExplorerParts.refreshItemList("task");
+          dynamicExplorerParts.refreshItemList(appConfig, "task");
         } else if (obj.constructor === Project) {
           editProject(obj);
           form.remove();
           explorer.style.display = "flex";
-          dynamicExplorerParts.refreshItemList("project");
+          dynamicExplorerParts.refreshItemList(appConfig, "project");
         }
       }
     });
@@ -400,7 +400,7 @@ const dynamicExplorerParts = (() => {
     content.appendChild(explorerFrame);
   };
 
-  const explorerTabs = (parent) => {
+  const explorerTabs = (appConfig, parent) => {
     const div = document.createElement("div");
 
     div.id = "explorer-tabs";
@@ -423,14 +423,14 @@ const dynamicExplorerParts = (() => {
 
     taskTab.addEventListener("click", () => {
       if (taskTab.classList.contains("inactive-tab")) {
-        refreshItemList("task");
+        refreshItemList(appConfig, "task");
         taskTab.classList.replace("inactive-tab", "active-tab");
         projectTab.classList.replace("active-tab", "inactive-tab");
       }
     });
     projectTab.addEventListener("click", () => {
       if (projectTab.classList.contains("inactive-tab")) {
-        refreshItemList("project");
+        refreshItemList(appConfig, "project");
         projectTab.classList.replace("inactive-tab", "active-tab");
         taskTab.classList.replace("active-tab", "inactive-tab");
       }
@@ -445,7 +445,7 @@ const dynamicExplorerParts = (() => {
     parent.appendChild(div);
   };
 
-  const itemList = (parent, library) => {
+  const itemList = (appConfig, parent, library) => {
     const list = document.createElement("ul");
     list.id = "explorer-list";
 
@@ -626,10 +626,10 @@ const dynamicExplorerParts = (() => {
         const explorer = document.getElementById("explorer-frame");
         explorer.style.display = "none";
         if (item.constructor === Task) {
-          editTaskMenu(item);
+          editTaskMenu(appConfig, item);
           // explorer.remove();
         } else if (item.constructor === Project) {
-          editProjectMenu(item);
+          editProjectMenu(appConfig, item);
           // explorer.remove();
         }
       });
@@ -653,13 +653,7 @@ const dynamicExplorerParts = (() => {
       removeButton.addEventListener("click", () => {
         if (confirm("Are you sure you want to remove?") === true) {
           if (item.constructor === Task) {
-            TaskLibrary.remove(item.key);
-            // TODO: Fix
-            // getUser()
-            //   ? removeDocument(item.key, "tasks")
-            //   :
-            updateLocalStorage(TaskLibrary.get(), "task");
-            renderListToNav(TaskLibrary.show(), "task");
+            deleteTask(appConfig, item, () => renderListToNav(TaskLibrary.show(), "task"))
           } else if (item.constructor === Project) {
             ProjectLibrary.remove(item.key);
             // TODO: Fix
@@ -685,14 +679,14 @@ const dynamicExplorerParts = (() => {
     // eslint-disable-next-line no-new
     new SimpleBar(document.getElementById("explorer-list"));
   };
-  const refreshItemList = (str) => {
+  const refreshItemList = (appConfig, str) => {
     const listContainer = document.getElementById("list-container");
     if (str === "task") {
       listContainer.removeChild(listContainer.childNodes[0]);
-      itemList(listContainer, TaskLibrary.show());
+      itemList(appConfig, listContainer, TaskLibrary.show());
     } else if (str === "project") {
       listContainer.removeChild(listContainer.childNodes[0]);
-      itemList(listContainer, ProjectLibrary.show());
+      itemList(appConfig, listContainer, ProjectLibrary.show());
     }
   };
   const buttons = (parent) => {
@@ -750,7 +744,7 @@ const dynamicExplorerParts = (() => {
 // renders date to body of page
 const renderBigDate = (() => {
   let initialized = false;
-  return () => {
+  return (appConfig) => {
     if (initialized) {
       throw new Error("already exists");
     }
@@ -785,7 +779,7 @@ const renderBigDate = (() => {
 
     startButton.addEventListener("click", () => {
       stop();
-      taskExplorer();
+      taskExplorer(appConfig);
       dateHero.remove();
     });
     return {
@@ -796,21 +790,21 @@ const renderBigDate = (() => {
 })();
 
 // creates task explorer
-const taskExplorer = () => {
+const taskExplorer = (appConfig) => {
   dynamicExplorerParts.explorerFrame();
   const explorer = document.getElementById("explorer");
-  dynamicExplorerParts.explorerTabs(explorer);
+  dynamicExplorerParts.explorerTabs(appConfig, explorer);
   const listContainer = document.createElement("div");
   listContainer.id = "list-container";
   explorer.appendChild(listContainer);
-  dynamicExplorerParts.itemList(listContainer, TaskLibrary.show());
+  dynamicExplorerParts.itemList(appConfig, listContainer, TaskLibrary.show());
   dynamicExplorerParts.buttons(explorer);
 };
 /** creating a form to make a new task
  *  @param {AppConfig} appConfig
  */
 const taskCreationMenu = (appConfig) => {
-  const inputClassName = "task-creation-input"
+  const inputClassName = "task-creation-input";
   dynamicFormParts.newFormWindow("Task", "New Task");
   const form = document.getElementById("task-form");
   form.classList.add("data-entry");
@@ -849,7 +843,7 @@ const taskCreationMenu = (appConfig) => {
 };
 
 // creating a form to make edit a task
-const editTaskMenu = (obj) => {
+const editTaskMenu = (appConfig, obj) => {
   let title = obj.title;
   if (obj.title.length > 20) {
     title = `${obj.title.split(" ").slice(0, 4).join(" ")}...`;
@@ -865,7 +859,7 @@ const editTaskMenu = (obj) => {
   const div = document.createElement("div");
   div.classList.add("form-buttons");
   div.id = "task-buttons";
-  dynamicFormParts.saveButton(div, obj);
+  dynamicFormParts.saveButton(appConfig, div, obj);
   dynamicFormParts.cancelButton(div, () => {
     document.getElementById("explorer-frame").style.display = "flex";
     document.getElementById("form-container").remove();
@@ -882,7 +876,7 @@ const editTaskMenu = (obj) => {
  * @param {AppConfig} appConfig
  */
 const projectCreationMenu = (appConfig) => {
-  const inputClassName = "project-creation-input"
+  const inputClassName = "project-creation-input";
   dynamicFormParts.newFormWindow("Project", "New Project");
   const form = document.getElementById("project-form");
   form.classList.add("data-entry");
@@ -928,7 +922,7 @@ const projectCreationMenu = (appConfig) => {
 };
 
 // creating a form to make edit a task
-const editProjectMenu = (obj) => {
+const editProjectMenu = (appConfig, obj) => {
   let title = obj.title;
   if (obj.title.length > 20) {
     title = `${obj.title.split(" ").slice(0, 4).join(" ")}...`;
@@ -945,7 +939,7 @@ const editProjectMenu = (obj) => {
   const div = document.createElement("div");
   div.classList.add("form-buttons");
   div.id = "task-buttons";
-  dynamicFormParts.saveButton(div, obj);
+  dynamicFormParts.saveButton(appConfig, div, obj);
   dynamicFormParts.cancelButton(div, () => {
     document.getElementById("form-container").remove();
     document.getElementById("explorer-frame").style.display = "flex";

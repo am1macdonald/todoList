@@ -22,7 +22,7 @@ import AppConfig from "./src/classes/appConfig.js";
 const appConfig = new AppConfig();
 const session = new Session();
 
-const {updateTime: updateClock, stop: stopClock} = renderBigDate()
+const {updateTime: updateClock, stop: stopClock} = renderBigDate(appConfig)
 
 renderStaticElements(appConfig);
 

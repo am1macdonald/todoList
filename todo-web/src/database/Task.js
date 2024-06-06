@@ -31,8 +31,8 @@ export async function sendTaskToDatabase(appConfig, task) {
   return response.json();
 }
 
-export async function deleteTask(appConfig, task) {
-  const response = await fetch(`/api/v1/${appConfig.session.userID}/tasks/${task.id}`, {
+export async function deleteTaskFromDatabase(appConfig, taskID) {
+  const response = await fetch(`/api/v1/${appConfig.session.userID}/tasks/${taskID}`, {
     method: "DELETE"
   });
   if (!response.ok && response.status !== 200) {

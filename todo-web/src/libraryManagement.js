@@ -4,7 +4,8 @@ import Project from "./classes/Project.js";
 import Task from "./classes/Task.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
 import { sendProjectToDatabase } from "./database/Project.js";
-import { sendTaskToDatabase } from "./database/Task.js";
+import { deleteTaskFromDatabase, sendTaskToDatabase } from "./database/Task.js";
+import { renderListToNav } from "./displayControl.js";
 
 const TaskLibrary = LibraryFactory();
 const ProjectLibrary = LibraryFactory();
@@ -139,6 +140,28 @@ export const editTask = (obj) => {
   obj.edit(description, dueDate, priority, notes, checklistObj);
   updateDocument(obj, "tasks", taskConverter);
   updateLocalStorage(TaskLibrary.get(), "task");
+};
+
+export const deleteTask = (appConfig, obj, callback) => {
+  console.log(obj);
+  TaskLibrary.remove(obj.key);
+
+  // // getUser()
+  // //   ? removeDocument(item.key, "tasks")
+  // //   :
+  // updateLocalStorage(TaskLibrary.get(), "task");
+  if (appConfig.session.isLocal) {
+    // TODO: local removal
+    ProjectLibrary.add(crypto.randomUUID(), newProject);
+    updateLocalStorage(ProjectLibrary.get(), "project");
+    ProjectLibrary.show(ProjectLibrary.show(), "project");
+  } else {
+    deleteTaskFromDatabase(appConfig, obj.id).then(() =>
+      ProjectLibrary.show(ProjectLibrary.show(), "project")
+    );
+  }
+
+  callback();
 };
 
 /**
