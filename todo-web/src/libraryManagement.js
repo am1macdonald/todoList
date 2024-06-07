@@ -90,9 +90,8 @@ const updateLocalStorage = (map, libraryType) => {
 
 /**
  * @param {AppConfig} appConfig
- * @returns {Promise<void|boolean>}
  */
-export const addNewTask = async (appConfig) => {
+export const addNewTask = (appConfig, callback) => {
   // array from text-input nodes from the task form
   const nodeArr = Array.from(document.querySelectorAll(".task-creation-input"))
     .filter((node) => node.tagName === "INPUT" || node.tagName === "SELECT")
@@ -115,18 +114,18 @@ export const addNewTask = async (appConfig) => {
   if (appConfig.session.isLocal) {
     TaskLibrary.add(crypto.randomUUID(), newTask);
     updateLocalStorage(TaskLibrary.get(), "task");
-    TaskLibrary.show();
   } else {
     sendTaskToDatabase(appConfig, newTask).then((res) => {
       newTask.id = res.id;
-      TaskLibrary.show(TaskLibrary.show(), "task");
+      TaskLibrary.add(newTask.id, newTask);
+      callback()
     }).catch((e) => {
       console.log(e);
     });
   }
 };
 
-export const editTask = (obj) => {
+export const editTask = (appConfig, obj) => {
   const description = document.getElementById("description").value;
   const dueDate = document.getElementById("due-date").value;
   const priority = document.getElementById("priority").value;
@@ -159,9 +158,8 @@ export const deleteTask = (appConfig, obj, callback) => {
 
 /**
  * @param {AppConfig} appConfig
- * @returns {Promise<void|boolean>}
  */
-export const addNewProject = async (appConfig) => {
+export const addNewProject = (appConfig, callback) => {
   // array from text-input nodes from the project form
   const nodeArr = Array.from(document.querySelectorAll(".project-creation-input"))
     .filter((node) => node.tagName === "INPUT" || node.tagName === "SELECT")
@@ -193,11 +191,12 @@ export const addNewProject = async (appConfig) => {
     ProjectLibrary.add(crypto.randomUUID(), newProject);
     updateLocalStorage(ProjectLibrary.get(), "project");
     ProjectLibrary.show(ProjectLibrary.show(), "project");
+    callback()
   } else {
     sendProjectToDatabase(appConfig, newProject).then((res) => {
-      console.log(res);
       newProject.id = res.id;
-      ProjectLibrary.show(ProjectLibrary.show(), "project");
+      ProjectLibrary.add(newProject.id, newProject);
+      callback()
     }).catch((e) => {
       console.log(e);
     });
@@ -218,7 +217,7 @@ export const deleteProject = (appConfig, obj, callback) => {
   callback();
 };
 
-export const editProject = async (obj) => {
+export const editProject = async (appConfig, obj) => {
   const description = document.getElementById("description").value;
   const dueDate = document.getElementById("due-date").value;
   const notes = document.getElementById("notes").value;

@@ -322,13 +322,13 @@ const dynamicFormParts = (() => {
     submitButton.classList.add("form-button");
     submitButton.addEventListener("click", () => {
       if (parent.id === "task-buttons") {
-        addNewTask(appConfig).then(() => {
+        addNewTask(appConfig, () => {
           renderListToNav(TaskLibrary.show(), "task");
           clearContent();
           stateManager.setAdded(false);
         });
       } else if (parent.id === "project-buttons") {
-        addNewProject(appConfig).then(() => {
+        addNewProject(appConfig, () => {
           renderListToNav(ProjectLibrary.show(), "project");
           clearContent();
           stateManager.setAdded(false);
@@ -349,12 +349,12 @@ const dynamicFormParts = (() => {
       const form = document.getElementById("form-container");
       if (confirm("Are you sure?") === true) {
         if (obj.constructor === Task) {
-          editTask(obj);
+          editTask(appConfig, obj);
           form.remove();
           explorer.style.display = "flex";
           dynamicExplorerParts.refreshItemList(appConfig, "task");
         } else if (obj.constructor === Project) {
-          editProject(obj);
+          editProject(appConfig, obj);
           form.remove();
           explorer.style.display = "flex";
           dynamicExplorerParts.refreshItemList(appConfig, "project");
@@ -653,9 +653,9 @@ const dynamicExplorerParts = (() => {
       removeButton.addEventListener("click", () => {
         if (confirm("Are you sure you want to remove?") === true) {
           if (item.constructor === Task) {
-            deleteTask(appConfig, item, () => renderListToNav(TaskLibrary.show(), "task"))
+            deleteTask(appConfig, item, () => renderListToNav(TaskLibrary.show(), "task"));
           } else if (item.constructor === Project) {
-            deleteProject(appConfig, item, () => renderListToNav(ProjectLibrary.show(), "project"))
+            deleteProject(appConfig, item, () => renderListToNav(ProjectLibrary.show(), "project"));
           }
           listItem.remove();
         }
