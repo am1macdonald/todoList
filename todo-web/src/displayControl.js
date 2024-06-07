@@ -845,11 +845,10 @@ const editTaskMenu = (appConfig, obj) => {
   dynamicFormParts.newFormWindow("task-edit", `Edit ${title}`);
   const form = document.getElementById("task-edit-form");
   form.classList.add("data-entry");
-  dynamicFormParts.newTextInput(form, "description", "Details.", "", true);
+  dynamicFormParts.newTextInput(form, "description", "Details.", "", true, []);
   dynamicFormParts.newDateInput(form, []);
-  dynamicFormParts.newPriorityDropdown(form, 5);
-  dynamicFormParts.newChecklist(form, obj);
-  dynamicFormParts.newTextInput(form, "notes", "Notes.", "", false);
+  dynamicFormParts.newPriorityDropdown(form, 5, []);
+  dynamicFormParts.newTextInput(form, "notes", "Notes.", "", false, []);
   const div = document.createElement("div");
   div.classList.add("form-buttons");
   div.id = "task-buttons";
