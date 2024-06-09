@@ -22,12 +22,12 @@ const populateAll = (taskData, projectData) => {
 };
 
 const projectFromJSON = (item) => {
-  const { title, description, deadline: dueDate, notes, tasks, id, complete } =
+  const { title, description, deadline, notes, tasks, id, complete } =
     item;
   return new Project(
     title,
     description,
-    dueDate,
+    deadline,
     notes,
     tasks,
     id,
@@ -39,7 +39,7 @@ const taskFromJSON = (item) => {
   const {
     title,
     description,
-    deadline: dueDate,
+    deadline,
     priority,
     notes,
     id,
@@ -48,7 +48,7 @@ const taskFromJSON = (item) => {
   return new Task(
     title,
     description,
-    dueDate,
+    deadline,
     priority,
     notes,
     id,
@@ -96,7 +96,7 @@ export const addNewTask = (appConfig, callback) => {
   const nodeArr = Array.from(document.querySelectorAll(".task-creation-input"))
     .filter((node) => node.tagName === "INPUT" || node.tagName === "SELECT")
     .map((node) => {
-      if (node.id === "due-date") {
+      if (node.id === "deadline") {
         return node.valueAsDate;
       } else {
         return node.value;
@@ -127,7 +127,7 @@ export const addNewTask = (appConfig, callback) => {
 
 export const editTask = (appConfig, obj) => {
   const description = document.getElementById("description").value;
-  const dueDate = document.getElementById("due-date").value;
+  const deadline = document.getElementById("deadline").value;
   const priority = document.getElementById("priority").value;
   const notes = document.getElementById("notes").value;
   const listItems = document.getElementsByClassName("checklist-item");
@@ -136,7 +136,7 @@ export const editTask = (appConfig, obj) => {
     checklistObj[item.innerHTML.slice(2, item.innerHTML.length)] = false;
   }
 
-  obj.edit(description, dueDate, priority, notes, checklistObj);
+  obj.edit(description, deadline, priority, notes, checklistObj);
   updateDocument(obj, "tasks", taskConverter);
   updateLocalStorage(TaskLibrary.get(), "task");
 };
@@ -164,7 +164,7 @@ export const addNewProject = (appConfig, callback) => {
   const nodeArr = Array.from(document.querySelectorAll(".project-creation-input"))
     .filter((node) => node.tagName === "INPUT" || node.tagName === "SELECT")
     .map((node) => {
-      if (node.id === "due-date") {
+      if (node.id === "deadline") {
         return node.valueAsDate;
       } else {
         return node.value;
@@ -217,24 +217,31 @@ export const deleteProject = (appConfig, obj, callback) => {
   callback();
 };
 
-export const editProject = async (appConfig, obj) => {
+/**
+ *
+ * @param {AppConfig} appConfig
+ * @param  obj
+ * @param {function} callback
+ */
+export const editProject = (appConfig, obj, callback) => {
   const description = document.getElementById("description").value;
-  const dueDate = document.getElementById("due-date").value;
+  const deadline = document.getElementById("deadline").value;
   const notes = document.getElementById("notes").value;
-  const tasks = Array.from(document.getElementsByClassName("task-list-item"))
-    .filter((item) => {
-      return item.firstChild.checked === true;
+  // const tasks = Array.from(document.getElementsByClassName("task-list-item"))
+  //   .filter((item) => {
+  //     return item.firstChild.checked === true;
+  //   })
+  //   .map((item) => {
+  //     return item.firstChild.id;
+  //   });
+  obj.edit(description, deadline, notes, []);
+  if (appConfig.session.isLocal) {
+    updateLocalStorage(ProjectLibrary.get(), "project");
+  } else {
+    updateDatabaseProject(appConfig, obj).then(() => {
+      callback()
     })
-    .map((item) => {
-      return item.firstChild.id;
-    });
-  obj.edit(description, dueDate, notes, tasks);
-  // TODO: Fix
-  // if (getUser()) {
-  //   updateDocument(obj, "projects", projectConverter);
-  // } else {
-  updateLocalStorage(ProjectLibrary.get(), "project");
-  // }
+  }
 };
 
 export const stateManager = (() => {
@@ -264,8 +271,8 @@ export const sortAlg = (() => {
       } else {
         for (let i = tempArr.length - 1; i >= 0; i--) {
           const test = compareAsc(
-            parseISO(item.dueDate),
-            parseISO(tempArr[i].dueDate)
+            item.deadline,
+            tempArr[i].deadline
           );
           if (test === 1 || test === 0) {
             tempArr.splice(i + 1, 0, item);

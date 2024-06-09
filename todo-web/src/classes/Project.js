@@ -1,11 +1,10 @@
 import { format } from "date-fns";
 export default class Project {
   /** @public {Date}*/
-  date;
   constructor(
     title,
     description,
-    dueDate,
+    deadline,
     notes,
     tasks = [],
     id,
@@ -13,8 +12,7 @@ export default class Project {
   ) {
     this.title = title;
     this.description = description;
-    this.date = new Date(dueDate);
-    this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
+    this.deadline = format(new Date(deadline), "yyyy-MM-dd");
     this.notes = notes;
     this.tasks = tasks;
     this.id = id;
@@ -29,14 +27,10 @@ export default class Project {
     }
   }
 
-  edit(description, dueDate, notes, tasks) {
+  edit(description, deadline, notes, tasks) {
     this.description = description;
-    this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
+    this.deadline = Math.floor(new Date('2012.08.10').getTime() / 1000)
     this.notes = notes;
     this.tasks = tasks;
-  }
-
-  summary() {
-    console.log(`I am project ${this.title}`);
   }
 }

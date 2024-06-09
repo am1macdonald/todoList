@@ -14,7 +14,7 @@ export async function sendTaskToDatabase(appConfig, task) {
       description: task.description,
       priority: task.priority,
       notes: task.notes,
-      deadline: Math.floor(new Date(task.dueDate).getTime() / 1000),
+      deadline: Math.floor(new Date(task.deadline).getTime() / 1000),
       complete: task.complete
     };
   }

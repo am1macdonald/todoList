@@ -4,7 +4,7 @@ export default class Task {
   constructor(
     title,
     description,
-    dueDate,
+    deadline,
     priority = 1,
     notes,
     id,
@@ -12,7 +12,7 @@ export default class Task {
   ) {
     this.title = title;
     this.description = description;
-    this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
+    this.deadline = format(new Date(deadline), "yyyy-MM-dd");
     this.priority = priority;
     this.notes = notes;
     this.id = id;
@@ -27,19 +27,10 @@ export default class Task {
     }
   }
 
-  edit(description, dueDate, priority, notes, checklist) {
+  edit(description, deadline, priority, notes) {
     this.description = description;
-    this.dueDate = format(new Date(dueDate), "yyyy-MM-dd");
+    this.deadline = Math.floor(new Date(this.deadline).getTime() / 1000).toString();
     this.priority = priority;
     this.notes = notes;
-  }
-
-  summary() {
-    console.log(
-      `I am task, ${this.title}, due on ${format(
-        new Date(),
-        "yyyy-MM-dd"
-      )} with level ${this.priority} priority & id:${this.id}`
-    );
   }
 }

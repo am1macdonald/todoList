@@ -147,11 +147,11 @@ const dynamicFormParts = (() => {
     const template = document.createElement("template");
     template.innerHTML = `
     <div class="flex flex-row justify-start items-center py-4">
-      <label class="flex flex-row justify-start items-center gap-6" for="due-date">
+      <label class="flex flex-row justify-start items-center gap-6" for="deadline">
         <span class="leading-tight w-20">
           Deadline.
         </span>
-        <input class="m-0 pl-2.5 pr-1.5 ${classList.join(" ")}" name="due-date" id="due-date" type="date" 
+        <input class="m-0 pl-2.5 pr-1.5 ${classList.join(" ")}" name="deadline" id="deadline" type="date" 
           min="${format(new Date(), "yyyy-MM-dd")}" 
           value="${format(new Date(), "yyyy-MM-dd")}">
       </label>
@@ -519,7 +519,7 @@ const dynamicExplorerParts = (() => {
             propListItem.innerHTML = `<u>Description:</u> <br> <br> ${item[prop]}`;
             hiddenContentList.appendChild(propListItem);
             break;
-          case prop === "dueDate":
+          case prop === "deadline":
             propListItem.innerHTML = `<u>Due On:</u> <br> <br> ${item[prop]}`;
             hiddenContentList.appendChild(propListItem);
             break;
@@ -859,7 +859,7 @@ const editTaskMenu = (appConfig, obj) => {
   });
   form.appendChild(div);
   document.getElementById("description").value = obj.description;
-  document.getElementById("due-date").value = obj.dueDate;
+  document.getElementById("deadline").value = obj.deadline;
   document.getElementById("priority").value = obj.priority;
   document.getElementById("notes").value = obj.notes;
 };
@@ -939,7 +939,7 @@ const editProjectMenu = (appConfig, obj) => {
   });
   form.appendChild(div);
   document.getElementById("description").value = obj.description;
-  document.getElementById("due-date").value = obj.dueDate;
+  document.getElementById("deadline").value = obj.deadline;
   document.getElementById("notes").value = obj.notes;
 };
 // clears the form from the main menu
@@ -966,8 +966,8 @@ const renderListToNav = (library, target) => {
     } else {
       for (let i = topFive.length - 1; i >= 0; i--) {
         const test = compareAsc(
-          parseISO(item.dueDate),
-          parseISO(topFive[i].dueDate)
+          parseISO(item.deadline),
+          parseISO(topFive[i].deadline)
         );
         if (test === 1 || test === 0) {
           if (i >= 4) {

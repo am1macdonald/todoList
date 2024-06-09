@@ -152,14 +152,14 @@ select {
   box-shadow: 0 0.15em 0.15em -2px rgba(0, 120, 138, 0.473);
   outline: none;
 }
-#due-date {
+#deadline {
   width: fit-content;
   min-height: 17px;
   padding: 0.05vh;
 
   border: solid 2px hsla(302, 16%, 45%, 1);
 }
-#due-date:focus {
+#deadline:focus {
   padding: 0.05vh;
 }
 #priority {
