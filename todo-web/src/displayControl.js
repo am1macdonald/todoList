@@ -354,10 +354,11 @@ const dynamicFormParts = (() => {
           explorer.style.display = "flex";
           dynamicExplorerParts.refreshItemList(appConfig, "task");
         } else if (obj.constructor === Project) {
-          editProject(appConfig, obj);
-          form.remove();
-          explorer.style.display = "flex";
-          dynamicExplorerParts.refreshItemList(appConfig, "project");
+          editProject(appConfig, obj, () => {
+            form.remove();
+            explorer.style.display = "flex";
+            dynamicExplorerParts.refreshItemList(appConfig, "project");
+          });
         }
       }
     });
@@ -923,12 +924,12 @@ const editProjectMenu = (appConfig, obj) => {
   dynamicFormParts.newFormWindow("project-edit", `Edit ${title}`);
   const form = document.getElementById("project-edit-form");
   form.classList.add("data-entry");
-  dynamicFormParts.newTextInput(form, "description", "Details.", "", true);
+  dynamicFormParts.newTextInput(form, "description", "Details.", "", true, []);
   dynamicFormParts.newDateInput(form, []);
   dynamicFormParts.newTasklist(form, obj);
   // eslint-disable-next-line no-new
   new SimpleBar(document.getElementById("checkboxes"), { autoHide: false });
-  dynamicFormParts.newTextInput(form, "notes", "Notes.", "", false);
+  dynamicFormParts.newTextInput(form, "notes", "Notes.", "", false, []);
   const div = document.createElement("div");
   div.classList.add("form-buttons");
   div.id = "task-buttons";

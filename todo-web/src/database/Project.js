@@ -4,6 +4,7 @@
  */
 function projectToDbProject(project) {
   return {
+    id: project.id ?? undefined,
     title: project.title,
     description: project.description,
     notes: project.notes,
@@ -35,6 +36,24 @@ export async function deleteProjectFromDatabase(appConfig, projectID) {
   });
   if (!response.ok && response.status !== 200) {
     throw new Error("failed to delete project");
+  }
+  return response.json();
+}
+
+/**
+ * @param {AppConfig} appConfig
+ * @param {Project} project
+ * @return {Promise<any>}
+ */
+export async function updateDatabaseProject(appConfig, project) {
+  const response = await fetch(`/api/v1/${appConfig.session.userID}/projects/${project.id}`, {
+    method: "PUT",
+    body: JSON.stringify(
+      projectToDbProject(project)
+    )
+  });
+  if (!response.ok && response.status !== 200) {
+    throw new Error("failed to create project");
   }
   return response.json();
 }

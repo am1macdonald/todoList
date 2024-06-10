@@ -3,7 +3,7 @@ import { compareAsc, parseISO } from "date-fns";
 import Project from "./classes/Project.js";
 import Task from "./classes/Task.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
-import { deleteProjectFromDatabase, sendProjectToDatabase } from "./database/Project.js";
+import { deleteProjectFromDatabase, sendProjectToDatabase, updateDatabaseProject } from "./database/Project.js";
 import { deleteTaskFromDatabase, sendTaskToDatabase } from "./database/Task.js";
 import { renderListToNav } from "./displayControl.js";
 
@@ -118,7 +118,7 @@ export const addNewTask = (appConfig, callback) => {
     sendTaskToDatabase(appConfig, newTask).then((res) => {
       newTask.id = res.id;
       TaskLibrary.add(newTask.id, newTask);
-      callback()
+      callback();
     }).catch((e) => {
       console.log(e);
     });
@@ -191,12 +191,12 @@ export const addNewProject = (appConfig, callback) => {
     ProjectLibrary.add(crypto.randomUUID(), newProject);
     updateLocalStorage(ProjectLibrary.get(), "project");
     ProjectLibrary.show(ProjectLibrary.show(), "project");
-    callback()
+    callback();
   } else {
     sendProjectToDatabase(appConfig, newProject).then((res) => {
       newProject.id = res.id;
       ProjectLibrary.add(newProject.id, newProject);
-      callback()
+      callback();
     }).catch((e) => {
       console.log(e);
     });
@@ -298,5 +298,5 @@ export {
   populateFromApi,
   taskFromJSON,
   projectFromJSON,
-  updateLocalStorage,
+  updateLocalStorage
 };
