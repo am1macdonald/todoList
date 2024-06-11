@@ -31,6 +31,6 @@ export default class Project {
     this.description = description;
     this.deadline = Math.floor(new Date('2012.08.10').getTime() / 1000)
     this.notes = notes;
-    this.tasks = tasks;
+    this.tasks = tasks.map(x => Number(x));
   }
 }

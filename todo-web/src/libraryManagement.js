@@ -220,27 +220,27 @@ export const deleteProject = (appConfig, obj, callback) => {
 /**
  *
  * @param {AppConfig} appConfig
- * @param  obj
+ * @param  {Project} obj
  * @param {function} callback
  */
 export const editProject = (appConfig, obj, callback) => {
   const description = document.getElementById("description").value;
   const deadline = document.getElementById("deadline").value;
   const notes = document.getElementById("notes").value;
-  // const tasks = Array.from(document.getElementsByClassName("task-list-item"))
-  //   .filter((item) => {
-  //     return item.firstChild.checked === true;
-  //   })
-  //   .map((item) => {
-  //     return item.firstChild.id;
-  //   });
-  obj.edit(description, deadline, notes, []);
+  const tasks = Array.from(document.getElementsByClassName("task-list-item"))
+    .filter((item) => {
+      return item.firstChild.checked === true;
+    })
+    .map((item) => {
+      return item.firstChild.id;
+    });
+  obj.edit(description, deadline, notes, tasks);
   if (appConfig.session.isLocal) {
     updateLocalStorage(ProjectLibrary.get(), "project");
   } else {
     updateDatabaseProject(appConfig, obj).then(() => {
-      callback()
-    })
+      callback();
+    });
   }
 };
 

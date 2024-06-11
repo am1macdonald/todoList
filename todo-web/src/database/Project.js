@@ -1,15 +1,18 @@
 /**
- * @param {Project} project
- * @return {{notes: *, description, title, deadline: number, complete: *}}
+ * Converts a local project to a database compliant project
+ * @param project
+ * @return {{notes: *, description, id: undefined, title, deadline: *, complete: *, tasks: ([]|*)}}
  */
 function projectToDbProject(project) {
+  console.log(project)
   return {
     id: project.id ?? undefined,
     title: project.title,
     description: project.description,
     notes: project.notes,
-    deadline: Math.floor(new Date(project.date).getTime() / 1000),
-    complete: project.complete
+    deadline: project.deadline,
+    complete: project.complete,
+    tasks: project.tasks
   };
 }
 
