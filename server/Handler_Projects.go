@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"log"
@@ -91,11 +92,12 @@ func (cfg *apiConfig) HandleAddProject(w http.ResponseWriter, r *http.Request, s
 
 func (cfg *apiConfig) HandleUpdateProject(w http.ResponseWriter, r *http.Request, s *session.Session) {
 	type projectRequestBody struct {
-		Title       string `json:"title"`
-		Description string `json:"description"`
-		Notes       string `json:"notes"`
-		Deadline    int64  `json:"deadline"`
-		Complete    bool   `json:"complete"`
+		Title       string  `json:"title"`
+		Description string  `json:"description"`
+		Notes       string  `json:"notes"`
+		Deadline    int64   `json:"deadline"`
+		Complete    bool    `json:"complete"`
+		Tasks       []int64 `json:"tasks"`
 	}
 
 	userID, err := strconv.ParseInt(r.PathValue("user_id"), 10, 64)
@@ -119,6 +121,22 @@ func (cfg *apiConfig) HandleUpdateProject(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		log.Println(err)
 		errorResponse(w, 500, errors.New("failed to parse body"))
+		return
+	}
+
+	log.Println(req.Tasks)
+
+	err = cfg.db.SetTaskProject(r.Context(), database.SetTaskProjectParams{
+		ProjectID: sql.NullInt64{
+			Valid: true,
+			Int64: projectID,
+		},
+		Ids: req.Tasks,
+	})
+
+	if err != nil {
+		log.Println(err)
+		errorResponse(w, 500, errors.New("failed to update project"))
 		return
 	}
 
