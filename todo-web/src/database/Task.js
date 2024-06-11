@@ -10,6 +10,7 @@ export async function sendTaskToDatabase(appConfig, task) {
    */
   function taskToDbTask(task) {
     return {
+      id: task.id ?? undefined,
       title: task.title,
       description: task.description,
       priority: task.priority,

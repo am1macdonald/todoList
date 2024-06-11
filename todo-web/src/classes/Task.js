@@ -15,7 +15,7 @@ export default class Task {
     this.deadline = format(new Date(deadline), "yyyy-MM-dd");
     this.priority = priority;
     this.notes = notes;
-    this.id = id;
+    this.id = Number(id);
     this.complete = complete;
   }
 
