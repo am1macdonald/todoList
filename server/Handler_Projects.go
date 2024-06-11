@@ -127,6 +127,7 @@ func (cfg *apiConfig) HandleUpdateProject(w http.ResponseWriter, r *http.Request
 	log.Println(req.Tasks)
 
 	err = cfg.db.SetTaskProject(r.Context(), database.SetTaskProjectParams{
+		UserID: userID,
 		ProjectID: sql.NullInt64{
 			Valid: true,
 			Int64: projectID,

@@ -22,7 +22,8 @@ RETURNING id;
 -- name: SetTaskProject :exec
 UPDATE tasks 
   set project_id = ?
-where id in (sqlc.slice(ids));
+where id in (sqlc.slice(ids))
+AND user_id = ?;
 
 -- name: DeleteTask :exec
 DELETE FROM tasks where id = ? and user_id = ?;

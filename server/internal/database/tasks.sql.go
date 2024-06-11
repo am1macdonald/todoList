@@ -120,11 +120,13 @@ const setTaskProject = `-- name: SetTaskProject :exec
 UPDATE tasks 
   set project_id = ?
 where id in (/*SLICE:ids*/?)
+AND user_id = ?
 `
 
 type SetTaskProjectParams struct {
 	ProjectID sql.NullInt64 `json:"project_id"`
 	Ids       []int64       `json:"ids"`
+	UserID    int64         `json:"user_id"`
 }
 
 func (q *Queries) SetTaskProject(ctx context.Context, arg SetTaskProjectParams) error {
@@ -139,6 +141,7 @@ func (q *Queries) SetTaskProject(ctx context.Context, arg SetTaskProjectParams) 
 	} else {
 		query = strings.Replace(query, "/*SLICE:ids*/?", "NULL", 1)
 	}
+	queryParams = append(queryParams, arg.UserID)
 	_, err := q.db.ExecContext(ctx, query, queryParams...)
 	return err
 }
