@@ -8,6 +8,7 @@ package database
 import (
 	"context"
 	"database/sql"
+	"strings"
 )
 
 const addTask = `-- name: AddTask :one
@@ -113,6 +114,33 @@ func (q *Queries) GetUserTasks(ctx context.Context, userID int64) ([]Task, error
 		return nil, err
 	}
 	return items, nil
+}
+
+const setTaskProject = `-- name: SetTaskProject :exec
+UPDATE tasks 
+  set project_id = ?
+where id in (/*SLICE:ids*/?)
+`
+
+type SetTaskProjectParams struct {
+	ProjectID sql.NullInt64 `json:"project_id"`
+	Ids       []int64       `json:"ids"`
+}
+
+func (q *Queries) SetTaskProject(ctx context.Context, arg SetTaskProjectParams) error {
+	query := setTaskProject
+	var queryParams []interface{}
+	queryParams = append(queryParams, arg.ProjectID)
+	if len(arg.Ids) > 0 {
+		for _, v := range arg.Ids {
+			queryParams = append(queryParams, v)
+		}
+		query = strings.Replace(query, "/*SLICE:ids*/?", strings.Repeat(",?", len(arg.Ids))[1:], 1)
+	} else {
+		query = strings.Replace(query, "/*SLICE:ids*/?", "NULL", 1)
+	}
+	_, err := q.db.ExecContext(ctx, query, queryParams...)
+	return err
 }
 
 const updateTask = `-- name: UpdateTask :one

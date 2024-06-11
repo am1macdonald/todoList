@@ -19,5 +19,10 @@ set title = ?,
 where id = ?
 RETURNING id;
 
+-- name: SetTaskProject :exec
+UPDATE tasks 
+  set project_id = ?
+where id in (sqlc.slice(ids));
+
 -- name: DeleteTask :exec
 DELETE FROM tasks where id = ? and user_id = ?;
