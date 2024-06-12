@@ -4,7 +4,7 @@ import Project from "./classes/Project.js";
 import Task from "./classes/Task.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
 import { deleteProjectFromDatabase, sendProjectToDatabase, updateDatabaseProject } from "./database/Project.js";
-import { deleteTaskFromDatabase, sendTaskToDatabase } from "./database/Task.js";
+import { deleteTaskFromDatabase, sendTaskToDatabase, updateDatabaseTask } from "./database/Task.js";
 import { renderListToNav } from "./displayControl.js";
 
 const TaskLibrary = LibraryFactory();
@@ -125,7 +125,7 @@ export const addNewTask = (appConfig, callback) => {
   }
 };
 
-export const editTask = (appConfig, obj) => {
+export const editTask = (appConfig, obj, callback) => {
   const description = document.getElementById("description").value;
   const deadline = document.getElementById("deadline").value;
   const priority = document.getElementById("priority").value;
@@ -137,8 +137,15 @@ export const editTask = (appConfig, obj) => {
   }
 
   obj.edit(description, deadline, priority, notes, checklistObj);
-  updateDocument(obj, "tasks", taskConverter);
-  updateLocalStorage(TaskLibrary.get(), "task");
+  if (appConfig.session.isLocal) {
+    updateLocalStorage(TaskLibrary.get(), "project");
+  } else {
+    updateDatabaseTask(appConfig, obj).then(() => {
+      callback();
+    }).catch(e => {
+      console.log(e)
+    });
+  }
 };
 
 export const deleteTask = (appConfig, obj, callback) => {

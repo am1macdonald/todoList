@@ -349,10 +349,11 @@ const dynamicFormParts = (() => {
       const form = document.getElementById("form-container");
       if (confirm("Are you sure?") === true) {
         if (obj.constructor === Task) {
-          editTask(appConfig, obj);
-          form.remove();
-          explorer.style.display = "flex";
-          dynamicExplorerParts.refreshItemList(appConfig, "task");
+          editTask(appConfig, obj, () => {
+            form.remove();
+            explorer.style.display = "flex";
+            dynamicExplorerParts.refreshItemList(appConfig, "task");
+          });
         } else if (obj.constructor === Project) {
           editProject(appConfig, obj, () => {
             form.remove();
