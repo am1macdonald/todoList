@@ -1,6 +1,15 @@
 import { format } from "date-fns";
 
 export default class Task {
+  /**
+   * @param {string} title
+   * @param {string} description
+   * @param {number} deadline
+   * @param {number} priority
+   * @param {string} notes
+   * @param {number} id
+   * @param {boolean} complete
+   */
   constructor(
     title,
     description,
@@ -12,8 +21,8 @@ export default class Task {
   ) {
     this.title = title;
     this.description = description;
-    this.deadline = format(new Date(deadline), "yyyy-MM-dd");
-    this.priority = priority;
+    this.deadline = Number(deadline);
+    this.priority = Number(priority);
     this.notes = notes;
     this.id = Number(id);
     this.complete = complete;
@@ -27,10 +36,16 @@ export default class Task {
     }
   }
 
+  /**
+   * @param {string} description
+   * @param {number} deadline
+   * @param {number} priority
+   * @param {string} notes
+   */
   edit(description, deadline, priority, notes) {
     this.description = description;
-    this.deadline = Math.floor(new Date(this.deadline).getTime() / 1000).toString();
-    this.priority = priority;
+    this.deadline = Number(deadline);
+    this.priority = Number(priority);
     this.notes = notes;
   }
 }

@@ -1,6 +1,15 @@
 import { format } from "date-fns";
+
 export default class Project {
-  /** @public {Date}*/
+  /**
+   * @param {string} title
+   * @param {string} description
+   * @param {number} deadline
+   * @param {string} notes
+   * @param {Array<number>} tasks
+   * @param {number} id
+   * @param {boolean} complete
+   */
   constructor(
     title,
     description,
@@ -12,10 +21,10 @@ export default class Project {
   ) {
     this.title = title;
     this.description = description;
-    this.deadline = format(new Date(deadline), "yyyy-MM-dd");
+    this.deadline = Number(deadline);
     this.notes = notes;
-    this.tasks = tasks;
-    this.id = id;
+    this.tasks = tasks.map(x => Number(x));
+    this.id = Number(id);
     this.complete = complete;
   }
 
@@ -27,9 +36,15 @@ export default class Project {
     }
   }
 
+  /**
+   * @param {string} description
+   * @param {number} deadline
+   * @param {string} notes
+   * @param {Array<number>} tasks
+   */
   edit(description, deadline, notes, tasks) {
     this.description = description;
-    this.deadline = Math.floor(new Date('2012.08.10').getTime() / 1000)
+    this.deadline = Number(deadline);
     this.notes = notes;
     this.tasks = tasks.map(x => Number(x));
   }
