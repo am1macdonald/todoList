@@ -56,7 +56,7 @@ export async function updateDatabaseProject(appConfig, project) {
     )
   });
   if (!response.ok && response.status !== 200) {
-    throw new Error("failed to create project");
+    throw new Error("failed to update project");
   }
   return response.json();
 }
