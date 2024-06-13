@@ -52,7 +52,7 @@ func (cfg *apiConfig) HandleAddTask(w http.ResponseWriter, r *http.Request, s *s
 		Title       string `json:"title"`
 		Description string `json:"description"`
 		Notes       string `json:"notes"`
-		Deadline    int64  `json:"deadline"`
+		Deadline    string `json:"deadline"`
 		Complete    bool   `json:"complete"`
 	}
 	userID, err := strconv.ParseInt(r.PathValue("user_id"), 10, 64)
@@ -98,7 +98,7 @@ func (cfg *apiConfig) HandleUpdateTask(w http.ResponseWriter, r *http.Request, s
 		Description string `json:"description"`
 		Priority    int64  `json:"priority"`
 		Notes       string `json:"notes"`
-		Deadline    int64  `json:"deadline"`
+		Deadline    string `json:"deadline"`
 		Complete    bool   `json:"complete"`
 	}
 

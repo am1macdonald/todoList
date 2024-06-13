@@ -52,7 +52,7 @@ func (cfg *apiConfig) HandleAddProject(w http.ResponseWriter, r *http.Request, s
 		Title       string `json:"title"`
 		Description string `json:"description"`
 		Notes       string `json:"notes"`
-		Deadline    int64  `json:"deadline"`
+		Deadline    string `json:"deadline"`
 		Complete    bool   `json:"complete"`
 	}
 	userID, err := strconv.ParseInt(r.PathValue("user_id"), 10, 64)
@@ -95,7 +95,7 @@ func (cfg *apiConfig) HandleUpdateProject(w http.ResponseWriter, r *http.Request
 		Title       string  `json:"title"`
 		Description string  `json:"description"`
 		Notes       string  `json:"notes"`
-		Deadline    int64   `json:"deadline"`
+		Deadline    string  `json:"deadline"`
 		Complete    bool    `json:"complete"`
 		Tasks       []int64 `json:"tasks"`
 	}
