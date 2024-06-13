@@ -6,6 +6,6 @@ type Project struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Notes       string `json:"notes"`
-	Deadline    int64  `json:"deadline"`
+	Deadline    string `json:"deadline"`
 	Complete    bool   `json:"complete"`
 }
