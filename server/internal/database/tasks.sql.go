@@ -24,7 +24,7 @@ type AddTaskParams struct {
 	Description string        `json:"description"`
 	Notes       string        `json:"notes"`
 	Priority    int64         `json:"priority"`
-	Deadline    int64         `json:"deadline"`
+	Deadline    string        `json:"deadline"`
 	Complete    bool          `json:"complete"`
 }
 
@@ -34,7 +34,7 @@ type AddTaskRow struct {
 	Description string `json:"description"`
 	Notes       string `json:"notes"`
 	Priority    int64  `json:"priority"`
-	Deadline    int64  `json:"deadline"`
+	Deadline    string `json:"deadline"`
 	Complete    bool   `json:"complete"`
 }
 
@@ -164,7 +164,7 @@ type UpdateTaskParams struct {
 	Description string `json:"description"`
 	Notes       string `json:"notes"`
 	Priority    int64  `json:"priority"`
-	Deadline    int64  `json:"deadline"`
+	Deadline    string `json:"deadline"`
 	Complete    bool   `json:"complete"`
 	ID          int64  `json:"id"`
 }

@@ -10,15 +10,15 @@ import (
 )
 
 type Project struct {
-	ID          int64     `json:"id"`
-	UserID      int64     `json:"user_id"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Notes       string    `json:"notes"`
-	Deadline    int64     `json:"deadline"`
-	Complete    bool      `json:"complete"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	ID          int64  `json:"id"`
+	UserID      int64  `json:"user_id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Notes       string `json:"notes"`
+	Deadline    string `json:"deadline"`
+	Complete    bool   `json:"complete"`
+	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
 }
 
 type Task struct {
@@ -28,11 +28,11 @@ type Task struct {
 	Title       string        `json:"title"`
 	Description string        `json:"description"`
 	Notes       string        `json:"notes"`
-	Deadline    int64         `json:"deadline"`
+	Deadline    string        `json:"deadline"`
 	Priority    int64         `json:"priority"`
 	Complete    bool          `json:"complete"`
-	CreatedAt   time.Time     `json:"created_at"`
-	UpdatedAt   time.Time     `json:"updated_at"`
+	CreatedAt   string        `json:"created_at"`
+	UpdatedAt   string        `json:"updated_at"`
 }
 
 type User struct {
