@@ -2,7 +2,7 @@
 CREATE TABLE tasks_new (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id     INTEGER      NOT NULL,
-  project_id  INTEGER      NOT NULL,
+  project_id  INTEGER,
   title       VARCHAR(120) NOT NULL,
   description TEXT         NOT NULL,
   notes       TEXT         NOT NULL,
@@ -46,10 +46,12 @@ ALTER TABLE projects_new RENAME TO projects;
 
 
 -- +goose Down
+ALTER TABLE tasks RENAME TO tasks_new;
+
 CREATE TABLE tasks (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id     INTEGER      NOT NULL,
-  project_id  INTEGER      NOT NULL,
+  project_id  INTEGER,
   title       VARCHAR(120) NOT NULL,
   description TEXT         NOT NULL,
   notes       TEXT         NOT NULL,
@@ -69,7 +71,7 @@ FROM tasks_new;
 
 DROP TABLE tasks_new;
 
-ALTER TABLE tasks RENAME TO tasks;
+ALTER TABLE projects RENAME TO projects_new;
 
 CREATE TABLE projects (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -89,5 +91,3 @@ SELECT id, user_id, title, description, notes, deadline, complete, created_at, u
 FROM projects_new;
 
 DROP TABLE projects_new;
-
-ALTER TABLE projects RENAME TO projects;
