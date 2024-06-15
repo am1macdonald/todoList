@@ -26,6 +26,7 @@ export default class Task {
     this.notes = notes;
     this.id = Number(id);
     this.complete = complete;
+    this._hidden = true;
   }
 
   toggleComplete() {
@@ -34,6 +35,14 @@ export default class Task {
     } else if (this.complete === false) {
       this.complete = true;
     }
+  }
+
+  toggleHidden() {
+    this._hidden = !this._hidden;
+  }
+
+  get hidden() {
+    return this._hidden;
   }
 
   /**
@@ -50,7 +59,6 @@ export default class Task {
   }
 
   get formattedDate() {
-    console.log(this.deadline)
-    return moment(this.deadline.split('T')[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
+    return moment(this.deadline.split("T")[0], "YYYY-MM-DD").format("YYYY-MM-DD");
   }
 }

@@ -7,7 +7,7 @@ import {
   sortAlg,
   editTask,
   editProject,
-  updateLocalStorage, deleteTask, deleteProject
+  updateLocalStorage, deleteTask, deleteProject, saveEditTask, saveEditProject
 } from "./libraryManagement.js";
 import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
@@ -472,6 +472,7 @@ const dynamicExplorerParts = (() => {
       collapsible.innerHTML = title;
 
       collapsible.addEventListener("click", function() {
+        item.toggleHidden()
         this.classList.toggle("active");
         const hiddenDiv = this.nextElementSibling;
         if (hiddenDiv.style.display === "grid") {
@@ -483,7 +484,7 @@ const dynamicExplorerParts = (() => {
 
       const hiddenDiv = document.createElement("div");
       hiddenDiv.classList.add("collapsible-content");
-      hiddenDiv.style.display = "none";
+      hiddenDiv.style.display = item._hidden ? "none" : "grid";
 
       const hiddenContentList = document.createElement("ul");
       hiddenContentList.classList.add("hidden-content-list");
@@ -578,12 +579,9 @@ const dynamicExplorerParts = (() => {
                     // updates the tasks 'complete' property when the box is checked
                     taskItem.addEventListener("click", () => {
                       obj.toggleComplete();
-                      // TODO: Fix
-                      // if (getUser()) {
-                      //   updateDocument(obj, "tasks", taskConverter);
-                      // } else {
-                      updateLocalStorage(TaskLibrary.get(), "task");
-                      // }
+                      saveEditTask(appConfig, obj, () => {
+                        dynamicExplorerParts.refreshItemList(appConfig, "project");
+                      });
                     });
                     const taskLabel = document.createElement("label");
                     taskLabel.setAttribute("for", obj.title);
@@ -612,8 +610,8 @@ const dynamicExplorerParts = (() => {
             }
             break;
           case prop === "id":
-            break;
           case prop === "key":
+          case prop === "_hidden":
             break;
           default:
             console.error("unknown property", prop);
@@ -638,19 +636,14 @@ const dynamicExplorerParts = (() => {
         }
       });
       completeButton.addEventListener("click", () => {
-        item.toggleComplete();
-        // TODO: Fix
-        // if (getUser()) {
-        //   // eslint-disable-next-line no-unused-expressions
-        //   item.constructor === Task
-        //     ? updateDocument(item, "tasks", taskConverter)
-        //     : item.constructor === Project
-        //     ? updateDocument(item, "projects", projectConverter)
-        //     : null;
-        // } else {
-        updateLocalStorage(TaskLibrary.get(), "task");
-        updateLocalStorage(ProjectLibrary.get(), "project");
-        // }
+          item.toggleComplete();
+        if (item.constructor === Task) {
+          saveEditTask(appConfig, item, () => {
+          });
+        } else if (item.constructor === Project) {
+          saveEditProject(appConfig, item, () => {
+          });
+        }
         hiddenDiv.classList.toggle("completed");
         completeButton.classList.toggle("complete-button-active");
       });
@@ -848,7 +841,7 @@ const editTaskMenu = (appConfig, obj) => {
   const form = document.getElementById("task-edit-form");
   form.classList.add("data-entry");
   dynamicFormParts.newTextInput(form, "description", "Details.", "", true, []);
-  dynamicFormParts.newDateInput(form, [], obj.formattedDate());
+  dynamicFormParts.newDateInput(form, [], obj.formattedDate);
   dynamicFormParts.newPriorityDropdown(form, 5, []);
   dynamicFormParts.newTextInput(form, "notes", "Notes.", "", false, []);
   const div = document.createElement("div");

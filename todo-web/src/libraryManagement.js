@@ -124,6 +124,18 @@ export const addNewTask = (appConfig, callback) => {
   }
 };
 
+export const saveEditTask = (appConfig, obj, callback) => {
+  if (appConfig.session.isLocal) {
+    updateLocalStorage(TaskLibrary.get(), "project");
+  } else {
+    updateDatabaseTask(appConfig, obj).then(() => {
+      callback();
+    }).catch(e => {
+      console.log(e);
+    });
+  }
+};
+
 export const editTask = (appConfig, obj, callback) => {
   const description = document.getElementById("description").value;
   const deadline = new Date(document.getElementById("deadline").value).toISOString();
@@ -136,15 +148,7 @@ export const editTask = (appConfig, obj, callback) => {
   }
 
   obj.edit(description, deadline, priority, notes, checklistObj);
-  if (appConfig.session.isLocal) {
-    updateLocalStorage(TaskLibrary.get(), "project");
-  } else {
-    updateDatabaseTask(appConfig, obj).then(() => {
-      callback();
-    }).catch(e => {
-      console.log(e);
-    });
-  }
+  saveEditTask(appConfig, obj, callback);
 };
 
 export const deleteTask = (appConfig, obj, callback) => {
@@ -223,6 +227,16 @@ export const deleteProject = (appConfig, obj, callback) => {
   callback();
 };
 
+export const saveEditProject = (appConfig, obj, callback) => {
+  if (appConfig.session.isLocal) {
+    updateLocalStorage(ProjectLibrary.get(), "project");
+  } else {
+    updateDatabaseProject(appConfig, obj).then(() => {
+      callback();
+    });
+  }
+}
+
 /**
  *
  * @param {AppConfig} appConfig
@@ -241,13 +255,7 @@ export const editProject = (appConfig, obj, callback) => {
       return item.firstChild.id;
     });
   obj.edit(description, deadline, notes, tasks);
-  if (appConfig.session.isLocal) {
-    updateLocalStorage(ProjectLibrary.get(), "project");
-  } else {
-    updateDatabaseProject(appConfig, obj).then(() => {
-      callback();
-    });
-  }
+  saveEditProject(appConfig, obj, callback);
 };
 
 export const stateManager = (() => {
@@ -277,8 +285,8 @@ export const sortAlg = (() => {
       } else {
         for (let i = tempArr.length - 1; i >= 0; i--) {
           const test = moment(item.deadline).isSameOrAfter(
-              tempArr[i].deadline
-            );
+            tempArr[i].deadline
+          );
           if (test) {
             tempArr.splice(i + 1, 0, item);
             break;

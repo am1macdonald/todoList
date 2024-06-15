@@ -4,7 +4,6 @@
  * @return {{notes: *, description, id: undefined, title, deadline: *, complete: *, tasks: ([]|*)}}
  */
 function projectToDbProject(project) {
-  console.log(project)
   return {
     id: project.id ?? undefined,
     title: project.title,

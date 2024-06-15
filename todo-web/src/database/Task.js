@@ -19,8 +19,6 @@ function taskToDbTask(task) {
  * @param {AppConfig} appConfig
  */
 export async function sendTaskToDatabase(appConfig, task) {
-
-
   const response = await fetch(`/api/v1/${appConfig.session.userID}/tasks`, {
     method: "POST",
     body: JSON.stringify(

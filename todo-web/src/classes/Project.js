@@ -1,6 +1,7 @@
 import moment from "moment";
 
 export default class Project {
+
   /**
    * @param {string} title
    * @param {string} description
@@ -26,6 +27,7 @@ export default class Project {
     this.tasks = tasks.map(x => Number(x));
     this.id = Number(id);
     this.complete = complete;
+    this._hidden = true;
   }
 
   toggleComplete() {
@@ -34,6 +36,14 @@ export default class Project {
     } else if (this.complete === false) {
       this.complete = true;
     }
+  }
+
+  toggleHidden() {
+    this._hidden = !this._hidden;
+  }
+
+  get hidden() {
+    return this._hidden;
   }
 
   /**
@@ -50,10 +60,6 @@ export default class Project {
   }
 
   get formattedDate() {
-    return moment(this.deadline.split('T')[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
-  }
-
-  get deadlineAsDate() {
-    return new Date(this.deadline);
+    return moment(this.deadline.split("T")[0], "YYYY-MM-DD").format("YYYY-MM-DD");
   }
 }
