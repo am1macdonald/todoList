@@ -11,7 +11,7 @@ My to-do list, simply-named "Do.", is a lightweight way to keep track of project
 This project relies on Webpack for bundling. Webpack allows me to break my code down into more concise modules. The Webpack-cli tools were utilized for setup.
 ### Packages / Dependencies
 I did include a couple of Node packages in this project for quality of life. These are:
-* [date-fns](https://www.npmjs.com/package/date-fns)
+* [moment]()
 * [simplebar](https://www.npmjs.com/package/simplebar)
 ## Design Patterns and Techniques
 Some of the new strategies used to complete this project are:

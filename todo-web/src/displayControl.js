@@ -1,4 +1,3 @@
-import { compareAsc, format, parseISO } from "date-fns";
 import {
   addNewProject,
   addNewTask,
@@ -14,6 +13,7 @@ import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
 import Task from "./classes/Task.js";
 import Project from "./classes/Project.js";
+import moment from "moment";
 
 const content = document.getElementById("content");
 
@@ -141,9 +141,11 @@ const dynamicFormParts = (() => {
   /** creates a date input when called
    * @param {HTMLElement} parent
    * @param {string[]} classList
+   * @param {Date} value
    * @return {HTMLDivElement}
    */
-  const newDateInput = (parent = undefined, classList) => {
+  const newDateInput = (parent = undefined, classList, value = undefined) => {
+    const initial = value ? value : moment().format("YYYY-MM-DD");
     const template = document.createElement("template");
     template.innerHTML = `
     <div class="flex flex-row justify-start items-center py-4">
@@ -152,8 +154,8 @@ const dynamicFormParts = (() => {
           Deadline.
         </span>
         <input class="m-0 pl-2.5 pr-1.5 ${classList.join(" ")}" name="deadline" id="deadline" type="date" 
-          min="${format(new Date(), "yyyy-MM-dd")}" 
-          value="${format(new Date(), "yyyy-MM-dd")}">
+          min="${moment().format("YYYY-MM-DD")}" 
+          value="${initial}">
       </label>
     </div>
     `;
@@ -451,7 +453,7 @@ const dynamicExplorerParts = (() => {
     const list = document.createElement("ul");
     list.id = "explorer-list";
 
-    sortAlg.timeAsc(library).forEach((item) => {
+    sortAlg.timeAsc(library).forEach((/**Project | Task*/item) => {
       const listItem = document.createElement("li");
       listItem.classList.add("explorer-list-item");
       if (item.constructor.name === "Task") {
@@ -522,7 +524,7 @@ const dynamicExplorerParts = (() => {
             hiddenContentList.appendChild(propListItem);
             break;
           case prop === "deadline":
-            propListItem.innerHTML = `<u>Due On:</u> <br> <br> ${item[prop]}`;
+            propListItem.innerHTML = `<u>Deadline:</u> <br> <br> ${item.formattedDate}`;
             hiddenContentList.appendChild(propListItem);
             break;
           case prop === "priority":
@@ -575,7 +577,7 @@ const dynamicExplorerParts = (() => {
                     }
                     // updates the tasks 'complete' property when the box is checked
                     taskItem.addEventListener("click", () => {
-                      obj.markComplete();
+                      obj.toggleComplete();
                       // TODO: Fix
                       // if (getUser()) {
                       //   updateDocument(obj, "tasks", taskConverter);
@@ -636,7 +638,7 @@ const dynamicExplorerParts = (() => {
         }
       });
       completeButton.addEventListener("click", () => {
-        item.markComplete();
+        item.toggleComplete();
         // TODO: Fix
         // if (getUser()) {
         //   // eslint-disable-next-line no-unused-expressions
@@ -760,11 +762,9 @@ const renderBigDate = (() => {
     let timer;
 
     function updateTime() {
-      dateToday.innerHTML = `${format(
-        new Date(),
-        "EEEE', the 'do'<br />of 'MMMM"
-      )} <br />
-                            ${format(new Date(), "p")}`;
+      dateToday.innerHTML = `${moment().format(
+        "dddd, [the] do<br />[of] MMMM<br />h:mmA"
+      )}`;
       timer = setTimeout(updateTime, 60000);
     }
 
@@ -848,7 +848,7 @@ const editTaskMenu = (appConfig, obj) => {
   const form = document.getElementById("task-edit-form");
   form.classList.add("data-entry");
   dynamicFormParts.newTextInput(form, "description", "Details.", "", true, []);
-  dynamicFormParts.newDateInput(form, []);
+  dynamicFormParts.newDateInput(form, [], obj.formattedDate());
   dynamicFormParts.newPriorityDropdown(form, 5, []);
   dynamicFormParts.newTextInput(form, "notes", "Notes.", "", false, []);
   const div = document.createElement("div");
@@ -861,7 +861,6 @@ const editTaskMenu = (appConfig, obj) => {
   });
   form.appendChild(div);
   document.getElementById("description").value = obj.description;
-  document.getElementById("deadline").value = obj.deadline;
   document.getElementById("priority").value = obj.priority;
   document.getElementById("notes").value = obj.notes;
 };
@@ -926,7 +925,7 @@ const editProjectMenu = (appConfig, obj) => {
   const form = document.getElementById("project-edit-form");
   form.classList.add("data-entry");
   dynamicFormParts.newTextInput(form, "description", "Details.", "", true, []);
-  dynamicFormParts.newDateInput(form, []);
+  dynamicFormParts.newDateInput(form, [], obj.formattedDate);
   dynamicFormParts.newTasklist(form, obj);
   // eslint-disable-next-line no-new
   new SimpleBar(document.getElementById("checkboxes"), { autoHide: false });
@@ -941,7 +940,6 @@ const editProjectMenu = (appConfig, obj) => {
   });
   form.appendChild(div);
   document.getElementById("description").value = obj.description;
-  document.getElementById("deadline").value = obj.deadline;
   document.getElementById("notes").value = obj.notes;
 };
 // clears the form from the main menu
@@ -967,11 +965,12 @@ const renderListToNav = (library, target) => {
       topFive.push(item);
     } else {
       for (let i = topFive.length - 1; i >= 0; i--) {
-        const test = compareAsc(
-          parseISO(item.deadline),
-          parseISO(topFive[i].deadline)
+        const test = moment(
+          item.deadline
+        ).isSameOrAfter(
+          topFive[i].deadline
         );
-        if (test === 1 || test === 0) {
+        if (test) {
           if (i >= 4) {
             break;
           } else {

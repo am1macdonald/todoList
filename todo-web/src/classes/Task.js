@@ -1,10 +1,10 @@
-import { format } from "date-fns";
+import moment from "moment";
 
 export default class Task {
   /**
    * @param {string} title
    * @param {string} description
-   * @param {number} deadline
+   * @param {string} deadline
    * @param {number} priority
    * @param {string} notes
    * @param {number} id
@@ -21,14 +21,14 @@ export default class Task {
   ) {
     this.title = title;
     this.description = description;
-    this.deadline = Number(deadline);
+    this.deadline = deadline;
     this.priority = Number(priority);
     this.notes = notes;
     this.id = Number(id);
     this.complete = complete;
   }
 
-  markComplete() {
+  toggleComplete() {
     if (this.complete === true) {
       this.complete = false;
     } else if (this.complete === false) {
@@ -38,14 +38,19 @@ export default class Task {
 
   /**
    * @param {string} description
-   * @param {number} deadline
+   * @param {string} deadline
    * @param {number} priority
    * @param {string} notes
    */
   edit(description, deadline, priority, notes) {
     this.description = description;
-    this.deadline = Number(deadline);
+    this.deadline = moment(deadline).toISOString();
     this.priority = Number(priority);
     this.notes = notes;
+  }
+
+  get formattedDate() {
+    console.log(this.deadline)
+    return moment(this.deadline.split('T')[0], 'YYYY-MM-DD').format('YYYY-MM-DD');
   }
 }

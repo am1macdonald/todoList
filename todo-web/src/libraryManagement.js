@@ -1,11 +1,10 @@
 /* eslint-disable curly */
-import { compareAsc, parseISO } from "date-fns";
 import Project from "./classes/Project.js";
 import Task from "./classes/Task.js";
 import LibraryFactory from "./factories/LibraryFactory.js";
 import { deleteProjectFromDatabase, sendProjectToDatabase, updateDatabaseProject } from "./database/Project.js";
 import { deleteTaskFromDatabase, sendTaskToDatabase, updateDatabaseTask } from "./database/Task.js";
-import { renderListToNav } from "./displayControl.js";
+import moment from "moment";
 
 const TaskLibrary = LibraryFactory();
 const ProjectLibrary = LibraryFactory();
@@ -97,7 +96,7 @@ export const addNewTask = (appConfig, callback) => {
     .filter((node) => node.tagName === "INPUT" || node.tagName === "SELECT")
     .map((node) => {
       if (node.id === "deadline") {
-        return node.valueAsDate;
+        return (new Date(node.value).toISOString());
       } else {
         return node.value;
       }
@@ -109,7 +108,7 @@ export const addNewTask = (appConfig, callback) => {
     }
   }
 
-  const newTask = new Task(...nodeArr, Date.now());
+  const newTask = new Task(...nodeArr);
 
   if (appConfig.session.isLocal) {
     TaskLibrary.add(crypto.randomUUID(), newTask);
@@ -127,7 +126,7 @@ export const addNewTask = (appConfig, callback) => {
 
 export const editTask = (appConfig, obj, callback) => {
   const description = document.getElementById("description").value;
-  const deadline = document.getElementById("deadline").value;
+  const deadline = new Date(document.getElementById("deadline").value).toISOString();
   const priority = document.getElementById("priority").value;
   const notes = document.getElementById("notes").value;
   const listItems = document.getElementsByClassName("checklist-item");
@@ -143,7 +142,7 @@ export const editTask = (appConfig, obj, callback) => {
     updateDatabaseTask(appConfig, obj).then(() => {
       callback();
     }).catch(e => {
-      console.log(e)
+      console.log(e);
     });
   }
 };
@@ -172,7 +171,7 @@ export const addNewProject = (appConfig, callback) => {
     .filter((node) => node.tagName === "INPUT" || node.tagName === "SELECT")
     .map((node) => {
       if (node.id === "deadline") {
-        return node.valueAsDate;
+        return (node.value);
       } else {
         return node.value;
       }
@@ -232,7 +231,7 @@ export const deleteProject = (appConfig, obj, callback) => {
  */
 export const editProject = (appConfig, obj, callback) => {
   const description = document.getElementById("description").value;
-  const deadline = document.getElementById("deadline").value;
+  const deadline = new Date(document.getElementById("deadline").value).toISOString();
   const notes = document.getElementById("notes").value;
   const tasks = Array.from(document.getElementsByClassName("task-list-item"))
     .filter((item) => {
@@ -277,11 +276,10 @@ export const sortAlg = (() => {
         tempArr.push(item);
       } else {
         for (let i = tempArr.length - 1; i >= 0; i--) {
-          const test = compareAsc(
-            item.deadline,
-            tempArr[i].deadline
-          );
-          if (test === 1 || test === 0) {
+          const test = moment(item.deadline).isSameOrAfter(
+              tempArr[i].deadline
+            );
+          if (test) {
             tempArr.splice(i + 1, 0, item);
             break;
           } else if (i === 0) {
