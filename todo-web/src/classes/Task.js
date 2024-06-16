@@ -1,4 +1,4 @@
-import moment from "moment";
+import dayjs from "dayjs";
 
 export default class Task {
   /**
@@ -53,12 +53,12 @@ export default class Task {
    */
   edit(description, deadline, priority, notes) {
     this.description = description;
-    this.deadline = moment(deadline).toISOString();
+    this.deadline = dayjs(deadline).toISOString();
     this.priority = Number(priority);
     this.notes = notes;
   }
 
   get formattedDate() {
-    return moment(this.deadline.split("T")[0], "YYYY-MM-DD").format("YYYY-MM-DD");
+    return dayjs(this.deadline.split("T")[0], "YYYY-MM-DD").format("YYYY-MM-DD");
   }
 }

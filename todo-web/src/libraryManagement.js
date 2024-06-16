@@ -1,13 +1,15 @@
 /* eslint-disable curly */
 import Project from "./classes/Project.js";
 import Task from "./classes/Task.js";
-import LibraryFactory from "./factories/LibraryFactory.js";
 import { deleteProjectFromDatabase, sendProjectToDatabase, updateDatabaseProject } from "./database/Project.js";
 import { deleteTaskFromDatabase, sendTaskToDatabase, updateDatabaseTask } from "./database/Task.js";
-import moment from "moment";
+import Library from "./classes/Library.js";
+import dayjs from "dayjs";
 
-const TaskLibrary = LibraryFactory();
-const ProjectLibrary = LibraryFactory();
+const TaskLibrary = new Library();
+const ProjectLibrary = new Library();
+
+const taskProjects = {};
 
 const populateLibrary = (libraryName, data) => {
   for (const key in data) {
@@ -69,7 +71,7 @@ const populateFromLocalStorage = (library, libraryType, converter) => {
 
 /**
  * @param {AppConfig} appConfig
- * @param library
+ * @param {Library} library
  * @param {string} libraryType
  * @param {function} converter
  * @returns {Promise<any>}
@@ -81,6 +83,9 @@ const populateFromApi = async (appConfig, library, libraryType, converter) => {
   }
   const responseJson = await response.json();
   library.addItems("id", responseJson.map(converter));
+  if (libraryType === "tasks") {
+    library.show()
+  }
 };
 
 const updateLocalStorage = (map, libraryType) => {
@@ -235,7 +240,7 @@ export const saveEditProject = (appConfig, obj, callback) => {
       callback();
     });
   }
-}
+};
 
 /**
  *
@@ -284,7 +289,7 @@ export const sortAlg = (() => {
         tempArr.push(item);
       } else {
         for (let i = tempArr.length - 1; i >= 0; i--) {
-          const test = moment(item.deadline).isSameOrAfter(
+          const test = dayjs(item.deadline).isSameOrAfter(
             tempArr[i].deadline
           );
           if (test) {

@@ -13,7 +13,10 @@ import SimpleBar from "simplebar";
 import "simplebar/dist/simplebar.css";
 import Task from "./classes/Task.js";
 import Project from "./classes/Project.js";
-import moment from "moment";
+
+import * as dayjs from "dayjs";
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 
 const content = document.getElementById("content");
 
@@ -145,7 +148,7 @@ const dynamicFormParts = (() => {
    * @return {HTMLDivElement}
    */
   const newDateInput = (parent = undefined, classList, value = undefined) => {
-    const initial = value ? value : moment().format("YYYY-MM-DD");
+    const initial = value ? value : dayjs().format("YYYY-MM-DD");
     const template = document.createElement("template");
     template.innerHTML = `
     <div class="flex flex-row justify-start items-center py-4">
@@ -154,7 +157,7 @@ const dynamicFormParts = (() => {
           Deadline.
         </span>
         <input class="m-0 pl-2.5 pr-1.5 ${classList.join(" ")}" name="deadline" id="deadline" type="date" 
-          min="${moment().format("YYYY-MM-DD")}" 
+          min="${dayjs().format("YYYY-MM-DD")}" 
           value="${initial}">
       </label>
     </div>
@@ -754,9 +757,10 @@ const renderBigDate = (() => {
     content.appendChild(dateHero);
     let timer;
 
+    dayjs.extend(advancedFormat)
     function updateTime() {
-      dateToday.innerHTML = `${moment().format(
-        "dddd, [the] do<br />[of] MMMM<br />h:mmA"
+      dateToday.innerHTML = `${dayjs().format(
+        "dddd, [the] Do<br />[of] MMMM<br />h:mmA"
       )}`;
       timer = setTimeout(updateTime, 60000);
     }
@@ -957,8 +961,9 @@ const renderListToNav = (library, target) => {
     if (topFive.length === 0) {
       topFive.push(item);
     } else {
+      dayjs.extend(isSameOrAfter)
       for (let i = topFive.length - 1; i >= 0; i--) {
-        const test = moment(
+        const test = dayjs(
           item.deadline
         ).isSameOrAfter(
           topFive[i].deadline
