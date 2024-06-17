@@ -7,7 +7,7 @@ export default class Project {
    * @param {string} description
    * @param {string} deadline
    * @param {string} notes
-   * @param {Array<number>} tasks
+   * @param {string} tasks
    * @param {number} id
    * @param {boolean} complete
    */
@@ -16,7 +16,7 @@ export default class Project {
     description,
     deadline,
     notes,
-    tasks = [],
+    tasks = "",
     id,
     complete = false
   ) {
@@ -24,7 +24,7 @@ export default class Project {
     this.description = description;
     this.deadline = deadline;
     this.notes = notes;
-    this.tasks = tasks.map(x => Number(x));
+    this.tasks = tasks.split(',').map(x => Number(x));
     this.id = Number(id);
     this.complete = complete;
     this._hidden = true;

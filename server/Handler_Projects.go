@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -13,7 +14,8 @@ import (
 	"github.com/am1macdonald/to-do-list/server/internal/session"
 )
 
-func DbProjectToProject(p *database.Project) *project.Project {
+func DbProjectToProject(p *database.GetUserProjectsRow) *project.Project {
+	fmt.Println(p.TaskIds)
 	return &project.Project{
 		ID:          p.ID,
 		UserID:      p.UserID,
@@ -22,6 +24,7 @@ func DbProjectToProject(p *database.Project) *project.Project {
 		Notes:       p.Notes,
 		Deadline:    p.Deadline,
 		Complete:    p.Complete,
+		Tasks:       p.TaskIds,
 	}
 }
 
@@ -37,6 +40,7 @@ func (cfg *apiConfig) HandleGetProjects(w http.ResponseWriter, r *http.Request, 
 	}
 	dbProj, err := cfg.db.GetUserProjects(r.Context(), userID)
 	if err != nil {
+		log.Println(err)
 		jsonResponse(w, 500, errors.New("failed to gather projects"))
 		return
 	}

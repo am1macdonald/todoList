@@ -7,7 +7,7 @@ import {
   renderStaticElements,
   taskCreationMenu,
   signInPopup,
-  renderListToNav
+  renderListToNav, openSignIn
 } from "./src/displayControl.js";
 import {
   TaskLibrary,
@@ -22,11 +22,11 @@ import AppConfig from "./src/classes/appConfig.js";
 const appConfig = new AppConfig();
 const session = new Session();
 
-const {updateTime: updateClock, stop: stopClock} = renderBigDate(appConfig)
+const { updateTime: updateClock, stop: stopClock } = renderBigDate(appConfig);
 
 renderStaticElements(appConfig);
 
-updateClock()
+updateClock();
 
 const content = document.getElementById("content");
 const page = document.getElementById("page");
@@ -90,29 +90,25 @@ const promptForSignIn = () => {
   );
 };
 
-if (authEnabled) {
-  session
-    .isValid()
-    .then(
-      (signedIn) => {
-        if (!signedIn) {
-          promptForSignIn();
-          return;
-        }
-        appConfig.session = session;
-        setupConnectedSession();
-      },
-      () => {
-        promptForSignIn();
+session
+  .isValid()
+  .then(
+    (signedIn) => {
+      if (!signedIn) {
+        openSignIn(page);
+        return;
       }
-    )
-    .catch(() => {
-      promptForSignIn();
-    });
-} else {
-  localSessionCallback(undefined);
-  disableButtons(false);
-}
+      appConfig.session = session;
+      setupConnectedSession();
+    },
+    () => {
+      openSignIn(page);
+    }
+  )
+  .catch(() => {
+    openSignIn(page);
+  });
+
 
 // Observer puts the clock back up when the content is empty && setsState to false.
 (() => {

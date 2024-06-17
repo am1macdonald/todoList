@@ -7,5 +7,6 @@ type Project struct {
 	Description string `json:"description"`
 	Notes       string `json:"notes"`
 	Deadline    string `json:"deadline"`
+	Tasks       string `json:"tasks"`
 	Complete    bool   `json:"complete"`
 }

@@ -1031,5 +1031,6 @@ export {
   taskCreationMenu,
   projectCreationMenu,
   signInPopup,
+  openSignIn,
   renderListToNav
 };

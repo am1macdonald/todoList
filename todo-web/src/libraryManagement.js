@@ -25,6 +25,7 @@ const populateAll = (taskData, projectData) => {
 const projectFromJSON = (item) => {
   const { title, description, deadline, notes, tasks, id, complete } =
     item;
+  console.log(item)
   return new Project(
     title,
     description,
@@ -83,9 +84,7 @@ const populateFromApi = async (appConfig, library, libraryType, converter) => {
   }
   const responseJson = await response.json();
   library.addItems("id", responseJson.map(converter));
-  if (libraryType === "tasks") {
-    library.show()
-  }
+  console.log(responseJson);
 };
 
 const updateLocalStorage = (map, libraryType) => {
@@ -157,7 +156,6 @@ export const editTask = (appConfig, obj, callback) => {
 };
 
 export const deleteTask = (appConfig, obj, callback) => {
-  console.log(obj);
   TaskLibrary.remove(obj.key);
   if (appConfig.session.isLocal) {
     // TODO: local removal

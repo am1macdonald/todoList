@@ -69,19 +69,43 @@ func (q *Queries) DeleteProject(ctx context.Context, arg DeleteProjectParams) er
 }
 
 const getUserProjects = `-- name: GetUserProjects :many
-SELECT id, user_id, title, description, notes, deadline, complete, created_at, updated_at from projects
-where user_id = ?
+SELECT 
+    p.id, p.user_id, p.title, p.description, p.notes, p.deadline, p.complete, p.created_at, p.updated_at, 
+    CAST(IFNULL(GROUP_CONCAT(t.id, ', '), '') AS TEXT) AS task_ids
+FROM 
+    projects p
+LEFT JOIN 
+    tasks t 
+ON 
+    p.id = t.project_id
+WHERE 
+    p.user_id = ?
+GROUP BY 
+    p.id
 `
 
-func (q *Queries) GetUserProjects(ctx context.Context, userID int64) ([]Project, error) {
+type GetUserProjectsRow struct {
+	ID          int64  `json:"id"`
+	UserID      int64  `json:"user_id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Notes       string `json:"notes"`
+	Deadline    string `json:"deadline"`
+	Complete    bool   `json:"complete"`
+	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
+	TaskIds     string `json:"task_ids"`
+}
+
+func (q *Queries) GetUserProjects(ctx context.Context, userID int64) ([]GetUserProjectsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getUserProjects, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Project
+	var items []GetUserProjectsRow
 	for rows.Next() {
-		var i Project
+		var i GetUserProjectsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.UserID,
@@ -92,6 +116,7 @@ func (q *Queries) GetUserProjects(ctx context.Context, userID int64) ([]Project,
 			&i.Complete,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.TaskIds,
 		); err != nil {
 			return nil, err
 		}
