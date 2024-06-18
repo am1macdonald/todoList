@@ -16,3 +16,4 @@ server/tmp
 server/.air.toml
 .idea
 .vscode
+todo-web/dist
