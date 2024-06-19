@@ -14,7 +14,7 @@ import "simplebar/dist/simplebar.css";
 import Task from "./classes/Task.js";
 import Project from "./classes/Project.js";
 
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 
