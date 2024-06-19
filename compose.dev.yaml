@@ -5,6 +5,8 @@ services:
     build:
       context: ./todo-web
       dockerfile: dev.Dockerfile
+    depends_on:
+      - backend
     develop:
       watch:
         - action: sync
@@ -19,6 +21,8 @@ services:
     build:
       context: ./server
       dockerfile: dev.Dockerfile
+    depends_on:
+      - valkey
     develop:
       watch:
         - action: sync

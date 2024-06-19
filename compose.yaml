@@ -1,29 +1,13 @@
+name: app
+
 services:
-  frontend:
-    build:
-      context: ./todo-web
-      dockerfile: dev.Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: ./todo-web
-          target: /usr/src/app
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: ./todo-web/package.json
-              
   backend:
     build:
       context: ./server
-      dockerfile: dev.Dockerfile
-    develop:
-      watch:
-        - action: sync
-          path: ./server
-          target: /usr/src/app
-          ignore:
-            - out/
+      dockerfile: Dockerfile
+    depends_on: 
+      - valkey
+
   valkey:
     image: valkey/valkey:7.2.5-alpine
     restart: unless-stopped
@@ -39,3 +23,4 @@ services:
       - "443:443/udp"
     volumes:
       - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/todo-web/dist:/var/www/html

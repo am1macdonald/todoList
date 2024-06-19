@@ -1,20 +1,23 @@
 #! /bin/bash
 
+: '
+run from within the root directory of the application
+'
+
+
 word="${1}"
 environment="${2}"
 case ${word} in
   start)
-    cd ..
     if [[ "$environment" == "dev" ]]; then
       echo "Starting dev environment"
-      docker compose -f compose.dev.yaml up
+      docker compose -f compose.dev.yaml up --detach
     else 
       echo "Starting application"
-      docker compose -f compose.yaml up
+      docker compose -f compose.yaml up --detach
     fi
     ;;
   stop)
-    cd ..
     if [[ "$environment" == "dev" ]]; then
       echo "Stopping dev environment"
       docker compose -f compose.dev.yaml down
