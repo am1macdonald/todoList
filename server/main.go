@@ -52,6 +52,9 @@ func errorResponse(w http.ResponseWriter, status int, err error) {
 }
 
 func init() {
+	if os.Getenv("PRODUCTION") != "" {
+		return
+	}
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
