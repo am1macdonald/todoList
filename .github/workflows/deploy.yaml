@@ -33,11 +33,11 @@ jobs:
 
     - name: Build backend Docker image
       run: |
-        docker buildx build --platform linux/amd64 -t backend/backend:latest ./server
+        docker buildx build --platform linux/amd64 -t backend/backend:latest ./server 
 
     - name: Save backend Docker image
       run: |
-        docker save backend/backend:latest -o backend.tar
+        docker save backend/backend:latest > backend.tar
 
     - name: Deploy to server
       env:
