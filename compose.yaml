@@ -2,12 +2,9 @@ name: app
 
 services:
   backend:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: backend/backend:latest
     depends_on: 
       - valkey
-
   valkey:
     image: valkey/valkey:7.2.5-alpine
     restart: unless-stopped
