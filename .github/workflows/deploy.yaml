@@ -37,7 +37,7 @@ jobs:
 
     - name: Verify backend Docker image
       run: |
-      docker images backend/backend:latest
+        docker images backend/backend:latest
 
     - name: Save backend Docker image
       run: |
