@@ -3,7 +3,7 @@ name: app
 services:
   backend:
     build:
-      context: ./server
+      context: ./
       dockerfile: Dockerfile
     depends_on: 
       - valkey
