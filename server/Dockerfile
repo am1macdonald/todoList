@@ -39,7 +39,7 @@ RUN go build -o main .
 # final stages
 FROM alpine:latest
 WORKDIR /root/
-COPY --from=builder /app/main .
+COPY --from=build /app/main .
 CMD ["./main"]
 
 EXPOSE 8080
