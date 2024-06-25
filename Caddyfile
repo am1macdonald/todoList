@@ -3,8 +3,7 @@
     redir https://{host}{uri} 308
 }
 
-# HTTPS configuration
-:443 {
+todo.techcraftedbyadam.com {
     root * /var/www/html
     reverse_proxy /api/* backend:8080
     file_server
