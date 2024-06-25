@@ -43,6 +43,16 @@ jobs:
       run: |
         docker save backend/backend:latest > backend.tar
 
+    - name: Create remote directory
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SERVER: ${{ secrets.SERVER }}
+        USERNAME: ${{ secrets.USERNAME }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > key
+        chmod 600 key
+        ssh -i key -o StrictHostKeyChecking=no $USERNAME@$SERVER 'mkdir -p /home/$USERNAME/todo/'
+
     - name: Deploy to server
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
