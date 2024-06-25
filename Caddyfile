@@ -1,9 +1,9 @@
 # Redirect HTTP to HTTPS
-:80 {
-    redir https://{host}{uri} 308
+http://todo.techcraftedbyadam.com {
+    redir https://todo.techcraftedbyadam.com{uri} 308
 }
 
-todo.techcraftedbyadam.com {
+https://todo.techcraftedbyadam.com {
     root * /var/www/html
     reverse_proxy /api/* backend:8080
     file_server
