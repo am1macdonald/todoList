@@ -59,7 +59,7 @@ jobs:
         SERVER: ${{ secrets.SERVER }}
         USERNAME: ${{ secrets.USERNAME }}
       run: |
-        APP_PATH=/home/$USERNAME/todo/
+        APP_PATH=/home/todo/
         echo "$SSH_PRIVATE_KEY" > key
         chmod 600 key
         rsync -avz -e "ssh -i key -o StrictHostKeyChecking=no" backend.tar $USERNAME@$SERVER:$APP_PATH/backend.tar
