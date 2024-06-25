@@ -59,7 +59,7 @@ jobs:
         SERVER: ${{ secrets.SERVER }}
         USERNAME: ${{ secrets.USERNAME }}
       run: |
-        APP_PATH=/home/todo/
+        APP_PATH=/home/$USERNAME/todo/
         echo "$SSH_PRIVATE_KEY" > key
         chmod 600 key
         rsync -avz -e "ssh -i key -o StrictHostKeyChecking=no" backend.tar $USERNAME@$SERVER:$APP_PATH/backend.tar
@@ -68,6 +68,8 @@ jobs:
         rsync -avz -e "ssh -i key -o StrictHostKeyChecking=no" todo-web/dist/ $USERNAME@$SERVER:$APP_PATH/dist/
         ssh -i key -o StrictHostKeyChecking=no $USERNAME@$SERVER '
           cd /home/$USERNAME/todo &&
+          docker compose down &&
+          docker rmi $(docker images -q) --force &&
           docker load -i backend.tar &&
           docker compose up -d --build
         '
