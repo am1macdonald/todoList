@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 : '
 run from within the root directory of the application

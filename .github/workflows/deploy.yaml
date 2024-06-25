@@ -1,0 +1,60 @@
+name: Deploy Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm install
+
+    - name: Build frontend
+      run: |
+        cd frontend
+        npm run build
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build backend Docker image
+      run: |
+        docker buildx build --platform linux/amd64 -t your-dockerhub-username/backend:latest ./server
+
+    - name: Save backend Docker image
+      run: |
+        docker save your-dockerhub-username/backend:latest -o backend.tar
+
+    - name: Deploy to server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SERVER: ${{ secrets.SERVER }}
+        USERNAME: ${{ secrets.USERNAME }}
+      run: |
+        export $APP_PATH = /home/$USERNAME/todo/
+        echo "$SSH_PRIVATE_KEY" > key
+        chmod 600 key
+        rsync -avz -e "ssh -i key -o StrictHostKeyChecking=no" backend.tar $USERNAME@$SERVER:$APP_PATH/backend.tar
+        rsync -avz -e "ssh -i key -o StrictHostKeyChecking=no" docker-compose.yml $USERNAME@$SERVER:$APP_PATH/docker-compose.yml
+        rsync -avz -e "ssh -i key -o StrictHostKeyChecking=no" Caddyfile $USERNAME@$SERVER:$APP_PATH/Caddyfile
+        rsync -avz -e "ssh -i key -o StrictHostKeyChecking=no" todo-web/dist/ $USERNAME@$SERVER:$APP_PATH/dist/
+        ssh -i key -o StrictHostKeyChecking=no $USERNAME@$SERVER '
+          cd /home/$USERNAME &&
+          docker load -i backend.tar &&
+          docker-compose up -d --build
+        '

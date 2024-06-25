@@ -23,4 +23,4 @@ services:
       - "443:443/udp"
     volumes:
       - $PWD/Caddyfile:/etc/caddy/Caddyfile
-      - $PWD/todo-web/dist:/var/www/html
+      - $PWD/dist:/var/www/html
