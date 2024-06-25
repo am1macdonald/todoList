@@ -1,4 +1,10 @@
-* {
+# Redirect HTTP to HTTPS
+http:// {
+    redir https://{host}{uri} 308
+}
+
+# HTTPS configuration
+https://* {
     root * /var/www/html
     reverse_proxy /api/* backend:8080
     file_server
