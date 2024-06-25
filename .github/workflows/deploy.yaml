@@ -33,7 +33,11 @@ jobs:
 
     - name: Build backend Docker image
       run: |
-        docker buildx build --platform linux/amd64 -t backend/backend:latest ./server 
+        docker buildx build --platform linux/amd64 -t backend/backend:latest --load ./server
+
+    - name: Verify backend Docker image
+      run: |
+      docker images backend/backend:latest
 
     - name: Save backend Docker image
       run: |
