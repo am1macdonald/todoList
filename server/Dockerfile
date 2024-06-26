@@ -1,6 +1,6 @@
-FROM golang:1.22 AS build
+#build stage
+FROM golang:1.22-alpine AS builder
 
-# Accept build arguments
 ARG CACHE_CONN
 ARG DB_CONN
 ARG EMAIL_ADDRESS
@@ -15,7 +15,6 @@ ARG PRODUCTION
 ARG SERVER
 ARG SERVICE_HOSTNAME
 
-# Use the build arguments
 ENV CACHE_CONN=$CACHE_CONN
 ENV DB_CONN=$DB_CONN
 ENV EMAIL_ADDRESS=$EMAIL_ADDRESS
@@ -30,16 +29,25 @@ ENV PRODUCTION=$PRODUCTION
 ENV SERVER=$SERVER
 ENV SERVICE_HOSTNAME=$SERVICE_HOSTNAME
 
-# build steps
+RUN apk add --no-cache git
+
 WORKDIR /app
+
 COPY . .
-RUN go build -o main .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
 
-# final stages
+# final stage
 FROM alpine:latest
+
+RUN apk add --no-cache ca-certificates
+
 WORKDIR /root/
-COPY --from=build /app/main .
-CMD ["./main"]
+
+COPY --from=builder /app/main .
 
 EXPOSE 8080
+
+CMD ["./main"]
+
