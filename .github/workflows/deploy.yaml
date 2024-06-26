@@ -34,19 +34,6 @@ jobs:
     - name: Build backend Docker image
       run: |
         docker buildx build --platform linux/amd64 \
-          --build-arg "CACHE_CONN=${{ secrets.CACHE_CONN }}" \
-          --build-arg "DB_CONN=${{ secrets.DB_CONN }}" \
-          --build-arg "EMAIL_ADDRESS=${{ secrets.EMAIL_ADDRESS }}" \
-          --build-arg "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" \
-          --build-arg "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" \
-          --build-arg "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" \
-          --build-arg "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" \
-          --build-arg "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
-          --build-arg "MAGICLINK_BASE=${{ secrets.MAGICLINK_BASE }}" \
-          --build-arg "PORT=${{ secrets.PORT }}" \
-          --build-arg "PRODUCTION=${{ secrets.PRODUCTION }}" \
-          --build-arg "SERVER=${{ secrets.SERVER }}" \
-          --build-arg "SERVICE_HOSTNAME=${{ secrets.SERVICE_HOSTNAME }}" \
           -t backend/backend:latest -f ./server/Dockerfile --load ./server
 
     - name: Verify backend Docker image
@@ -56,6 +43,32 @@ jobs:
     - name: Save backend Docker image
       run: |
         docker save backend/backend:latest > backend.tar
+
+    - name: Create .env file
+      run: |
+        echo "CACHE_CONN=${{ secrets.CACHE_CONN }}" >> .env
+        echo "DB_CONN=${{ secrets.DB_CONN }}" >> .env
+        echo "EMAIL_ADDRESS=${{ secrets.EMAIL_ADDRESS }}" >> .env
+        echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env
+        echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
+        echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> .env
+        echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> .env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+        echo "MAGICLINK_BASE=${{ secrets.MAGICLINK_BASE }}" >> .env
+        echo "PORT=${{ secrets.PORT }}" >> .env
+        echo "PRODUCTION=${{ secrets.PRODUCTION }}" >> .env
+        echo "SERVER=${{ secrets.SERVER }}" >> .env
+        echo "SERVICE_HOSTNAME=${{ secrets.SERVICE_HOSTNAME }}" >> .env
+
+    - name: Transfer .env file to server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SERVER: ${{ secrets.SERVER }}
+        USERNAME: ${{ secrets.USERNAME }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > key
+        chmod 600 key
+        rsync -avz -e "ssh -i key -o StrictHostKeyChecking=no" .env $USERNAME@$SERVER:$APP_PATH/.env
 
     - name: Create remote directory
       env:

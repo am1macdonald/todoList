@@ -3,6 +3,8 @@ name: app
 services:
   backend:
     image: backend/backend:latest
+    env_file:
+      - .env
     depends_on: 
       - valkey
   valkey:
