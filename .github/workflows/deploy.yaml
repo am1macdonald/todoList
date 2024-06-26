@@ -34,19 +34,19 @@ jobs:
     - name: Build backend Docker image
       run: |
         docker buildx build --platform linux/amd64 \
-          --build-arg CACHE_CONN=${{ secrets.CACHE_CONN }} \
-          --build-arg DB_CONN=${{ secrets.DB_CONN }} \
-          --build-arg EMAIL_ADDRESS=${{ secrets.EMAIL_ADDRESS }} \
-          --build-arg EMAIL_HOST=${{ secrets.EMAIL_HOST }} \
-          --build-arg EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
-          --build-arg EMAIL_PORT=${{ secrets.EMAIL_PORT }} \
-          --build-arg EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }} \
-          --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
-          --build-arg MAGICLINK_BASE=${{ secrets.MAGICLINK_BASE }} \
-          --build-arg PORT=${{ secrets.PORT }} \
-          --build-arg PRODUCTION=${{ secrets.PRODUCTION }} \
-          --build-arg SERVER=${{ secrets.SERVER }} \
-          --build-arg SERVICE_HOSTNAME=${{ secrets.SERVICE_HOSTNAME }} \
+          --build-arg "CACHE_CONN=${{ secrets.CACHE_CONN }}" \
+          --build-arg "DB_CONN=${{ secrets.DB_CONN }}" \
+          --build-arg "EMAIL_ADDRESS=${{ secrets.EMAIL_ADDRESS }}" \
+          --build-arg "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" \
+          --build-arg "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" \
+          --build-arg "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" \
+          --build-arg "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" \
+          --build-arg "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
+          --build-arg "MAGICLINK_BASE=${{ secrets.MAGICLINK_BASE }}" \
+          --build-arg "PORT=${{ secrets.PORT }}" \
+          --build-arg "PRODUCTION=${{ secrets.PRODUCTION }}" \
+          --build-arg "SERVER=${{ secrets.SERVER }}" \
+          --build-arg "SERVICE_HOSTNAME=${{ secrets.SERVICE_HOSTNAME }}" \
           -t backend/backend:latest -f ./server/Dockerfile --load ./server
 
     - name: Verify backend Docker image
