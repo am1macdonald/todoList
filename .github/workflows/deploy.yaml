@@ -66,6 +66,7 @@ jobs:
         SERVER: ${{ secrets.SERVER }}
         USERNAME: ${{ secrets.USERNAME }}
       run: |
+        APP_PATH=/home/todo/
         echo "$SSH_PRIVATE_KEY" > key
         chmod 600 key
         rsync -avz -e "ssh -i key -o StrictHostKeyChecking=no" .env $USERNAME@$SERVER:$APP_PATH/.env
@@ -76,9 +77,10 @@ jobs:
         SERVER: ${{ secrets.SERVER }}
         USERNAME: ${{ secrets.USERNAME }}
       run: |
+        APP_PATH=/home/todo/
         echo "$SSH_PRIVATE_KEY" > key
         chmod 600 key
-        ssh -i key -o StrictHostKeyChecking=no $USERNAME@$SERVER 'mkdir -p /home/todo/'
+        ssh -i key -o StrictHostKeyChecking=no $USERNAME@$SERVER 'mkdir -p $APP_PATH'
 
     - name: Deploy to server
       env:
