@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/am1macdonald/to-do-list/server/internal/database"
 	"github.com/am1macdonald/to-do-list/server/internal/mailer"
@@ -52,6 +53,10 @@ func errorResponse(w http.ResponseWriter, status int, err error) {
 }
 
 func init() {
+	for _, e := range os.Environ() {
+		pair := strings.SplitN(e, "=", 2)
+		fmt.Println(pair[0])
+	}
 	if os.Getenv("PRODUCTION") != "" {
 		return
 	}
