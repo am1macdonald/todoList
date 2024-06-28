@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/am1macdonald/to-do-list/server/internal/session"
@@ -12,7 +13,12 @@ import (
 )
 
 func (cfg *apiConfig) HandleMagicLink(w http.ResponseWriter, r *http.Request) {
-	ss := r.URL.Query().Get("token")
+	ss, err := url.QueryUnescape(r.URL.Query().Get("token"))
+	if err != nil {
+		log.Println(err)
+		errorResponse(w, 500, errors.New("cannot parse token"))
+		return
+	}
 	u, issuer, err := user.UserFromToken(ss)
 	if err != nil || strings.ToLower(issuer) != "passporter_login" {
 		errorResponse(w, 400, errors.New("token is invalid"))
