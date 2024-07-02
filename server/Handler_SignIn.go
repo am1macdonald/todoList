@@ -5,7 +5,6 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 
 	"github.com/am1macdonald/to-do-list/server/internal/database"
@@ -54,8 +53,7 @@ func (cfg *apiConfig) HandleSignIn(w http.ResponseWriter, r *http.Request) {
 		errorResponse(w, 500, errors.New("can't get user token"))
 		return
 	}
-	encodedToken := url.QueryEscape(ss)
-	cfg.mailer.SendMessage("MagicLink for 'DO.'", os.Getenv("MAGICLINK_BASE")+"/api/v1/sign_in"+"?token="+encodedToken, u.Email)
+	cfg.mailer.SendMessage("MagicLink for 'DO.'", os.Getenv("MAGICLINK_BASE")+"/api/v1/sign_in"+"?token="+ss, u.Email)
 	jsonResponse(w, 200, "success")
 	return
 }
