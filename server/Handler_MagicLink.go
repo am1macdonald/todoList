@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/am1macdonald/to-do-list/server/internal/session"
@@ -32,7 +33,7 @@ func (cfg *apiConfig) HandleMagicLink(w http.ResponseWriter, r *http.Request) {
 	session_cookie := http.Cookie{
 		Name:     "session",
 		Value:    s.Key,
-		Domain:   "localhost",
+		Domain:   os.Getenv("SERVICE_HOSTNAME"),
 		MaxAge:   24 * 60 * 60,
 		HttpOnly: true,
 	}
